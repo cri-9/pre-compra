@@ -1,8 +1,9 @@
 import React, { useState} from "react";
+import { Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function FechaAgendamiento({onChange}) {
+function FechaAgendamiento({onChange, onSiguiente, onAnterior}) {
     const [fecha, setFecha] = useState(new Date());
     const [bloque, setBloque] = useState('');
 
@@ -23,9 +24,27 @@ function FechaAgendamiento({onChange}) {
 
     return (
         <div>
-            <DatePicker selected={fecha} onChange={handleFechaChange} />
-            <Select options={bloques} onChange={handleBloqueChange} placeholder="Bloque" />
+          <DatePicker selected={fecha} onChange={handleFechaChange} />
+          <FormControl fullWidth>
+            <InputLabel id="bloque-label">Bloque</InputLabel>
+            <Select labelId="bloque-label" id="bloque" value={bloque} label="Bloque" onChange={handleBloqueChange}>
+              {bloques.map((bloque) => (
+                <MenuItem key={bloque.value} value={bloque.value}>
+                  {bloque.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button variant="contained" onClick={onAnterior}>
+            Anterior
+
+          </Button>
+
+          <Button variant="contained" onClick={onSiguiente}>
+            Continuar
+          </Button>
         </div>
-    );
-}
-export default FechaAgendamiento;
+      );
+    }
+    
+    export default FechaAgendamiento;

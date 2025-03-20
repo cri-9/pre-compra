@@ -1,147 +1,161 @@
-import React, {useState} from 'react';
-import Select from 'react-select';
+import React, { useState, useEffect } from 'react';
+import { TextField, Button, Select, MenuItem, InputLabel, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
-function DatosCliente({onChange}) {
-    const [ tipoCliente, setTipoCliente ] = useState('');
-    const [ nombre, setNombre ] = useState('');
-    const [ email, setEmail ] = useState('');
-    const [ telefono, setTelefono ] = useState('');
-    const [ rut, setRut ] = useState('');
-    const [ direccion, setDireccion ] = useState('');
-    const [ region, setRegion ] = useState('');
-    const [ comuna, setComuna ] = useState('');
-    const [inspeccion, setInspeccion] = useState('');
+function DatosCliente({ datos, onChange, onSiguiente, onAnterior }) {
+  const [tipoCliente, setTipoCliente] = useState(datos?.tipoCliente || '');
+  const [nombre, setNombre] = useState(datos?.nombre || '');
+  const [email, setEmail] = useState(datos?.email || '');
+  const [telefono, setTelefono] = useState(datos?.telefono || '');
+  const [rut, setRut] = useState(datos?.rut || '');
+  const [direccion, setDireccion] = useState(datos?.direccion || '');
+  const [region, setRegion] = useState(datos?.region || '');
+  const [comuna, setComuna] = useState(datos?.comuna || '');
+  const [inspeccion, setInspeccion] = useState(datos?.inspeccion || 'no');
 
-    const tiposCliente = [
-        { value: 'Persona', label: 'Persona' },
-        { value: 'Empresa', label: 'Empresa' },
-    ];
+  const tiposCliente = [
+    { value: 'Persona', label: 'Persona' },
+    { value: 'Empresa', label: 'Empresa' },
+  ];
 
-    const regiones = [
-        { value: 'RM', label: 'Región Metropolitana' },
-        { value: 'V', label: 'Valparaíso' },
-        { value: 'I', label: 'O’Higgins' },
-        { value: 'VI', label: 'Maule' },
-        { value: 'VII', label: 'Biobío' },
-        { value: 'VIII', label: 'Araucanía' },
-        { value: 'IX', label: 'Los Ríos' },
-        { value: 'X', label: 'Los Lagos' },
-        { value: 'XI', label: 'Aysén' },
-        { value: 'XII', label: 'Magallanes' },
-        { value: 'XIV', label: 'Los Ríos' },
-        { value: 'XV', label: 'Arica y Parinacota' },
-    ];
+  const regiones = [
+    { value: 'RM', label: 'Región Metropolitana' },
+    { value: 'V', label: 'Valparaíso' },
+    { value: 'I', label: 'O’Higgins' },
+    { value: 'VI', label: 'Maule' },
+    { value: 'VII', label: 'Biobío' },
+    { value: 'VIII', label: 'Araucanía' },
+    { value: 'IX', label: 'Los Ríos' },
+    { value: 'X', label: 'Los Lagos' },
+    { value: 'XI', label: 'Aysén' },
+    { value: 'XII', label: 'Magallanes' },
+    { value: 'XIV', label: 'Los Ríos' },
+    { value: 'XV', label: 'Arica y Parinacota' },
+  ];
 
-    const comunas = {
-        VIII: [
-          { value: "Temuco", label: "Temuco" },
-          { value: "Padre Las Casas", label: "Padre Las Casas" },
-          { value: "Pucon", label: "Pucon" },
-          { value: "Villarrica", label: "Villarrica" },
-          { value: "Galvarino", label: "Galvarino" },
-          { value: "Lautaro", label: "Lautaro" },
-          { value: "Perquenco", label: "Perquenco" },
-          { value: "Cunco", label: "Cunco" },
-          { value: "Victoria", label: "Victoria" },
-          { value: "Carahue", label: "Carahue" },
-          { value: "Freire", label: "Freire" },
-          { value: "Nueva Imperial", label: "Nueva Imperial" },
-          { value: "Gorbea", label: "Gorbea" },
-          { value: "Melipeuco", label: "Melipeuco" },
-        ],
-        // Agrega las comunas para las otras regiones aquí
-      };
-    
-    const handleTipoClienteChange = (selectedOption) => {
-        setTipoCliente(selectedOption.value);
-        onChange({ tipoCliente: selectedOption.value, nombre, email, telefono, rut, direccion, region, comuna, inspeccion });
-    };
+  const comunas = {
+    VIII: [
+      { value: "Temuco", label: "Temuco" },
+      { value: "Padre Las Casas", label: "Padre Las Casas" },
+      { value: "Pucon", label: "Pucon" },
+      { value: "Villarrica", label: "Villarrica" },
+      { value: "Galvarino", label: "Galvarino" },
+      { value: "Lautaro", label: "Lautaro" },
+      { value: "Perquenco", label: "Perquenco" },
+      { value: "Cunco", label: "Cunco" },
+      { value: "Victoria", label: "Victoria" },
+      { value: "Carahue", label: "Carahue" },
+      { value: "Freire", label: "Freire" },
+      { value: "Nueva Imperial", label: "Nueva Imperial" },
+      { value: "Gorbea", label: "Gorbea" },
+      { value: "Melipeuco", label: "Melipeuco" },
+    ],
+    // Agrega las comunas para las otras regiones aquí
+  };
 
-    const handleNombreChange = (e) => {
-        setNombre(e.target.value);
-        onChange({ tipoCliente, nombre: e.target.value, email, telefono, rut, direccion, region, comuna, inspeccion });
-    };
+  useEffect(() => {
+    onChange({
+      ...datos,
+      tipoCliente,
+      nombre,
+      email,
+      telefono,
+      rut,
+      direccion,
+      region,
+      comuna,
+      inspeccion,
+    });
+  }, [tipoCliente, nombre, email, telefono, rut, direccion, region, comuna, inspeccion, datos]);
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-        onChange({ tipoCliente, nombre, email: e.target.value, telefono, rut, direccion, region, comuna, inspeccion });
-    };
+  const handleTipoClienteChange = (e) => {
+    setTipoCliente(e.target.value);
+  };
 
-    const handleTelefonoChange = (e) => {
-        setTelefono(e.target.value);
-        onChange({ tipoCliente, nombre, email, telefono: e.target.value, rut, direccion, region, comuna, inspeccion });
-    };
+  const handleNombreChange = (e) => {
+    setNombre(e.target.value);
+  };
 
-    const handleRutChange = (e) => {
-        setRut(e.target.value);
-        onChange({ tipoCliente, nombre, email, telefono, rut: e.target.value, direccion, region, comuna, inspeccion });
-    };
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
 
-    const handleDireccionChange = (e) => {
-        setDireccion(e.target.value);
-        onChange({ tipoCliente, nombre, email, telefono, rut, direccion: e.target.value, region, comuna, inspeccion });
-    };
+  const handleTelefonoChange = (e) => {
+    setTelefono(e.target.value);
+  };
 
-    const handleRegionChange = (selectedOption) => {
-        setRegion(selectedOption.value);
-        onChange({ tipoCliente, nombre, email, telefono, rut, direccion, region: selectedOption.value, comuna, inspeccion });
-    };
+  const handleRutChange = (e) => {
+    setRut(e.target.value);
+  };
 
-    const handleComunaChange = (selectedOption) => {
-        setComuna(selectedOption.value);
-        onChange({ tipoCliente, nombre, email, telefono, rut, direccion, region, comuna: selectedOption.value, inspeccion });
-    };
+  const handleDireccionChange = (e) => {
+    setDireccion(e.target.value);
+  };
 
-    const handleInspeccionChange = (e) => {
-        setInspeccion(e.target.value);
-        onChange({ tipoCliente, nombre, email, telefono, rut, direccion, region, comuna, inspeccion: e.target.value });
-    };
+  const handleRegionChange = (e) => {
+    setRegion(e.target.value);
+    setComuna(''); // Reset comuna when region changes
+  };
 
-    return (
-        <div>
-            <Select 
-            options={tiposCliente} 
-            onChange={handleTipoClienteChange} 
-            placeholder="Tipo de cliente" 
-            />
-            <input 
-            type="text" 
-            placeholder="Nombre" 
-            onChange={handleNombreChange}
-             />
-            <input 
-            type="email" 
-            placeholder="Email" 
-            onChange={handleEmailChange} 
-            />
-            <input 
-            type="number" 
-            placeholder="Teléfono" 
-            onChange={handleTelefonoChange} 
-            />
-            <input 
-            type="text" 
-            placeholder="RUT" 
-            onChange={handleRutChange} 
-            />
-            <input 
-            type="text" 
-            placeholder="Dirección" 
-            onChange={handleDireccionChange} 
-            />
-            <Select 
-            options={regiones} 
-            onChange={handleRegionChange} 
-            placeholder="Región" 
-            />
-            <Select 
-            options={comunas[region] || []} 
-            onChange={handleComunaChange} 
-            placeholder="Comuna" 
-            />
-            <input type="text" placeholder="Inspección" onChange={handleInspeccionChange} />
-        </div>
-    );
-    };
+  const handleComunaChange = (e) => {
+    setComuna(e.target.value);
+  };
 
-    export default DatosCliente;
+  const handleInspeccionChange = (e) => {
+    setInspeccion(e.target.value);
+  };
+
+  return (
+    <div>
+      <FormControl fullWidth>
+        <InputLabel id="tipo-cliente-label">Tipo de Cliente</InputLabel>
+        <Select labelId="tipo-cliente-label" id="tipo-cliente" value={tipoCliente} label="Tipo de Cliente" onChange={handleTipoClienteChange}>
+          {tiposCliente.map((tipo) => (
+            <MenuItem key={tipo.value} value={tipo.value}>
+              {tipo.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <TextField label="Nombre" value={nombre} onChange={handleNombreChange} fullWidth />
+      <TextField label="Email" value={email} onChange={handleEmailChange} fullWidth />
+      <TextField label="Teléfono" value={telefono} onChange={handleTelefonoChange} fullWidth />
+      <TextField label="RUT" value={rut} onChange={handleRutChange} fullWidth />
+      <TextField label="Dirección" value={direccion} onChange={handleDireccionChange} fullWidth />
+      <FormControl fullWidth>
+        <InputLabel id="region-label">Región</InputLabel>
+        <Select labelId="region-label" id="region" value={region} label="Región" onChange={handleRegionChange}>
+          {regiones.map((region) => (
+            <MenuItem key={region.value} value={region.value}>
+              {region.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth>
+        <InputLabel id="comuna-label">Comuna</InputLabel>
+        <Select labelId="comuna-label" id="comuna" value={comuna} onChange={handleComunaChange}>
+          {comunas[region]?.map((comuna) => (
+            <MenuItem key={comuna.value} value={comuna.value}>
+              {comuna.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl component="fieldset">
+        <RadioGroup row aria-label="inspeccion" name="inspeccion" value={inspeccion} onChange={handleInspeccionChange}>
+          <FormControlLabel value="si" control={<Radio />} label="Sí" />
+          <FormControlLabel value="no" control={<Radio />} label="No" />
+        </RadioGroup>
+      </FormControl>
+      <Button variant="contained" onClick={onAnterior}>
+        Anterior
+      </Button>
+      
+      <Button variant="contained" onClick={onSiguiente}>
+        Continuar
+      </Button>
+    </div>
+  );
+}
+
+export default DatosCliente;

@@ -1,18 +1,18 @@
-import React, { useState} from "react";
-import Select from "react-select";
+import React, { useState, useEffect } from "react";
+import { TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
-function DatosVendedor ({ onChange}) {
-    const [tipoVendedor, setTipoVendedor] = useState('');
-    const [nombreVendedor, setNombreVendedor] = useState('');
-    const [telefonoVendedor, setTelefonoVendedor] = useState('');
-    const [direccionVendedor, setDireccionVendedor] = useState('');
-    const [regionVendedor, setRegionVendedor] = useState('');
-    const [comunaVendedor, setComunaVendedor] = useState('');
+function DatosVendedor({ datos, onChange, onSiguiente, onAnterior }) {
+    const [tipoVendedor, setTipoVendedor] = useState(datos?.tipoVendedor || '');
+    const [nombreVendedor, setNombreVendedor] = useState(datos?.nombreVendedor || '');
+    const [telefonoVendedor, setTelefonoVendedor] = useState(datos?.telefonoVendedor || '');
+    const [direccionVendedor, setDireccionVendedor] = useState(datos?.direccionVendedor || '');
+    const [regionVendedor, setRegionVendedor] = useState(datos?.regionVendedor || '');
+    const [comunaVendedor, setComunaVendedor] = useState(datos?.comunaVendedor || '');
 
     const tiposVendedor = [
         { value: 'Particular', label: 'Particular' },
         { value: 'Empresa', label: 'Empresa' },
-        ];
+    ];
 
     const regiones = [
         { value: 'RM', label: 'Región Metropolitana' },
@@ -28,124 +28,107 @@ function DatosVendedor ({ onChange}) {
         { value: 'XIV', label: 'Los Ríos' },
         { value: 'XV', label: 'Arica y Parinacota' },
     ];
-    
-    
+
     const comunas = {
         VIII: [
-          { value: "Temuco", label: "Temuco" },
-          { value: "Padre Las Casas", label: "Padre Las Casas" },
-          { value: "Pucon", label: "Pucon" },
-          { value: "Villarrica", label: "Villarrica" },
-          { value: "Galvarino", label: "Galvarino" },
-          { value: "Lautaro", label: "Lautaro" },
-          { value: "Perquenco", label: "Perquenco" },
-          { value: "Cunco", label: "Cunco" },
-          { value: "Victoria", label: "Victoria" },
-          { value: "Carahue", label: "Carahue" },
-          { value: "Freire", label: "Freire" },
-          { value: "Nueva Imperial", label: "Nueva Imperial" },
-          { value: "Gorbea", label: "Gorbea" },
-          { value: "Melipeuco", label: "Melipeuco" },
+            { value: "Temuco", label: "Temuco" },
+            { value: "Padre Las Casas", label: "Padre Las Casas" },
+            { value: "Pucon", label: "Pucon" },
+            { value: "Villarrica", label: "Villarrica" },
+            { value: "Galvarino", label: "Galvarino" },
+            { value: "Lautaro", label: "Lautaro" },
+            { value: "Perquenco", label: "Perquenco" },
+            { value: "Cunco", label: "Cunco" },
+            { value: "Victoria", label: "Victoria" },
+            { value: "Carahue", label: "Carahue" },
+            { value: "Freire", label: "Freire" },
+            { value: "Nueva Imperial", label: "Nueva Imperial" },
+            { value: "Gorbea", label: "Gorbea" },
+            { value: "Melipeuco", label: "Melipeuco" },
         ],
         // Agrega las comunas para las otras regiones aquí
-      };
-
-    const handleTipoVendedorChange = (selectedOption) => {
-        setTipoVendedor(selectedOption.value);
-        onChange({ tipoVendedor: selectedOption.value, nombreVendedor, telefonoVendedor, direccionVendedor, regionVendedor, comunaVendedor });
     };
-// Compare this snippet from src/DatosVendedor.js:
-//     const handleNombreChange = (e) => {
-//         setNombre(e.target.value); 
-//     };
+
+    useEffect(() => {
+        onChange({
+            ...datos,
+            tipoVendedor,
+            nombreVendedor,
+            telefonoVendedor,
+            direccionVendedor,
+            regionVendedor,
+            comunaVendedor,
+        });
+    }, [tipoVendedor, nombreVendedor, telefonoVendedor, direccionVendedor, regionVendedor, comunaVendedor, datos, onChange]);
+
+    const handleTipoVendedorChange = (e) => {
+        setTipoVendedor(e.target.value);
+    };
 
     const handleNombreVendedorChange = (e) => {
         setNombreVendedor(e.target.value);
-        onChange({ tipoVendedor, nombreVendedor: e.target.value, telefonoVendedor, direccionVendedor, regionVendedor, comunaVendedor });
     };
-// Compare this snippet from src/DatosVendedor.js:
-//     const handleTelefonoChange = (e) => {
-//         setTelefono(e.target.value);
-//     };
-const handleTelefonoVendedorChange = (e) => {
-    setTelefonoVendedor(e.target.value);
-    onChange({ tipoVendedor, nombreVendedor, telefonoVendedor: e.target.value, direccionVendedor, regionVendedor, comunaVendedor });
-}
-// Compare this snippet from src/DatosVendedor.js:
-//     const handleDireccionChange = (e) => {
+
+    const handleTelefonoVendedorChange = (e) => {
+        setTelefonoVendedor(e.target.value);
+    };
 
     const handleDireccionVendedorChange = (e) => {
         setDireccionVendedor(e.target.value);
-        onChange({ tipoVendedor, nombreVendedor, telefonoVendedor, direccionVendedor: e.target.value, regionVendedor, comunaVendedor });
     };
-// Compare this snippet from src/DatosVendedor.js:
-//     const handleRegionChange = (selectedOption) => {
-//         setRegion(selectedOption.value);
-//     };
-const handleRegionVendedorChange = (selectedOption) => {
-    setRegionVendedor(selectedOption.value);
-    onChange({ tipoVendedor, nombreVendedor, telefonoVendedor, direccionVendedor, regionVendedor: selectedOption.value, comunaVendedor });
-}
-// Compare this snippet from src/DatosVendedor.js:
-//     const handleComunaChange = (selectedOption) => {
-    //         setComuna(selectedOption.value);
-    //     };
-    const handleComunaVendedorChange = (selectedOption) => {
-        setComunaVendedor(selectedOption.value);
-        onChange({ tipoVendedor, nombreVendedor, telefonoVendedor, direccionVendedor, regionVendedor, comunaVendedor: selectedOption.value });
+
+    const handleRegionVendedorChange = (e) => {
+        setRegionVendedor(e.target.value);
+        setComunaVendedor(''); // Reset comuna when region changes
     };
-    // Compare this snippet from src/DatosVendedor.js:
-    //     return (
-    //         <div>
-    //             <Select options={tipos} onChange={handleTipoChange} placeholder="Tipo de cliente" />
-    //             <input type="text" value={nombre} onChange={handleNombreChange} placeholder
-    //                 ="Nombre del cliente"/>
-    //             <input type="text" value={telefono} onChange={handleTelefonoChange} placeholder
-    //                 ="Teléfono del cliente"/>
-    //             <input type="text" value={direccion} onChange={handleDireccionChange} placeholder
-    //                 ="Dirección del cliente"/>
-    //             <Select options={regiones} onChange={handleRegionChange} placeholder="Región" />
-    //             <Select options={comunas} onChange={handleComunaChange} placeholder="Com
-    //             una" />
-    //         </div>
-    //     );
+
+    const handleComunaVendedorChange = (e) => {
+        setComunaVendedor(e.target.value);
+    };
+
     return (
         <div>
-          <Select
-            options={tiposVendedor}
-            onChange={handleTipoVendedorChange}
-            placeholder="Tipo de vendedor"
-          />
-          <input
-            type="text"
-            placeholder="Nombre del vendedor"
-            onChange={handleNombreVendedorChange}
-          />
-          <input
-            type="text"
-            placeholder="Teléfono del vendedor"
-            onChange={handleTelefonoVendedorChange}
-          />
-          <input
-            type="text"
-            placeholder="Dirección del vendedor"
-            onChange={handleDireccionVendedorChange}
-          />
-          <Select
-            options={regiones}
-            onChange={handleRegionVendedorChange}
-            placeholder="Región"
-          />
-          <Select
-            options={comunas[regionVendedor] || []}
-            onChange={handleComunaVendedorChange}
-            placeholder="Comuna"
-          />
+            <FormControl fullWidth>
+                <InputLabel id="tipo-vendedor-label">Tipo de Vendedor</InputLabel>
+                <Select labelId="tipo-vendedor-label" id="tipo-vendedor" value={tipoVendedor} label="Tipo de Vendedor" onChange={handleTipoVendedorChange}>
+                    {tiposVendedor.map((tipo) => (
+                        <MenuItem key={tipo.value} value={tipo.value}>
+                            {tipo.label}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+            <TextField label="Nombre Vendedor" value={nombreVendedor} onChange={handleNombreVendedorChange} fullWidth />
+            <TextField label="Teléfono Vendedor" value={telefonoVendedor} onChange={handleTelefonoVendedorChange} fullWidth />
+            <TextField label="Dirección Vendedor" value={direccionVendedor} onChange={handleDireccionVendedorChange} fullWidth />
+            <FormControl fullWidth>
+                <InputLabel id="region-vendedor-label">Región Vendedor</InputLabel>
+                <Select labelId="region-vendedor-label" id="region-vendedor" value={regionVendedor} label="Región Vendedor" onChange={handleRegionVendedorChange}>
+                    {regiones.map((region) => (
+                        <MenuItem key={region.value} value={region.value}>
+                            {region.label}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+            <FormControl fullWidth>
+                <InputLabel id="comuna-vendedor-label">Comuna Vendedor</InputLabel>
+                <Select labelId="comuna-vendedor-label" id="comuna-vendedor" value={comunaVendedor} label="Comuna Vendedor" onChange={handleComunaVendedorChange}>
+                    {comunas[regionVendedor]?.map((comuna) => (
+                        <MenuItem key={comuna.value} value={comuna.value}>
+                            {comuna.label}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+            <Button variant="contained" onClick={onAnterior}>
+                Anterior
+            </Button>
+            <Button variant="contained" onClick={onSiguiente}>
+                Continuar
+            </Button>
         </div>
-      );
-    }
-    
-    export default DatosVendedor;
-// Compa r e this snippet from src/DatosVendedor.js:    
-//     import React, { useState } from 'react';
-//     import Select from 'react-select';
+    );
+}
+
+export default DatosVendedor;

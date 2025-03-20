@@ -1,0 +1,14 @@
+
+/* Intenta con estos selectores en App.css */
+button.btn-continuar {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.App button.btn-continuar {
+  /* Agrega más estilos aquí si es necesario */
+}

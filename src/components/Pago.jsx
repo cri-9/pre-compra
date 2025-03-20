@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { TextField, Button } from '@mui/material';
 import axios from "axios";
 
-function Pago({ datos }) {
+function Pago({ datos, onAnterior }) {
     const [codigoDescuento, setCodigoDescuento] = useState("");
-    const [total, setTotal] = useState(629912);
+    const [total, setTotal] = useState(45000);
 
     const handleCodigoDescuentoChange = (e) => {
         setCodigoDescuento(e.target.value);
@@ -16,11 +17,19 @@ function Pago({ datos }) {
             });
     }
     return (
-        <div>
-            <input type="text" value={codigoDescuento} onChange={handleCodigoDescuentoChange} placeholder="Código de descuento" />
-            <button onClick={handleIrPago}>Ir a pago</button>
-            <p>Total: {total}</p>
-        </div>
-    ); 
+      <div>
+          <TextField label="Código de descuento" value={codigoDescuento} onChange={handleCodigoDescuentoChange} fullWidth style={{ marginBottom: '20px' }} /> {/* Espacio inferior */}
+          <div style={{ marginTop: '20px' }}> {/* Espacio superior para los botones */}
+              <Button variant="contained" onClick={onAnterior}>
+                  Anterior
+              </Button>
+              <Button variant="contained" onClick={handleIrPago}>
+                  Ir al pago
+              </Button>
+          </div>
+          <p>Total: ${total}</p>
+      </div>
+  );
 }
+
 export default Pago;
