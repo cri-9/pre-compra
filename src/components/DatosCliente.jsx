@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Select, MenuItem, InputLabel, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { TextField, Box, FormControl, InputLabel, Select, MenuItem, Typography, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import FormItem from './FormItem';
 
 function DatosCliente({ datos, onChange, onSiguiente, onAnterior }) {
-  const [tipoCliente, setTipoCliente] = useState(datos?.tipoCliente || '');
   const [nombre, setNombre] = useState(datos?.nombre || '');
+  const [apellido, setApellido] = useState(datos?.apellido || '');
   const [email, setEmail] = useState(datos?.email || '');
   const [telefono, setTelefono] = useState(datos?.telefono || '');
   const [rut, setRut] = useState(datos?.rut || '');
   const [direccion, setDireccion] = useState(datos?.direccion || '');
   const [region, setRegion] = useState(datos?.region || '');
   const [comuna, setComuna] = useState(datos?.comuna || '');
-  const [inspeccion, setInspeccion] = useState(datos?.inspeccion || 'no');
-
-  const tiposCliente = [
-    { value: 'Persona', label: 'Persona' },
-    { value: 'Empresa', label: 'Empresa' },
-  ];
+  const [presente, setPresente] = useState(datos?.presente || '');
 
   const regiones = [
     { value: 'RM', label: 'Región Metropolitana' },
@@ -53,108 +49,81 @@ function DatosCliente({ datos, onChange, onSiguiente, onAnterior }) {
   };
 
   useEffect(() => {
-    onChange({
-      ...datos,
-      tipoCliente,
-      nombre,
-      email,
-      telefono,
-      rut,
-      direccion,
-      region,
-      comuna,
-      inspeccion,
-    });
-  }, [tipoCliente, nombre, email, telefono, rut, direccion, region, comuna, inspeccion, datos]);
-
-  const handleTipoClienteChange = (e) => {
-    setTipoCliente(e.target.value);
-  };
-
-  const handleNombreChange = (e) => {
-    setNombre(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleTelefonoChange = (e) => {
-    setTelefono(e.target.value);
-  };
-
-  const handleRutChange = (e) => {
-    setRut(e.target.value);
-  };
-
-  const handleDireccionChange = (e) => {
-    setDireccion(e.target.value);
-  };
+    onChange({ nombre, apellido, email, telefono, rut, direccion, region, comuna, presente });
+  }, [nombre, apellido, email, telefono, rut, direccion, region, comuna, presente, onChange]);
 
   const handleRegionChange = (e) => {
     setRegion(e.target.value);
     setComuna(''); // Reset comuna when region changes
   };
 
-  const handleComunaChange = (e) => {
-    setComuna(e.target.value);
-  };
-
-  const handleInspeccionChange = (e) => {
-    setInspeccion(e.target.value);
+  const handlePresenteChange = (e) => {
+    setPresente(e.target.value);
   };
 
   return (
-    <div>
-      <FormControl fullWidth>
-        <InputLabel id="tipo-cliente-label">Tipo de Cliente</InputLabel>
-        <Select labelId="tipo-cliente-label" id="tipo-cliente" value={tipoCliente} label="Tipo de Cliente" onChange={handleTipoClienteChange}>
-          {tiposCliente.map((tipo) => (
-            <MenuItem key={tipo.value} value={tipo.value}>
-              {tipo.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <TextField label="Nombre" value={nombre} onChange={handleNombreChange} fullWidth />
-      <TextField label="Email" value={email} onChange={handleEmailChange} fullWidth />
-      <TextField label="Teléfono" value={telefono} onChange={handleTelefonoChange} fullWidth />
-      <TextField label="RUT" value={rut} onChange={handleRutChange} fullWidth />
-      <TextField label="Dirección" value={direccion} onChange={handleDireccionChange} fullWidth />
-      <FormControl fullWidth>
-        <InputLabel id="region-label">Región</InputLabel>
-        <Select labelId="region-label" id="region" value={region} label="Región" onChange={handleRegionChange}>
-          {regiones.map((region) => (
-            <MenuItem key={region.value} value={region.value}>
-              {region.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel id="comuna-label">Comuna</InputLabel>
-        <Select labelId="comuna-label" id="comuna" value={comuna} onChange={handleComunaChange}>
-          {comunas[region]?.map((comuna) => (
-            <MenuItem key={comuna.value} value={comuna.value}>
-              {comuna.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl component="fieldset">
-        <RadioGroup row aria-label="inspeccion" name="inspeccion" value={inspeccion} onChange={handleInspeccionChange}>
-          <FormControlLabel value="si" control={<Radio />} label="Sí" />
-          <FormControlLabel value="no" control={<Radio />} label="No" />
-        </RadioGroup>
-      </FormControl>
-      <Button variant="contained" onClick={onAnterior}>
-        Anterior
-      </Button>
-      
-      <Button variant="contained" onClick={onSiguiente}>
-        Continuar
-      </Button>
-    </div>
+    <Box sx={{ width: '100%' }}>
+      <FormItem>
+        <TextField label="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} fullWidth />
+      </FormItem>
+      <FormItem>
+        <TextField label="Apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} fullWidth />
+      </FormItem>
+      <FormItem>
+        <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth />
+      </FormItem>
+      <FormItem>
+        <TextField label="Teléfono" value={telefono} onChange={(e) => setTelefono(e.target.value)} fullWidth />
+      </FormItem>
+      <FormItem>
+        <TextField label="RUT" value={rut} onChange={(e) => setRut(e.target.value)} fullWidth />
+      </FormItem>
+      <FormItem>
+        <TextField label="Dirección" value={direccion} onChange={(e) => setDireccion(e.target.value)} fullWidth />
+      </FormItem>
+      <FormItem>
+        <FormControl fullWidth>
+          <InputLabel id="region-label">Región</InputLabel>
+          <Select labelId="region-label" id="region" value={region} label="Región" onChange={handleRegionChange}>
+            {regiones.map((region) => (
+              <MenuItem key={region.value} value={region.value}>
+                {region.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </FormItem>
+      <FormItem>
+        <FormControl fullWidth>
+          <InputLabel id="comuna-label">Comuna</InputLabel>
+          <Select labelId="comuna-label" id="comuna" value={comuna} label="Comuna" onChange={(e) => setComuna(e.target.value)}>
+            {comunas[region]?.map((comuna) => (
+              <MenuItem key={comuna.value} value={comuna.value}>
+                {comuna.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </FormItem>
+      <FormItem>
+        <FormControl component="fieldset">
+          <RadioGroup row value={presente} onChange={handlePresenteChange}>
+            <FormControlLabel value="si" control={<Radio />} label="Sí" />
+            <FormControlLabel value="no" control={<Radio />} label="No" />
+          </RadioGroup>
+        </FormControl>
+      </FormItem>
+      {presente === 'si' && (
+        <Typography variant="body1" sx={{ backgroundColor: '#dff0d8', color: '#3c763d', padding: 1, borderRadius: 1 }}>
+          Perfecto, el inspector se comunicará cuando llegue al lugar de la revisión.
+        </Typography>
+      )}
+      {presente === 'no' && (
+        <Typography variant="body1" sx={{ backgroundColor: '#f2dede', color: '#a94442', padding: 1, borderRadius: 1 }}>
+          No hay problema, el inspector se comunicará con el vendedor cuando llegue al lugar.
+        </Typography>
+      )}
+    </Box>
   );
 }
 
