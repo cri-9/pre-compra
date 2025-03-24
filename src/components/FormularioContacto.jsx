@@ -19,10 +19,27 @@ function FormularioContacto() {
     agendamiento: {},
     pago: {},
   });
+  const [error, setError] = useState('');
 
   const handleSiguientePaso = () => setPasoActual((prev) => prev + 1);
   const handlePasoAnterior = () => setPasoActual((prev) => prev - 1);
-  const handleDatosChange = (seccion, nuevosDatos) => setDatos({ ...datos, [seccion]: nuevosDatos });
+  const handleDatosChange = (seccion, nuevosDatos) => {
+    setDatos((prevDatos) => {
+
+      const handleSiguiente = () => {
+        setTouched(true); // Activa el estado de validación
+        if (validateForm()) {
+          handleSiguientePaso();
+        }
+      };
+      // Compara los datos previos con los nuevos antes de actualizar
+      if (JSON.stringify(prevDatos[seccion]) !== JSON.stringify(nuevosDatos)) {
+        return { ...prevDatos, [seccion]: nuevosDatos };
+      }
+      return prevDatos;
+    });
+  };
+  
 
   // Personalizar el ícono del Stepper para que muestre un check cuando se complete el paso
   const StepIconComponent = ({ active, completed, icon }) => (
@@ -31,7 +48,6 @@ function FormularioContacto() {
 
   return (
     <>
-      {/* Barra superior */}
       <AppBar position="static" sx={{ backgroundColor: '#333', width: '100%' }}>
         <Toolbar>
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
@@ -40,10 +56,8 @@ function FormularioContacto() {
         </Toolbar>
       </AppBar>
 
-      {/* Contenedor del formulario */}
       <Container maxWidth="lg" sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
         <Box sx={{ width: '100%' }}>
-          {/* Header con los pasos más grandes y check cuando se complete */}
           <Stepper activeStep={pasoActual} alternativeLabel sx={{ mb: 4 }}>
             {pasos.map((label, index) => (
               <Step key={index} completed={pasoActual > index}>
@@ -52,7 +66,12 @@ function FormularioContacto() {
             ))}
           </Stepper>
 
-          {/* Contenedor del formulario con más espacio y diseño más limpio */}
+          {error && (
+            <Typography variant="body2" color="error" sx={{ mb: 2 }}>
+              {error}
+            </Typography>
+          )}
+
           <Paper elevation={3} sx={{ p: 5, borderRadius: 3, minHeight: '500px', width: '100%' }}>
             <Grid container spacing={3}>
               {pasoActual === 0 && (
@@ -68,6 +87,7 @@ function FormularioContacto() {
                   onChange={(nuevosDatos) => handleDatosChange('cliente', nuevosDatos)}
                   onSiguiente={handleSiguientePaso}
                   onAnterior={handlePasoAnterior}
+                  setError={setError}
                 />
               )}
               {pasoActual === 2 && (
@@ -91,7 +111,6 @@ function FormularioContacto() {
               )}
             </Grid>
 
-            {/* Botones mejor distribuidos */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
               {pasoActual > 0 && (
                 <Button variant="outlined" onClick={handlePasoAnterior}>

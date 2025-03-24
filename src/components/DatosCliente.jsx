@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Box, FormControl, InputLabel, Select, MenuItem, Typography, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { TextField, Box, FormControl, InputLabel, Select, MenuItem, Typography, RadioGroup, FormControlLabel, Radio, Button } from '@mui/material';
 import FormItem from './FormItem';
 
-function DatosCliente({ datos, onChange, onSiguiente, onAnterior }) {
+function DatosCliente({ datos, onChange, onSiguiente, onAnterior, setError }) {
   const [nombre, setNombre] = useState(datos?.nombre || '');
   const [apellido, setApellido] = useState(datos?.apellido || '');
   const [email, setEmail] = useState(datos?.email || '');
@@ -12,6 +12,8 @@ function DatosCliente({ datos, onChange, onSiguiente, onAnterior }) {
   const [region, setRegion] = useState(datos?.region || '');
   const [comuna, setComuna] = useState(datos?.comuna || '');
   const [presente, setPresente] = useState(datos?.presente || '');
+  const [rutError, setRutError] = useState('');
+  const [ touched, setTouched] = useState(false); // Para manejar el estado de los campos
 
   const regiones = [
     { value: 'RM', label: 'Región Metropolitana' },
@@ -61,25 +63,150 @@ function DatosCliente({ datos, onChange, onSiguiente, onAnterior }) {
     setPresente(e.target.value);
   };
 
+  const handleRutChange = (e) => {
+    const newRut = e.target.value.replace(/\./g, '').replace(/-/g, ''); // Quita puntos y guión
+    setRut(newRut);
+  
+    if (validateRut(newRut)) {
+      setRutError('');
+    } else {
+      setRutError('RUT inválido');
+    }
+  };
+  
+  const validateRut = (rut) => {
+    rut = rut.replace(/\./g, '').replace(/-/g, '');
+    if (rut.length < 8) return false;
+  
+    const dv = rut.slice(-1).toUpperCase();
+    const cuerpo = rut.slice(0, -1);
+  
+    let suma = 0;
+    let multiplo = 2;
+    for (let i = cuerpo.length - 1; i >= 0; i--) {
+      suma += multiplo * parseInt(cuerpo.charAt(i), 10);
+      multiplo = multiplo < 7 ? multiplo + 1 : 2;
+    }
+  
+    const dvEsperado = 11 - (suma % 11);
+    const dvCalculado = dvEsperado === 11 ? '0' : dvEsperado === 10 ? 'K' : dvEsperado.toString();
+  
+    return dv === dvCalculado;
+  };
+  
+  
+  const validateForm = () => {
+    let hasError = false;
+
+    if (!nombre) {
+      setError('Nombre es requerido');
+      hasError = true;
+      }
+      if (!apellido) {
+        setError('Apellido es requerido');
+        hasError = true;
+        }
+        if (!email) {
+          setError('Correo electrónico es requerido');
+          hasError = true;
+          }
+          if (!telefono) {
+            setError('Teléfono es requerido');
+            hasError = true;
+            }
+            if (!rut || rutError) {
+              setError('El RUT es requerido');
+              hasError = true;
+              }
+              if (!direccion) {
+                setError('La Dirección es requerido');
+                hasError = true;
+                }
+                if (!region) {
+                  setError('La Región es requerido');
+                  hasError = true;
+                  }
+                  if (!comuna) {
+                    setError('La Comuna es requerido');
+                    hasError = true;
+                    }
+                    if (!presente) { 
+                      setError('El Presente es requerido');
+                      hasError = true;
+                      }
+                      return !hasError;
+                      };
+    
+
+                    const handleSiguiente = () => {
+                        setTouched(true); // Activa el estado de validación
+                        if (validateForm()) {
+                          onSiguiente();
+                        }
+                      };  
+
+
   return (
     <Box sx={{ width: '100%' }}>
       <FormItem>
-        <TextField label="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} fullWidth />
+      <TextField
+        label="Nombre Cliente *"
+        value={nombre}
+        onChange={(e) => setNombre(e.target.value)}
+        error={touched && !nombre} // Solo muestra error si touched es true y está vacío
+        helperText={touched && !nombre ? 'Campo obligatorio' : ''}
+        fullWidth
+      />
+</FormItem>
+      <FormItem>
+      <TextField
+        label="Apellido Cliente *"
+        value={apellido}
+        onChange={(e) => setApellido(e.target.value)}
+        error={touched && !apellido} // Solo muestra error si touched es true y está vacío
+        helperText={touched && !apellido ? 'Campo obligatorio' : ''}
+        fullWidth
+      />
+</FormItem>
+      <FormItem>
+      <TextField
+        label="Correo Electronico *"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        error={touched && !email} // Solo muestra error si touched es true y está vacío
+        helperText={touched && !email ? 'Campo obligatorio' : ''}
+        fullWidth
+      />
+</FormItem>
+      <FormItem>
+      <TextField
+        label="Celular *"
+        value={telefono}
+        onChange={(e) => setTelefono(e.target.value)}
+        error={touched && !telefono} // Solo muestra error si touched es true y está vacío
+        helperText={touched && !telefono ? 'Campo obligatorio' : ''}
+        fullWidth
+      />
+</FormItem>
+      <FormItem>
+      <TextField
+        label="Rut *"
+        value={rut}
+        onChange={(e) => setRut(e.target.value)}
+        error={touched && !rut} // Solo muestra error si touched es true y está vacío
+        helperText={touched && !rut ? 'Campo obligatorio' : ''}
+        fullWidth
+      />
       </FormItem>
       <FormItem>
-        <TextField label="Apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} fullWidth />
-      </FormItem>
-      <FormItem>
-        <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth />
-      </FormItem>
-      <FormItem>
-        <TextField label="Teléfono" value={telefono} onChange={(e) => setTelefono(e.target.value)} fullWidth />
-      </FormItem>
-      <FormItem>
-        <TextField label="RUT" value={rut} onChange={(e) => setRut(e.target.value)} fullWidth />
-      </FormItem>
-      <FormItem>
-        <TextField label="Dirección" value={direccion} onChange={(e) => setDireccion(e.target.value)} fullWidth />
+      <TextField
+        label="Dirección"
+        value={direccion}
+        onChange={(e) => setDireccion(e.target.value)}
+        error={touched && !direccion} // Solo muestra error si touched es true y está vacío
+        helperText={touched && !direccion ? 'Campo obligatorio' : ''}
+        fullWidth
+      />
       </FormItem>
       <FormItem>
         <FormControl fullWidth>
@@ -106,13 +233,15 @@ function DatosCliente({ datos, onChange, onSiguiente, onAnterior }) {
         </FormControl>
       </FormItem>
       <FormItem>
-        <FormControl component="fieldset">
-          <RadioGroup row value={presente} onChange={handlePresenteChange}>
-            <FormControlLabel value="si" control={<Radio />} label="Sí" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-        </FormControl>
-      </FormItem>
+      <FormControl component="fieldset" sx={{ textAlign: 'center' }}> {/* Aplicar estilo textAlign: 'center' aquí */}
+        ¿Estarás presente en la inspección?
+        <RadioGroup row value={presente} onChange={handlePresenteChange}
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
+          <FormControlLabel value="si" control={<Radio />} label="Sí" />
+          <FormControlLabel value="no" control={<Radio />} label="No" />
+        </RadioGroup>
+      </FormControl>
+    </FormItem>
       {presente === 'si' && (
         <Typography variant="body1" sx={{ backgroundColor: '#dff0d8', color: '#3c763d', padding: 1, borderRadius: 1 }}>
           Perfecto, el inspector se comunicará cuando llegue al lugar de la revisión.

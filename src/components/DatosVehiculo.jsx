@@ -21,9 +21,14 @@ function DatosVehiculo({ datos, onChange, onSiguiente }) {
   };
 
   useEffect(() => {
-    onChange({ marca, modelo, año, patente });
-  }, [marca, modelo, año, patente, onChange]);
-
+    const nuevosDatos = { marca, modelo, año, patente };
+  
+    // Compara solo si los valores realmente cambiaron antes de llamar a onChange
+    if (JSON.stringify(nuevosDatos) !== JSON.stringify(datos)) {
+      onChange(nuevosDatos);
+    }
+  }, [marca, modelo, año, patente]); // 🔥 NO INCLUYAS `onChange`
+  
   const handleMarcaChange = (e) => {
     setMarca(e.target.value);
   };
@@ -44,7 +49,8 @@ function DatosVehiculo({ datos, onChange, onSiguiente }) {
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
       <FormItem>
         <FormControl fullWidth>
-          <InputLabel id="marca-label">Marca</InputLabel>
+          <InputLabel id="marca-label">Marca <span style={{ color: 'red' }}>*</span> 
+          </InputLabel>
           <Select labelId="marca-label" id="marca" value={marca} label="Marca" onChange={handleMarcaChange}>
             {marcas.map((marca) => (
               <MenuItem key={marca.value} value={marca.value}>
@@ -56,7 +62,8 @@ function DatosVehiculo({ datos, onChange, onSiguiente }) {
       </FormItem>
       <FormItem>
         <FormControl fullWidth>
-          <InputLabel id="modelo-label">Modelo</InputLabel>
+          <InputLabel id="modelo-label">Modelo <span style={{ color: 'red' }}>*</span> 
+          </InputLabel>
           <Select labelId="modelo-label" id="modelo" value={modelo} label="Modelo" onChange={handleModeloChange}>
             {modelos[marca]?.map((modelo) => (
               <MenuItem key={modelo.value} value={modelo.value}>
@@ -70,7 +77,12 @@ function DatosVehiculo({ datos, onChange, onSiguiente }) {
         <TextField label="Año" type="number" value={año} onChange={handleAñoChange} fullWidth />
       </FormItem>
       <FormItem>
-        <TextField label="Patente" value={patente} onChange={handlePatenteChange} fullWidth />
+        <TextField 
+        label={ <span>
+          Patente <span style={{ color: 'red' }}>*</span>
+        </span>
+        }
+        value={patente} onChange={handlePatenteChange} fullWidth />
       </FormItem>
     </Box>
   );

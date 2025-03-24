@@ -91,7 +91,8 @@ function DatosVendedor({ datos, onChange, onSiguiente, onAnterior }) {
     <Box sx={{ width: '100%' }}>
       <FormItem>
         <FormControl fullWidth>
-          <InputLabel id="tipo-vendedor-label">Tipo de Vendedor</InputLabel>
+          <InputLabel id="tipo-vendedor-label">Tipo de Vendedor <span style={{ color: 'red' }}>*</span>
+          </InputLabel>
           <Select labelId="tipo-vendedor-label" id="tipo-vendedor" value={tipoVendedor} label="Tipo de Vendedor" onChange={handleTipoVendedorChange}>
             {tiposVendedor.map((tipo) => (
               <MenuItem key={tipo.value} value={tipo.value}>
@@ -102,17 +103,33 @@ function DatosVendedor({ datos, onChange, onSiguiente, onAnterior }) {
         </FormControl>
       </FormItem>
       <FormItem>
-        <TextField label="Nombre Vendedor" value={nombreVendedor} onChange={handleNombreVendedorChange} fullWidth />
+        <TextField label={
+          <span>Nombre Vendedor
+            <span style={{ color: 'red' }}>*</span>
+          </span>
+        } 
+        value={nombreVendedor} onChange={handleNombreVendedorChange} fullWidth />
       </FormItem>
       <FormItem>
-        <TextField label="Teléfono Vendedor" value={telefonoVendedor} onChange={handleTelefonoVendedorChange} fullWidth />
+        <TextField label={
+          <span>Telefono Vendedor
+            <span style={{ color: 'red' }}>*</span>
+            </span>
+        } 
+        value={telefonoVendedor} onChange={handleTelefonoVendedorChange} fullWidth />
       </FormItem>
       <FormItem>
-        <TextField label="Dirección Vendedor" value={direccionVendedor} onChange={handleDireccionVendedorChange} fullWidth />
+        <TextField label={
+          <span>Direccion Vendedor
+            <span style={{ color: 'red' }}>*</span>
+            </span>
+        } 
+        value={direccionVendedor} onChange={handleDireccionVendedorChange} fullWidth />
       </FormItem>
       <FormItem>
         <FormControl fullWidth>
-          <InputLabel id="region-vendedor-label">Región Vendedor</InputLabel>
+          <InputLabel id="region-vendedor-label">Región Vendedor <span style={{ color: 'red'}}>*</span>
+          </InputLabel>
           <Select labelId="region-vendedor-label" id="region-vendedor" value={regionVendedor} label="Región Vendedor" onChange={handleRegionVendedorChange}>
             {regiones.map((region) => (
               <MenuItem key={region.value} value={region.value}>
@@ -124,7 +141,8 @@ function DatosVendedor({ datos, onChange, onSiguiente, onAnterior }) {
       </FormItem>
       <FormItem>
         <FormControl fullWidth>
-          <InputLabel id="comuna-vendedor-label">Comuna Vendedor</InputLabel>
+          <InputLabel id="comuna-vendedor-label">Comuna Vendedor<span style={{ color: 'red'}}>*</span>
+          </InputLabel>
           <Select labelId="comuna-vendedor-label" id="comuna-vendedor" value={comunaVendedor} label="Comuna Vendedor" onChange={handleComunaVendedorChange}>
             {comunas[regionVendedor]?.map((comuna) => (
               <MenuItem key={comuna.value} value={comuna.value}>
