@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import FormItem from './FormItem';
+import { TextField, Box, FormControl, InputLabel, Select, MenuItem, Typography } from '@mui/material';
 
-function DatosVendedor({ datos, onChange, onSiguiente, onAnterior }) {
-  const [tipoVendedor, setTipoVendedor] = useState(datos?.tipoVendedor || '');
-  const [nombreVendedor, setNombreVendedor] = useState(datos?.nombreVendedor || '');
-  const [telefonoVendedor, setTelefonoVendedor] = useState(datos?.telefonoVendedor || '');
-  const [direccionVendedor, setDireccionVendedor] = useState(datos?.direccionVendedor || '');
-  const [regionVendedor, setRegionVendedor] = useState(datos?.regionVendedor || '');
-  const [comunaVendedor, setComunaVendedor] = useState(datos?.comunaVendedor || '');
-
-  const tiposVendedor = [
-    { value: 'Particular', label: 'Particular' },
-    { value: 'Empresa', label: 'Empresa' },
-  ];
+function DatosVendedor({ datos, onChange }) {
+  const [tipovendedor, setTipoVendedor] = useState(datos?.tipovendedor || '');
+  const [nombre, setNombre] = useState(datos?.nombre || '');
+  const [telefono, setTelefono] = useState(datos?.telefono || '');
+  const [direccion, setDireccion] = useState(datos?.direccion || '');
+  const [region, setRegion] = useState(datos?.region || '');
+  const [comuna, setComuna] = useState(datos?.comuna || '');
 
   const regiones = [
     { value: 'RM', label: 'Región Metropolitana' },
@@ -47,111 +41,85 @@ function DatosVendedor({ datos, onChange, onSiguiente, onAnterior }) {
       { value: "Gorbea", label: "Gorbea" },
       { value: "Melipeuco", label: "Melipeuco" },
     ],
-    // Agrega las comunas para las otras regiones aquí
   };
 
   useEffect(() => {
-    onChange({
-      ...datos,
-      tipoVendedor,
-      nombreVendedor,
-      telefonoVendedor,
-      direccionVendedor,
-      regionVendedor,
-      comunaVendedor,
-    });
-  }, [tipoVendedor, nombreVendedor, telefonoVendedor, direccionVendedor, regionVendedor, comunaVendedor, datos, onChange]);
+    onChange({ tipovendedor, nombre, telefono, direccion, region, comuna });
+  }, [tipovendedor, nombre, telefono, direccion, region, comuna, onChange]);
 
-  const handleTipoVendedorChange = (e) => {
-    setTipoVendedor(e.target.value);
-  };
-
-  const handleNombreVendedorChange = (e) => {
-    setNombreVendedor(e.target.value);
-  };
-
-  const handleTelefonoVendedorChange = (e) => {
-    setTelefonoVendedor(e.target.value);
-  };
-
-  const handleDireccionVendedorChange = (e) => {
-    setDireccionVendedor(e.target.value);
-  };
-
-  const handleRegionVendedorChange = (e) => {
-    setRegionVendedor(e.target.value);
-    setComunaVendedor(''); // Reset comuna when region changes
-  };
-
-  const handleComunaVendedorChange = (e) => {
-    setComunaVendedor(e.target.value);
+  const handleRegionChange = (e) => {
+    setRegion(e.target.value);
+    setComuna(''); // Reset comuna when region changes
   };
 
   return (
     <Box sx={{ width: '100%' }}>
-      <FormItem>
-        <FormControl fullWidth>
-          <InputLabel id="tipo-vendedor-label">Tipo de Vendedor <span style={{ color: 'red' }}>*</span>
-          </InputLabel>
-          <Select labelId="tipo-vendedor-label" id="tipo-vendedor" value={tipoVendedor} label="Tipo de Vendedor" onChange={handleTipoVendedorChange}>
-            {tiposVendedor.map((tipo) => (
-              <MenuItem key={tipo.value} value={tipo.value}>
-                {tipo.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </FormItem>
-      <FormItem>
-        <TextField label={
-          <span>Nombre Vendedor
-            <span style={{ color: 'red' }}>*</span>
-          </span>
-        } 
-        value={nombreVendedor} onChange={handleNombreVendedorChange} fullWidth />
-      </FormItem>
-      <FormItem>
-        <TextField label={
-          <span>Telefono Vendedor
-            <span style={{ color: 'red' }}>*</span>
-            </span>
-        } 
-        value={telefonoVendedor} onChange={handleTelefonoVendedorChange} fullWidth />
-      </FormItem>
-      <FormItem>
-        <TextField label={
-          <span>Direccion Vendedor
-            <span style={{ color: 'red' }}>*</span>
-            </span>
-        } 
-        value={direccionVendedor} onChange={handleDireccionVendedorChange} fullWidth />
-      </FormItem>
-      <FormItem>
-        <FormControl fullWidth>
-          <InputLabel id="region-vendedor-label">Región Vendedor <span style={{ color: 'red'}}>*</span>
-          </InputLabel>
-          <Select labelId="region-vendedor-label" id="region-vendedor" value={regionVendedor} label="Región Vendedor" onChange={handleRegionVendedorChange}>
-            {regiones.map((region) => (
-              <MenuItem key={region.value} value={region.value}>
-                {region.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </FormItem>
-      <FormItem>
-        <FormControl fullWidth>
-          <InputLabel id="comuna-vendedor-label">Comuna Vendedor<span style={{ color: 'red'}}>*</span>
-          </InputLabel>
-          <Select labelId="comuna-vendedor-label" id="comuna-vendedor" value={comunaVendedor} label="Comuna Vendedor" onChange={handleComunaVendedorChange}>
-            {comunas[regionVendedor]?.map((comuna) => (
-              <MenuItem key={comuna.value} value={comuna.value}>
-                {comuna.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </FormItem>
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <InputLabel id="tipovendedor-label">Tipo de Vendedor</InputLabel>
+        <Select
+          labelId="tipovendedor-label"
+          id="tipovendedor"
+          value={tipovendedor}
+          onChange={(e) => setTipoVendedor(e.target.value)}
+          onClose={() => document.activeElement.blur()} // Forzar el foco fuera del menú
+        >
+          <MenuItem value="particular">Particular</MenuItem>
+          <MenuItem value="empresa">Empresa</MenuItem>
+        </Select>
+      </FormControl>
+      <TextField
+        label="Nombre"
+        value={nombre}
+        onChange={(e) => setNombre(e.target.value)}
+        fullWidth
+        sx={{ mb: 2 }}
+      />
+      <TextField
+        label="Teléfono"
+        value={telefono}
+        onChange={(e) => setTelefono(e.target.value)}
+        fullWidth
+        sx={{ mb: 2 }}
+      />
+      <TextField
+        label="Dirección"
+        value={direccion}
+        onChange={(e) => setDireccion(e.target.value)}
+        fullWidth
+        sx={{ mb: 2 }}
+      />
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <InputLabel id="region-label">Región</InputLabel>
+        <Select
+          labelId="region-label"
+          id="region"
+          value={region}
+          onChange={handleRegionChange}
+          onClose={() => document.activeElement.blur()} // Forzar el foco fuera del menú
+        >
+          {regiones.map((region) => (
+            <MenuItem key={region.value} value={region.value}>
+              {region.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth>
+        <InputLabel id="comuna-label">Comuna</InputLabel>
+        <Select
+          labelId="comuna-label"
+          id="comuna"
+          value={comuna}
+          onChange={(e) => setComuna(e.target.value)}
+          onClose={() => document.activeElement.blur()} // Forzar el foco fuera del menú
+        >
+          {comunas[region]?.map((comuna) => (
+            <MenuItem key={comuna.value} value={comuna.value}>
+              {comuna.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Box>
   );
 }

@@ -1,136 +1,191 @@
 import React, { useState } from 'react';
-import { Box, Button, Step, StepLabel, Stepper, Grid, Container, Paper, AppBar, Toolbar, Typography } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // Ícono de check
+import { Box, Button, Step, StepLabel, Stepper, Typography, Paper, Container, AppBar, Toolbar, Snackbar, Alert } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DatosVehiculo from './DatosVehiculo';
 import DatosCliente from './DatosCliente';
 import DatosVendedor from './DatosVendedor';
 import FechaAgendamiento from './FechaAgendamiento';
-import FormItem from './FormItem';
 import Pago from './Pago';
 
 const pasos = ["Datos del Vehículo", "Datos del Cliente", "Datos del Vendedor", "Fecha de Agendamiento", "Pago"];
 
 function FormularioContacto() {
   const [pasoActual, setPasoActual] = useState(0);
+  const [touched, setTouched] = useState(false);
   const [datos, setDatos] = useState({
-    vehiculo: {},
-    cliente: {},
-    vendedor: {},
-    agendamiento: {},
-    pago: {},
+    vehiculo: { marca: '', modelo: '', año: '', patente: '' }, // Incluye "patente"
+    cliente: { nombre: '', apellido: '', email: '', telefono: '', rut: '', dirección: '', región: '' },
+    vendedor: { tipovendedor: '', nombre: '', telefono: '' , direccion: '', region: '' , comuna: ''},
+    agendamiento: { fecha: '', hora: '' },
+    pago: { metodo: '' },
   });
-  const [error, setError] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [missingFields, setMissingFields] = useState([]);
 
-  const handleSiguientePaso = () => setPasoActual((prev) => prev + 1);
-  const handlePasoAnterior = () => setPasoActual((prev) => prev - 1);
+  // ✅ Evita ciclo infinito: Solo actualiza si los datos han cambiado
   const handleDatosChange = (seccion, nuevosDatos) => {
     setDatos((prevDatos) => {
-
-      const handleSiguiente = () => {
-        setTouched(true); // Activa el estado de validación
-        if (validateForm()) {
-          handleSiguientePaso();
-        }
-      };
-      // Compara los datos previos con los nuevos antes de actualizar
       if (JSON.stringify(prevDatos[seccion]) !== JSON.stringify(nuevosDatos)) {
         return { ...prevDatos, [seccion]: nuevosDatos };
       }
       return prevDatos;
     });
   };
-  
 
-  // Personalizar el ícono del Stepper para que muestre un check cuando se complete el paso
-  const StepIconComponent = ({ active, completed, icon }) => (
-    completed ? <CheckCircleIcon sx={{ color: 'lightgreen' }} fontSize="large" /> : <Typography fontSize={20} fontWeight="bold">{icon}</Typography>
-  );
+  // Validar formulario antes de avanzar
+  const validarFormulario = (stepIndex) => {
+    let fieldsToCheck = [];
+    let currentData = {};
+
+    switch (stepIndex) {
+      case 0: // Datos del Vehículo
+        fieldsToCheck = ["marca", "modelo", "año", "patente"]; // Incluye "patente"
+        currentData = datos.vehiculo;
+        break;
+      case 1: // Datos del Cliente
+        fieldsToCheck = ["nombre", "apellido", "email", "telefono", "rut", "direccion", "region",];
+        currentData = datos.cliente;
+        break;
+      case 2: // Datos del Vendedor
+        fieldsToCheck = ["tipovendedor", "nombre", "telefono", "direccion", "region", "comuna"];
+        currentData = datos.vendedor;
+        break;
+      case 3: // Fecha de Agendamiento
+        fieldsToCheck = ["fecha", "hora"];
+        currentData = datos.agendamiento;
+        break;
+      case 4: // Pago
+        fieldsToCheck = ["metodo"];
+        currentData = datos.pago;
+        break;
+      default:
+        return true;
+    }
+
+    const missing = fieldsToCheck.filter(field => !currentData[field]);
+    setMissingFields(missing);
+    return missing.length === 0;
+  };
+
+  // Manejar el botón siguiente
+  const handleSiguiente = () => {
+    setTouched(true);
+    if (validarFormulario(pasoActual)) {
+      setPasoActual((prev) => prev + 1);
+      setOpenSnackbar(false); // Cierra el Snackbar si la validación pasa
+    } else {
+      setOpenSnackbar(true); // Muestra el Snackbar si hay campos faltantes
+    }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   return (
-    <>
-      <AppBar position="static" sx={{ backgroundColor: '#333', width: '100%' }}>
-        <Toolbar>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            Formulario de Contacto
-          </Typography>
-        </Toolbar>
-      </AppBar>
+    <Container
+      elevation={3}
+      sx={{
+        p: 3,
+        borderRadius: 3,
+        backgroundColor: '#f0f0f0',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+      }}
+    >
+      {/* Contenedor interno para AppBar y Paper */}
+      <Box sx={{ width: '100%', maxWidth: 800 }}>
+        {/* Barra de navegación */}
+        <AppBar position="static" sx={{ backgroundColor: '#333', mb: 2 }}>
+          <Toolbar>
+            <Typography variant="h5" sx={{ flexGrow: 1, color: '#fff', p: 3, textAlign: 'center' }}>
+              Formulario de Contacto
+            </Typography>
+          </Toolbar>
+        </AppBar>
 
-      <Container maxWidth="lg" sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-        <Box sx={{ width: '100%' }}>
-          <Stepper activeStep={pasoActual} alternativeLabel sx={{ mb: 4 }}>
+        {/* Contenedor del formulario */}
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 3, width: '100%' }}>
+          <Stepper activeStep={pasoActual} sx={{ mb: 4 }}>
             {pasos.map((label, index) => (
               <Step key={index} completed={pasoActual > index}>
-                <StepLabel StepIconComponent={(props) => <StepIconComponent {...props} icon={index + 1} />}>{label}</StepLabel>
+                <StepLabel
+                  StepIconComponent={(props) =>
+                    props.completed ? (
+                      <CheckCircleIcon sx={{ color: 'lightgreen' }} />
+                    ) : (
+                      <Typography fontSize={18} fontWeight="bold">
+                        {props.icon}
+                      </Typography>
+                    )
+                  }
+                >
+                  {label}
+                </StepLabel>
               </Step>
             ))}
           </Stepper>
 
-          {error && (
-            <Typography variant="body2" color="error" sx={{ mb: 2 }}>
-              {error}
-            </Typography>
-          )}
+          {/* Renderizar el componente del paso actual */}
+          <Box sx={{ p: 2 }}>
+            {pasoActual === 0 &&
+              <DatosVehiculo datos={datos.vehiculo} onChange={(data) => handleDatosChange('vehiculo', data)} />}
+            {pasoActual === 1 &&
+              <DatosCliente datos={datos.cliente} onChange={(data) => handleDatosChange('cliente', data)} touched={touched} setTouched={setTouched} />}
+            {pasoActual === 2 &&
+              <DatosVendedor datos={datos.vendedor} onChange={(data) => handleDatosChange('vendedor', data)} />}
+            {pasoActual === 3 &&
+              <FechaAgendamiento datos={datos.agendamiento} onChange={(data) => handleDatosChange('agendamiento', data)} />}
+            {pasoActual === 4 &&
+              <Pago datos={datos.pago} onChange={(data) => handleDatosChange('pago', data)} />}
+          </Box>
 
-          <Paper elevation={3} sx={{ p: 5, borderRadius: 3, minHeight: '500px', width: '100%' }}>
-            <Grid container spacing={3}>
-              {pasoActual === 0 && (
-                <DatosVehiculo
-                  datos={datos.vehiculo}
-                  onChange={(nuevosDatos) => handleDatosChange('vehiculo', nuevosDatos)}
-                  onSiguiente={handleSiguientePaso}
-                />
-              )}
-              {pasoActual === 1 && (
-                <DatosCliente
-                  datos={datos.cliente}
-                  onChange={(nuevosDatos) => handleDatosChange('cliente', nuevosDatos)}
-                  onSiguiente={handleSiguientePaso}
-                  onAnterior={handlePasoAnterior}
-                  setError={setError}
-                />
-              )}
-              {pasoActual === 2 && (
-                <DatosVendedor
-                  datos={datos.vendedor}
-                  onChange={(nuevosDatos) => handleDatosChange('vendedor', nuevosDatos)}
-                  onSiguiente={handleSiguientePaso}
-                  onAnterior={handlePasoAnterior}
-                />
-              )}
-              {pasoActual === 3 && (
-                <FechaAgendamiento
-                  datos={datos.agendamiento}
-                  onChange={(nuevosDatos) => handleDatosChange('agendamiento', nuevosDatos)}
-                  onSiguiente={handleSiguientePaso}
-                  onAnterior={handlePasoAnterior}
-                />
-              )}
-              {pasoActual === 4 && (
-                <Pago datos={datos.pago} onAnterior={handlePasoAnterior} />
-              )}
-            </Grid>
+          {/* Botones de navegación */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+            {pasoActual > 0 && (
+              <Button variant="contained" color="secondary" onClick={() => setPasoActual((prev) => prev - 1)}>
+                Atrás
+              </Button>
+            )}
+            {pasoActual < pasos.length - 1 ? (
+              <Button variant="contained" color="primary" onClick={handleSiguiente}>
+                Siguiente
+              </Button>
+            ) : (
+              <Button variant="contained" color="success">
+                Finalizar
+              </Button>
+            )}
+          </Box>
+        </Paper>
+      </Box>
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-              {pasoActual > 0 && (
-                <Button variant="outlined" onClick={handlePasoAnterior}>
-                  Anterior
-                </Button>
-              )}
-              {pasoActual < pasos.length - 1 ? (
-                <Button variant="contained" onClick={handleSiguientePaso}>
-                  Siguiente
-                </Button>
-              ) : (
-                <Button variant="contained" color="success">
-                  Finalizar
-                </Button>
-              )}
-            </Box>
-          </Paper>
-        </Box>
-      </Container>
-    </>
+      {/* Snackbar para mostrar el mensaje de error */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%', backgroundColor: 'white', color: 'black', border: '1px solid black' }}>
+          <Typography variant="body1" color="black">
+            Por favor, complete los siguientes campos:
+          </Typography>
+          <ul>
+            {missingFields.map((field, index) => (
+              <li key={index} style={{ color: 'black' }}>{field}</li>
+            ))}
+          </ul>
+        </Alert>
+      </Snackbar>
+    </Container>
   );
 }
 
