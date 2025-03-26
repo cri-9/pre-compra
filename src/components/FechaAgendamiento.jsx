@@ -15,9 +15,9 @@ function FechaAgendamiento({ datos, onChange, onSiguiente, onAnterior }) {
 
   const handleFechaChange = (date) => {
     setFecha(date);
-    onChange({ fecha: date, bloque });
+    onChange({ fecha: date.toISOString(), bloque }); // Asegúrate de enviar la fecha en un formato válido
   };
-
+  
   const handleBloqueChange = (event) => {
     setBloque(event.target.value);
     onChange({ fecha, bloque: event.target.value });
@@ -26,6 +26,9 @@ function FechaAgendamiento({ datos, onChange, onSiguiente, onAnterior }) {
   return (
     <Box sx={{ width: '100%' }}>
       <FormItem>
+      <Typography variant="body1" sx={{ mb: 2, backgroundColor: '#f0f0f0', padding: 1, borderRadius: 1 }}>
+        Seleccionar la fecha para la cita
+      </Typography>
         <FormControl fullWidth>
           <DatePicker
             selected={fecha}
@@ -55,7 +58,7 @@ function FechaAgendamiento({ datos, onChange, onSiguiente, onAnterior }) {
           </Select>
         </FormControl>
       </FormItem>
-      <Typography variant="body1" sx={{ mt: 2, backgroundColor: '#f0f0f0', padding: 1, borderRadius: 1 }}>
+      <Typography variant="body1" sx={{ mt: 2, backgroundColor: '#c5d5e8', padding: 1, borderRadius: 1, textAlign: 'center' }}>
         Recuerda que al pagar y finalizar el agendamiento te llegará una notificación
       </Typography>
     </Box>

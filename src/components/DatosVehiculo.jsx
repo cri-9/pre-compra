@@ -41,8 +41,27 @@ function DatosVehiculo({ datos, onChange, onSiguiente }) {
     setAño(e.target.value);
   };
 
-  const handlePatenteChange = (e) => {
-    setPatente(e.target.value);
+  const handlePatenteChange = (event) => {
+    let value = event.target.value.toUpperCase(); // Convertir a mayúsculas
+
+    //Elimina cualquier carácter que no sea una letra o un numero
+    value = value.replace(/[^A-Z0-9]/g, '');
+
+    //Aplica el formato xxxx-nn
+    if (value.length > 4) {
+      value = `${value.substring(0, 4)}-${value.substring(4, 6)}`;
+    } else if (value.length > 4 && value.length < 6) {
+      value = `${value.substring(0, 4)}-${value.substring(4)}`;
+    } else if (value.length > 0 && value.length <= 4) {
+      // No agregar guion hasta que se ingresen 4 caracteres
+    }
+    setPatente(value);
+  };
+  const handleNumeroChange = (event) => {
+    const inputValue = event.target.value;
+    // Usamos una expresión regular para permitir solo dígitos (0-9)
+    const numericValue = inputValue.replace(/[^0-9]/g, '');
+    setNumero(numericValue);
   };
 
   return (
@@ -74,7 +93,22 @@ function DatosVehiculo({ datos, onChange, onSiguiente }) {
         </FormControl>
       </FormItem>
       <FormItem>
-        <TextField label="Año" type="number" value={año} onChange={handleAñoChange} fullWidth />
+        
+      <TextField
+  label="Año"
+  variant="outlined"
+  inputProps={{
+    inputMode: "numeric",
+    pattern: "[0-9]{4}",
+    maxLength: 4
+  }}
+  onChange={(e) => {
+    let value = e.target.value.replace(/\D/g, ""); // Elimina caracteres no numéricos
+    if (value.length > 4) value = value.slice(0, 4); // Limita a 4 dígitos
+    setAño(value); // ✅ Actualiza el estado 'año' con el valor modificado
+  }}
+  fullWidth
+/>
       </FormItem>
       <FormItem>
         <TextField 

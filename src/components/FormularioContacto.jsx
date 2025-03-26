@@ -16,7 +16,7 @@ function FormularioContacto() {
     vehiculo: { marca: '', modelo: '', año: '', patente: '' }, // Incluye "patente"
     cliente: { nombre: '', apellido: '', email: '', telefono: '', rut: '', dirección: '', región: '' },
     vendedor: { tipovendedor: '', nombre: '', telefono: '' , direccion: '', region: '' , comuna: ''},
-    agendamiento: { fecha: '', hora: '' },
+    agendamiento: { fecha: '', bloque: '' },
     pago: { metodo: '' },
   });
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -51,7 +51,7 @@ function FormularioContacto() {
         currentData = datos.vendedor;
         break;
       case 3: // Fecha de Agendamiento
-        fieldsToCheck = ["fecha", "hora"];
+        fieldsToCheck = ["fecha", "bloque"];
         currentData = datos.agendamiento;
         break;
       case 4: // Pago

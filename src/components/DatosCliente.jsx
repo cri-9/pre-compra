@@ -6,7 +6,16 @@ function DatosCliente({ datos, onChange }) {
   const [nombre, setNombre] = useState(datos?.nombre || '');
   const [apellido, setApellido] = useState(datos?.apellido || '');
   const [email, setEmail] = useState(datos?.email || '');
-  const [telefono, setTelefono] = useState(datos?.telefono || '');
+  const [suggestions, setSuggestions] = useState([]);
+  const [telefono, setTelefono] = useState(() => {
+    const initialTelefono = datos?.telefono || '';
+    if (initialTelefono && /^\d+$/.test(initialTelefono)) {
+      return '+56' + initialTelefono.slice(0, 9);
+    }
+    return '';
+  });
+  const maximoDigitos = 9;
+  const prefijo = '+56';
   const [rut, setRut] = useState(datos?.rut || '');
   const [direccion, setDireccion] = useState(datos?.direccion || '');
   const [region, setRegion] = useState(datos?.region || '');
@@ -14,7 +23,7 @@ function DatosCliente({ datos, onChange }) {
   const [presente, setPresente] = useState(datos?.presente || '');
   const [rutError, setRutError] = useState('');
   const [formErrors, setFormErrors] = useState({});
-  const [touched, setTouched] = useState({}); // Estado para rastrear qué campos han sido tocados
+  const [touched, setTouched] = useState({});
 
   const regiones = [
     { value: 'RM', label: 'Región Metropolitana' },
@@ -57,6 +66,42 @@ function DatosCliente({ datos, onChange }) {
   const handleBlur = (field) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
+//formato celular 
+const handleTelefonoChange = (event) => {
+  let inputValue = event.target.value.replace(/\D/g, ''); // Eliminar todo lo que no sea número
+
+  // Eliminar prefijo si ya existe y el usuario intenta escribirlo
+  if (inputValue.startsWith('56')) {
+    inputValue = inputValue.slice(2);
+  }
+
+  // Limitar a 9 dígitos después del prefijo
+  const numerosLimitados = inputValue.slice(0, maximoDigitos);
+
+  // Actualizar el estado con el prefijo fijo
+  setTelefono(prefijo + numerosLimitados);
+};
+//FIn Configuración de celular
+
+//Con Email segú extención
+const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
+
+  const handleChange = (e) => {
+    let value = e.target.value;
+    setEmail(value);
+
+    // Mostrar sugerencias si el usuario escribe "@"
+    if (value.includes("@")) {
+      const [localPart, domainPart] = value.split("@");
+      setSuggestions(
+        emailDomains
+          .filter((domain) => domain.startsWith(domainPart))
+          .map((domain) => `${localPart}@${domain}`)
+      );
+    } else {
+      setSuggestions([]);
+    }
+  };
 
   const handleRegionChange = (e) => {
     setRegion(e.target.value);
@@ -66,7 +111,7 @@ function DatosCliente({ datos, onChange }) {
   const handlePresenteChange = (e) => {
     setPresente(e.target.value);
   };
-
+//Inicio conf Rut
   const handleRutChange = (e) => {
     const newRut = e.target.value.replace(/\./g, '').replace(/-/g, ''); // Quita puntos y guión
     setRut(newRut);
@@ -97,6 +142,7 @@ function DatosCliente({ datos, onChange }) {
 
     return dv === dvCalculado;
   };
+// Fin conf Rut
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -134,16 +180,16 @@ function DatosCliente({ datos, onChange }) {
         />
       </FormItem>
       <FormItem>
-        <TextField
-          label="Celular *"
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-          onBlur={() => handleBlur('telefono')}
-          error={touched.telefono && !telefono}
-          helperText={touched.telefono && !telefono ? 'Campo obligatorio' : ''}
-          fullWidth
-        />
-      </FormItem>
+      <TextField
+        label="Teléfono"
+        value={telefono}
+        onChange={handleTelefonoChange}
+        fullWidth
+        inputProps={{
+          maxLength: prefijo.length + maximoDigitos, // Limitar la longitud total en el input
+        }}
+      />
+    </FormItem>
       <FormItem>
         <TextField
           label="Rut *"

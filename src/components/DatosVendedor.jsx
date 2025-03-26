@@ -4,7 +4,13 @@ import { TextField, Box, FormControl, InputLabel, Select, MenuItem, Typography }
 function DatosVendedor({ datos, onChange }) {
   const [tipovendedor, setTipoVendedor] = useState(datos?.tipovendedor || '');
   const [nombre, setNombre] = useState(datos?.nombre || '');
-  const [telefono, setTelefono] = useState(datos?.telefono || '');
+  const [telefono, setTelefono] = useState(() => {
+      const initialTelefono = datos?.telefono || '';
+      if (initialTelefono && /^\d+$/.test(initialTelefono)) {
+        return '+56' + initialTelefono.slice(0, 9);
+      }
+      return '';
+    });  
   const [direccion, setDireccion] = useState(datos?.direccion || '');
   const [region, setRegion] = useState(datos?.region || '');
   const [comuna, setComuna] = useState(datos?.comuna || '');
@@ -47,6 +53,25 @@ function DatosVendedor({ datos, onChange }) {
     onChange({ tipovendedor, nombre, telefono, direccion, region, comuna });
   }, [tipovendedor, nombre, telefono, direccion, region, comuna, onChange]);
 
+  //formato celular 
+  const prefijo = "+56";
+  const maximoDigitos = 9;
+  
+  const handleTelefonoChange = (event) => {
+    let inputValue = event.target.value.replace(/\D/g, ''); // Elimina todo lo que no sea número
+  
+    // Si el número empieza con 56, lo eliminamos
+    if (inputValue.startsWith("56")) {
+      inputValue = inputValue.slice(2);
+    }
+  
+    // Limitamos a 9 dígitos
+    const numerosLimitados = inputValue.slice(0, maximoDigitos);
+  
+    // Actualizamos el estado con el prefijo fijo
+    setTelefono(prefijo + numerosLimitados);
+  };
+
   const handleRegionChange = (e) => {
     setRegion(e.target.value);
     setComuna(''); // Reset comuna when region changes
@@ -77,7 +102,7 @@ function DatosVendedor({ datos, onChange }) {
       <TextField
         label="Teléfono"
         value={telefono}
-        onChange={(e) => setTelefono(e.target.value)}
+        onChange={handleTelefonoChange}
         fullWidth
         sx={{ mb: 2 }}
       />
