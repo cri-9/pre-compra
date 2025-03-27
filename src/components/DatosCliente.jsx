@@ -169,16 +169,54 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
         />
       </FormItem>
       <FormItem>
-        <TextField
-          label="Correo Electrónico *"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onBlur={() => handleBlur('email')}
-          error={touched.email && !email}
-          helperText={touched.email && !email ? 'Campo obligatorio' : ''}
-          fullWidth
-        />
-      </FormItem>
+  <TextField
+    label="Correo Electrónico *"
+    value={email}
+    onChange={(e) => {
+      const value = e.target.value;
+      setEmail(value);
+
+      // Mostrar sugerencias si el usuario escribe "@"
+      if (value.includes("@")) {
+        const [localPart, domainPart] = value.split("@");
+        setSuggestions(
+          emailDomains
+            .filter((domain) => domain.startsWith(domainPart))
+            .map((domain) => `${localPart}@${domain}`)
+        );
+      } else {
+        setSuggestions([]);
+      }
+    }}
+    onBlur={() => handleBlur('email')}
+    error={touched.email && (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))} // Validación de formato
+    helperText={
+      touched.email && (!email ? 'Campo obligatorio' : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Formato inválido' : '')
+    }
+    fullWidth
+  />
+  {/* Mostrar sugerencias */}
+  {suggestions.length > 0 && (
+    <Box sx={{ border: '1px solid #ccc', borderRadius: 1, mt: 1, backgroundColor: '#fff' }}>
+      {suggestions.map((suggestion, index) => (
+        <Typography
+          key={index}
+          sx={{
+            padding: 1,
+            cursor: 'pointer',
+            '&:hover': { backgroundColor: '#f0f0f0' },
+          }}
+          onClick={() => {
+            setEmail(suggestion); // Seleccionar sugerencia
+            setSuggestions([]); // Limpiar sugerencias
+          }}
+        >
+          {suggestion}
+        </Typography>
+      ))}
+    </Box>
+  )}
+</FormItem>
       <FormItem>
       <TextField
         label="Teléfono"

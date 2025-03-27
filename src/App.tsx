@@ -1,18 +1,23 @@
 import React from 'react';
-import FormularioContacto from "./components/FormularioContacto";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LandingPage from './components/LandingPage';
+import FormularioContacto from './components/FormularioContacto';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'; 
 
 
 function App() {
   return (
-    <div className="App">
-      <FormularioContacto />
-     
-    </div>
-  );
+    <div>
+      <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/agendar" element={<FormularioContacto />} />
+      </Routes>
+    </Router>
     
+    </div>
+
+  );
 }
 
 export default App;
-
