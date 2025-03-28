@@ -17,13 +17,17 @@
     "@mui/material": "^6.4.8",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.3",
+    "grid": "^4.10.8",
     "inputmask": "^5.0.9",
     "paper": "^0.12.18",
     "react": "^19.0.0",
     "react-datepicker": "^8.2.1",
     "react-dom": "^19.0.0",
     "react-input-mask": "^2.0.4",
-    "react-router-dom": "^7.4.0"
+    "react-router-dom": "^7.4.0",
+    "react-scroll": "^1.9.3",
+    "react-slick": "^0.30.3",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
