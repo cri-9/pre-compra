@@ -6,10 +6,12 @@ import DatosCliente from './DatosCliente';
 import DatosVendedor from './DatosVendedor';
 import FechaAgendamiento from './FechaAgendamiento';
 import Pago from './Pago';
+import { useNavigate } from 'react-router-dom'; // Importa useNavegador
 
 const pasos = ["Datos del Vehículo", "Datos del Cliente", "Datos del Vendedor", "Fecha de Agendamiento", "Pago"];
 
 function FormularioContacto() {
+  const navigate = useNavigate(); // Hook para la navegacion
   const [pasoActual, setPasoActual] = useState(0);
   const [touched, setTouched] = useState(false);
   const [datos, setDatos] = useState({
@@ -87,31 +89,40 @@ function FormularioContacto() {
 
   return (
     <Container
-      elevation={3}
-      sx={{
-        p: 3,
-        borderRadius: 3,
-        backgroundColor: '#f0f0f0',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-      }}
-    >
-      {/* Contenedor interno para AppBar y Paper */}
-      <Box sx={{ width: '100%', maxWidth: 800 }}>
-        {/* Barra de navegación */}
-        <AppBar position="static" sx={{ backgroundColor: '#333', mb: 2 }}>
-          <Toolbar>
-            <Typography variant="h5" sx={{ flexGrow: 1, color: '#fff', p: 3, textAlign: 'center' }}>
-              Formulario de Contacto
-            </Typography>
-          </Toolbar>
-        </AppBar>
+    elevation={3}
+    sx={{
+      p: 3,
+      borderRadius: 3,
+      backgroundColor: '#f0f0f0',
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '100vh',
+      
+    }}
+  >
+    {/* Contenedor interno para AppBar y Paper */}
+    
+      {/* Barra de navegación */}
+      <AppBar position="static" sx={{ 
+        backgroundColor: '#1565c0', 
+        mb: 6, 
+        width: '85%' , 
+        display: '100%', 
+        alignItems: 'center'}}> {/* width 100% en AppBar */}
+        <Toolbar sx={{ width: '100%', maxWidth: 800 }}>
+          <Typography variant="h5" sx={{ flexGrow: 1, color: '#fff', p: 3, textAlign: 'center' }}>
+            Formulario de Contacto
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
-        {/* Contenedor del formulario */}
+      {/* Contenedor del formulario */}
+      <Box sx={{ width: '100%', 
+        maxWidth: 800,
+        display: 'flex', flexDirection: 'column', alignItems: 'center' }}> {/* aseguramos alineación con la barra  */}
         <Paper elevation={3} sx={{ p: 3, borderRadius: 3, width: '100%' }}>
           <Stepper activeStep={pasoActual} sx={{ mb: 4 }}>
             {pasos.map((label, index) => (
@@ -155,7 +166,7 @@ function FormularioContacto() {
               </Button>
             )}
             {pasoActual < pasos.length - 1 ? (
-              <Button variant="contained" color="primary" onClick={handleSiguiente}>
+              <Button variant="contained" color="secondary" onClick={handleSiguiente}>
                 Siguiente
               </Button>
             ) : (
@@ -166,7 +177,18 @@ function FormularioContacto() {
           </Box>
         </Paper>
       </Box>
+      
+      {/* Botón para volver a la Landing Page */}
+      <Button
+        variant="outlined"
+        color="primary"
+        sx={{ mt: 4, textTransform: 'none', fontSize: 16 }}
+        onClick={() => navigate('/')} // Redirigir a la Landing Page
+      >
+        Volver a Inicio
+      </Button>
 
+      
       {/* Snackbar para mostrar el mensaje de error */}
       <Snackbar
         open={openSnackbar}

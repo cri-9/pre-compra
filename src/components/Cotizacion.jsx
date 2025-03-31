@@ -11,9 +11,9 @@ const Cotizacion = ({ open, handleClose }) => {
   });
 
   const servicios = [
-    { value: "basico", label: "Inspección Básica - $30.000" },
+    { value: "basico", label: "Servicio Escaner - $25.000" },
     { value: "completo", label: "Inspección Completa - $45.000" },
-    { value: "premium", label: "Inspección Premium - $60.000" },
+    { value: "premium", label: "Inspección Premium - $65.000" },
   ];
 
   const handleChange = (e) => {
