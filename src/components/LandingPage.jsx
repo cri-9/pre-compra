@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../Csspersonalizado/landingpage.css'; //Css personalizado para varios estilos
 import { AppBar, Toolbar, Typography, Button, Box, Container } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -6,7 +6,11 @@ import logo from "../assets/img_header1.jpg";
 import logo_sect from "../assets/img_secction1.jpg";
 import PrecioServicio from "./PrecioServicio";
 import Cotizacion from "../components/Cotizacion"; // Importar el nuevo componente
-import CardServicio from "./CardServicio";
+import ServiceCards from "./ServiceCards.jsx"; //nuevas card de prueba
+import HerramientasSection from './herramientasSection';
+import TestimoniosSection from "./TestimoniosSection.jsx";
+import Footer from "./Footer";
+//import CardServicio from "./ServiceCards.jsx";
 
 function LandingPage() {
   const [openCotizacion, setOpenCotizacion] = useState(false);
@@ -31,17 +35,37 @@ function LandingPage() {
     },
   ];
   
+  {/*Navegación dentro de la misma pagian*/}
+  useEffect(() => {
+    const links = document.querySelectorAll('nav a');
+
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const targetId = link.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  }, []);
+
   return (
     <div>
       {/* Header */}
-      <AppBar position="static" sx={{ backgroundColor: "#1976d2" }}>
+      <AppBar position="static" sx={{ backgroundColor: "#4F6A95" }}>
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             <img src={logo} alt="Logo" style={{ height: "100px", border: "1px solid ", borderRadius: "10px", margin: "5px" }} />
           </Typography>
           <Button color="inherit" component={Link} to="/">Inicio</Button>
-          <Button color="inherit" component={Link} to="/CardServicio">Servicio</Button>
-          <Button color="inherit" component={Link} to="/testimonios">Testimonios</Button>
+          <Button color="inherit" href="#nuestro-servicio">Nuestro Servicio</Button>
+          <Button color="inherit" href="#nuestras-herramientas">Nuestras Herramientas</Button> {/* Agrega el enlace */}
+          <Button color="inherit" onClick={() => document.getElementById("testimonios").scrollIntoView({ behavior: "smooth" })}>
+                  Testimonios</Button>
           <Button color="inherit" component={Link} to="/blog">Blog</Button>
           <Button color="inherit" component={Link} to="/agendar" sx={{ backgroundColor: "#fff", color: "#1976d2", ml: 2 }}>
             Agendar
@@ -102,51 +126,29 @@ function LandingPage() {
 
       {/* Componente PrecioServicio */}
       <PrecioServicio />
+{/*Aca va EL NUEVO CODIGO DE LAS CARS*/ }
+{/* Sección de Servicios */}
+<Container id="nuestro-servicio" sx={{ textAlign: "center", mt: 5 }}>
+  <Typography variant="h4" fontWeight="bold" mb={3}>
+    Nuestros Servicios
+  </Typography>
+  <ServiceCards />
+  </Container>
 
-       {/* Componentes Card*/}
-      <div>
-        <Box sx={{ textAlign: 'center', mt: 5}}>
-          <Typography variant="h6" sx={{
-            fontWeight: 'bold',
-            color: '#555',
-            fontSize: '2.5rem', // Ajusta el tamaño de fuente para simular un h1
-            lineHeight: '1.2', // Ajusta el espaciado entre líneas si es necesario
-            
-          }}
-        >
-          Nuestros Servicios
-        </Typography>
-        <Typography variant="body1"sx={{
-          fontWeight: 'bold',
-          color: '#555',
-          fontSize: '1.5rem',
-          
-          lineHeight: '1.5', // Ajusta el espaciado entre líneas si es necesario
-        }}>Aquí hay algunos de nuestros servicios:</Typography>
-      </Box>
+       {/* Se dejara sin efecta para probar otra Card --componente se guarda en block al final////// Componentes Card*/}
+       {/* Sección de Herramientas */}
+  <Container id="nuestras-herramientas" sx={{ textAlign: "center", mt: 5 }}>
+  <HerramientasSection />
+    </Container>
 
-      {/* Renderiza el componente CardServicio */}
-      <div style={{ 
-        display: 'flex', 
-        flexWrap: 'wrap', 
-        justifyContent: 'space-around' , 
-        backgroundColor: '#f8f9f9',  //Color de fondo de las tarjetas
-        lineHeight: '1.5',
-        marginTop: '30px'
-        }}>
-        {servicios.map((servicio, index) => (
-      <CardServicio key={index} {...servicio} />
-    ))}
-      </div>
-      {/* Puedes agregar más contenido aquí */}
-    </div>
+    {/*Testimonios*/}
+    <TestimoniosSection />
+ 
       {/* Ventana emergente de Cotización */}
       <Cotizacion open={openCotizacion} handleClose={() => setOpenCotizacion(false)} />
 
       {/* Footer */}
-      <Box sx={{ backgroundColor: "#1976d2", color: "#fff", textAlign: "center", py: 2, mt: 5 }}>
-        <Typography variant="body2">© 2025 Pre-Compra. Todos los derechos reservados.</Typography>
-      </Box>
+      <Footer />
     </div>
   );
 }

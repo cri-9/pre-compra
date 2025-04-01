@@ -11,8 +11,8 @@ function PrecioServicio() {
       <Typography variant="h5" sx={{ textDecoration: 'line-through', color: 'gray', mb: 1 }}>
         $54.000
       </Typography>
-      <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
-        $45.000
+      <Typography variant="h2" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
+        $30.000
       </Typography>
     </Box>
   );
