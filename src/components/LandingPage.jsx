@@ -15,26 +15,6 @@ import Footer from "./Footer";
 
 function LandingPage() {
   const [openCotizacion, setOpenCotizacion] = useState(false);
-  const servicios = [
-    {
-      titulo: 'Servicio 1',
-      subheader: 'Descripción del servicio 1',
-      imagen: '/imgcard1.jpg',
-      descripcion: 'Detalles del servicio 1',
-    },
-    {
-      titulo: 'Servicio 2',
-      subheader: 'Descripción del servicio 2',
-      imagen: '/imgcard2.jpg',
-      descripcion: 'Detalles del servicio 2',
-    },
-    {
-      titulo: 'Servicio 3',
-      subheader: 'Descripción del servicio 3',
-      imagen: '/imgcard3.jpg',
-      descripcion: 'Detalles del servicio 3',
-    },
-  ];
   
   {/*Navegación dentro de la misma pagian*/}
   useEffect(() => {
@@ -72,7 +52,7 @@ function LandingPage() {
               src={logo} 
               alt="Logo" 
               style={{ 
-                height: "100px", // Aumenta el tamaño
+                height: "100px", // Aumenta el tamaño del logo
                 border: "1px solid",                 
                 margin: "1px",
                 imageRendering: "crisp-edges", // Mejora la nitidez
@@ -85,8 +65,8 @@ function LandingPage() {
           <Button sx={{ color: "#7C70A1" }} href="#valor-servicios">Valores</Button>         
           <Button 
             component={Link} 
-            to="/agendar" 
-            sx={{ backgroundColor: "#6a6191", color: "#fff", ml: 2, "&:hover": { backgroundColor: "#7B1FA2" } }}
+            to="/agendar"              
+            sx={{ width: "140px", height: "50px" , fontSize: "1rem" , fontWeight: "bold", backgroundColor: "#6a6191", color: "#ffffff", ml: 4, "&:hover": { backgroundColor: "#7B1FA2" } }} //Boton Agendar que esta en la barra menu
           >
             Agendar
           </Button>
@@ -94,7 +74,7 @@ function LandingPage() {
       </AppBar>
 
       {/* Sección principal */}
-      <Container sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 5, gap: 8 }}>
+      <Container sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 12, gap: 8 }}>
         <Box>
           <img src={logo_sect} alt="Auto" style={{ width: "100%", maxWidth: "500px", height: "auto", borderRadius: "40px" }} />
         </Box>
