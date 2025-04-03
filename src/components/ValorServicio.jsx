@@ -56,7 +56,7 @@ const ValorServicio = () => {
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         Nuestros Valores
       </Typography>
-      <Grid container spacing={4} justifyContent="center" alignItems="stretch" sx={{ mt: 1 }}> {/* Agrega mt: 4 */}
+      <Grid container spacing={4} justifyContent="center" alignItems="stretch" sx={{ mt: 1 }}> {/* Agrega mt: 4  para separar*/}
         {valores.map((valor) => (
           <Grid item xs={12} sm={6} md={3} key={valor.id}>
             <Card sx={{ display: 'flex', flexDirection: 'column' }}>
