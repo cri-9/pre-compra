@@ -1,142 +1,121 @@
-import * as React from 'react';
+import React from 'react';
+import { Container, Grid, Typography, Link, Box } from '@mui/material';
+import { FaFacebookF, FaTwitter, FaGoogle, FaInstagram, FaLinkedinIn, FaGithub, FaHome, FaEnvelope, FaPhone, FaPrint } from 'react-icons/fa';
+import logo from '../assets/logo_pre.png';
 
-import AspectRatio from '@mui/joy/AspectRatio';
-import Box from '@mui/joy/Box';
-import IconButton from '@mui/joy/IconButton';
-import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import Divider from '@mui/joy/Divider';
-import Input from '@mui/joy/Input';
-import List from '@mui/joy/List';
-import ListSubheader from '@mui/joy/ListSubheader';
-import ListItem from '@mui/joy/ListItem';
-import ListItemButton from '@mui/joy/ListItemButton';
-import Typography from '@mui/joy/Typography';
-import Sheet from '@mui/joy/Sheet';
-import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import SendIcon from '@mui/icons-material/Send';
-import ColorLensRoundedIcon from '@mui/icons-material/ColorLensRounded';
-
-export default function ColorInversionFooter() {
-  const [color, setColor] = React.useState('neutral');
+function Footer() {
   return (
-    <Sheet
-      variant="solid"
-      color={color}
-      invertedColors
-      sx={[
-        {
-          flexGrow: 1,
-          p: 2,
-          borderRadius: { xs: 0, sm: 'sm' },
-        },
-        color !== 'neutral' && {
-          bgcolor: `${color}.800`,
-        },
-      ]}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <IconButton
-          variant="soft"
-          size="sm"
-          onClick={() => {
-            const colors = ['warning', 'neutral', 'danger', 'success', 'primary'];
 
-            const nextColorIndex = colors.indexOf(color) + 1;
-            setColor(colors[nextColorIndex] ?? colors[0]);
-          }}
-        >
-          <ColorLensRoundedIcon fontSize="small" />
-        </IconButton>
-        <Divider orientation="vertical" />
-        <IconButton variant="plain">
-          <FacebookRoundedIcon />
-        </IconButton>
-        <IconButton variant="plain">
-          <GitHubIcon />
-        </IconButton>
-        <Input
-          variant="soft"
-          placeholder="Type in your email"
-          type="email"
-          name="email"
-          endDecorator={
-            <IconButton variant="soft" aria-label="subscribe">
-              <SendIcon />
-            </IconButton>
-          }
-          sx={{ ml: 'auto', display: { xs: 'none', md: 'flex' } }}
-        />
-      </Box>
-      <Divider sx={{ my: 2 }} />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          alignItems: { md: 'flex-start' },
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: 2,
-        }}
-      >
-        <Card
-          variant="soft"
-          size="sm"
-          sx={{
-            flexDirection: { xs: 'row', md: 'column' },
-            minWidth: { xs: '100%', md: 'auto' },
-            gap: 1,
-          }}
-        >
-          <AspectRatio
-            ratio="21/9"
-            minHeight={80}
-            sx={{ flexBasis: { xs: 200, md: 'initial' } }}
-          >
-            <img alt="" src="/static/blog/mui-product-comparison/ecosystem.png" />
-          </AspectRatio>
-          <CardContent>
-            <Typography level="body-sm">Servicio Pre-Compra en Novena Región</Typography>
-            <Typography level="body-xs">Blog post</Typography>
-          </CardContent>
-        </Card>
-        <List
-          size="sm"
-          orientation="horizontal"
-          wrap
-          sx={{ flexGrow: 0, '--ListItem-radius': '8px' }}
-        >
-          <ListItem nested sx={{ width: { xs: '50%', md: 140 } }}>
-            <ListSubheader sx={{ fontWeight: 'xl' }}>Sitemap</ListSubheader>
-            <List>
-              <ListItem>
-                <ListItemButton>Inicio</ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton>Nuestros Servicios</ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton>Herramientas</ListItemButton>
-              </ListItem>
-            </List>
-          </ListItem>
-          <ListItem nested sx={{ width: { xs: '50%', md: 180 } }}>
-            <ListSubheader sx={{ fontWeight: 'xl' }}>Products</ListSubheader>
-            <List>
-              <ListItem>
-                <ListItemButton>Joy UI</ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton>MUI Base</ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton>Material UI</ListItemButton>
-              </ListItem>
-            </List>
-          </ListItem>
-        </List>
-      </Box>
-    </Sheet>
+    /*Logo en Footer*/
+    <Box sx={{ backgroundColor: '#DDE4F4', 
+                  color: 'white', 
+                  py: 5,
+                  display: 'flex' , //Habilita flexbox en el footer
+                  alignItems: 'center', //Alinea los elementos en el eje vertical
+                  justifyContent: 'center', //Alinea horizontalmente el centro 
+                  }}> 
+                  <img 
+                    src={logo} 
+                    alt="Logo" 
+                    style={{ 
+                      height: "100px", // Aumenta el tamaño                        
+                      margin: "1px",
+                      imageRendering: "crisp-edges", // Mejora la nitidez
+                      border: 'none',
+                    }}
+                  />                
+
+      <Container>
+        <Grid container spacing={8}>
+          <Grid item xs={12} md={3}>
+            <Typography variant="h6" gutterBottom>
+              Visual&Mecanica
+            </Typography>
+            <Typography variant="body2"
+            color="text.secondary">
+              Uno de los pocos servicios a domicilio, brindando confianza y calidad a nuestros clientes. No pierdas dinero y asegura tu inversión
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={2}>
+            <Typography variant="h6" gutterBottom>
+              Productos
+            </Typography>
+            <Typography variant="body2">
+              <Link href="#" color="text.secondary">
+                Inicio
+              </Link>
+            </Typography>
+            <Typography variant="body2">
+              <Link href="#" color="text.secondary">
+                Nuestro Servicio
+              </Link>
+            </Typography>
+            <Typography variant="body2">
+              <Link href="#" color="text.secondary">
+                Nuestras Herramientas
+              </Link>
+            </Typography>
+            <Typography variant="body2">
+              <Link href="#" color="text.secondary">
+                Testimonios
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <Typography variant="h6" gutterBottom>
+              Blog
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              <FaHome style={{ marginRight: '8px' }} /> Ramon Freire 195, Temuco. CH
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              <FaEnvelope style={{ marginRight: '8px' }} /> pre-venta@gmail.com
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              <FaPhone style={{ marginRight: '8px' }} /> + 56-97541042
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              <FaPrint style={{ marginRight: '8px' }} /> + 56-997541042
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={2}>
+            <Typography variant="h6" gutterBottom>
+              Síguenos
+            </Typography>
+            <Box>
+              <Link href="#" sx={{ mr: 1, color: '#1976D2' }}>
+                <FaFacebookF />
+              </Link>              
+              <Link href="#" sx={{ mr: 1, color: '#EC4034' }}>
+                <FaGoogle />
+              </Link>
+              <Link href="#" sx={{ mr: 1, color: '#AC3083' }}>
+                <FaInstagram />
+              </Link>
+              <Link href="#" sx={{ mr: 1, color: '#0184CA' }}>
+                <FaLinkedinIn />
+              </Link>
+              <Link href="#" sx={{ mr: 1, color: '#000000' }}>
+                <FaGithub />
+              </Link>
+            </Box>
+          </Grid>
+        </Grid>
+        <Box 
+        textAlign="center" 
+        pt={4} //Aumenta el padding top para separar
+        mt={3} // Añade margen superior para separar
+        sx={{ 
+          borderTop: '1px solid  rgba(0,0,0,0.2)', // Borde Superior más delgado
+          backgroundColor: 'rgba(0, 0, 0, 0.0)',  //Cambia el color de fondo  para diferenciar 
+          py: 2 }}>
+          <Typography variant="body2" color="text.secondary">
+            © 2020 Copyright: <Link href="https://mdbootstrap.com/" color="inherit">Visual Mecánica</Link>
+          </Typography>
+        </Box>
+      </Container>
+    </Box>
   );
 }
+
+export default Footer;

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import '../Csspersonalizado/landingpage.css'; //Css personalizado para varios estilos
 import { AppBar, Toolbar, Typography, Button, Box, Container } from "@mui/material";
 import { Link } from "react-router-dom";
-import logo from "../assets/img_header1.jpg";
+import logo from "../assets/logo_visual1.2.png";
 import logo_sect from "../assets/img_secction1.jpg";
 import PrecioServicio from "./PrecioServicio";
 import Cotizacion from "../components/Cotizacion"; // Importar el nuevo componente
 import ServiceCards from "./ServiceCards.jsx"; //nuevas card de prueba
 import HerramientasSection from './herramientasSection';
+import ValorServicio from './ValorServicio';
 import TestimoniosSection from "./TestimoniosSection.jsx";
 import Footer from "./Footer";
 //import CardServicio from "./ServiceCards.jsx";
@@ -54,20 +55,39 @@ function LandingPage() {
   }, []);
 
   return (
-    <div>
+    <div>      
+     {/* Sección superior */}
+     <Box sx={{ backgroundColor: "#dde4f4",  mx: "auto", maxWidth: "7xl", px: 5, py: 1, sm: { px: 6, py: 3 }, lg: { px: 8 } }}>
+        {/* Puedes agregar contenido aquí si es necesario */}
+        <Typography align="center" style={{ color: '#6A6191' }}>
+      No te pierdas la oportunidad de conocer nuestros servicios
+    </Typography>
+      </Box>
+      
       {/* Header */}
-      <AppBar position="static" sx={{ backgroundColor: "#4F6A95" }}>
+      <AppBar position="static" sx={{ backgroundColor: "#fff", boxShadow: "none" }}>{/*Efectos al header*/}
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            <img src={logo} alt="Logo" style={{ height: "100px", border: "1px solid ", borderRadius: "10px", margin: "5px" }} />
+        <Typography variant="h6" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', paddingBottom: '15px'}}>
+            <img 
+              src={logo} 
+              alt="Logo" 
+              style={{ 
+                height: "100px", // Aumenta el tamaño
+                border: "1px solid",                 
+                margin: "1px",
+                imageRendering: "crisp-edges", // Mejora la nitidez
+              }}
+            />
           </Typography>
-          <Button color="inherit" component={Link} to="/">Inicio</Button>
-          <Button color="inherit" href="#nuestro-servicio">Nuestro Servicio</Button>
-          <Button color="inherit" href="#nuestras-herramientas">Nuestras Herramientas</Button> {/* Agrega el enlace */}
-          <Button color="inherit" onClick={() => document.getElementById("testimonios").scrollIntoView({ behavior: "smooth" })}>
-                  Testimonios</Button>
-          <Button color="inherit" component={Link} to="/blog">Blog</Button>
-          <Button color="inherit" component={Link} to="/agendar" sx={{ backgroundColor: "#fff", color: "#1976d2", ml: 2 }}>
+          <Button sx={{ color: "#7C70A1" }} component={Link} to="/">Inicio</Button>
+          <Button sx={{ color: "#7C70A1" }} href="#nuestro-servicio">Nuestro Servicio</Button>
+          <Button sx={{ color: "#7C70A1" }} href="#nuestras-herramientas">Nuestras Herramientas</Button>
+          <Button sx={{ color: "#7C70A1" }} href="#valor-servicios">Valores</Button>         
+          <Button 
+            component={Link} 
+            to="/agendar" 
+            sx={{ backgroundColor: "#6a6191", color: "#fff", ml: 2, "&:hover": { backgroundColor: "#7B1FA2" } }}
+          >
             Agendar
           </Button>
         </Toolbar>
@@ -107,10 +127,11 @@ function LandingPage() {
           {/* Botón Agendar */}
           <Button
             variant="contained"
-            color="secondary"
+            
             component={Link}
             to="/agendar"
             sx={{ 
+              backgroundColor: "#6a6191", "&:hover": { backgroundColor: "#7B1FA2" },  //Color de fondo
               fontSize: "1.5rem",  // Reduce el tamaño de la fuente si es necesario
               px: 5, // Reduce el padding horizontal
               py: 2,  // Reduce el padding vertical
@@ -140,6 +161,11 @@ function LandingPage() {
   <Container id="nuestras-herramientas" sx={{ textAlign: "center", mt: 5 }}>
   <HerramientasSection />
     </Container>
+
+    {/*ValoresServicio*/}
+    <div id="valor-servicios" >
+    <ValorServicio />
+    </div>
 
     {/*Testimonios*/}
     <TestimoniosSection />
