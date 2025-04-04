@@ -26,7 +26,7 @@ function HerramientasSection() {
 
   return (
     <Box sx={{ padding: '20px', backgroundColor: '#f0f0f0' }}>
-      <Typography variant="h4" gutterBottom textAlign="center">
+      <Typography variant="h4" fontWeight="bold" gutterBottom textAlign="center">
         Nuestras herramientas
       </Typography>
       <Typography variant="body1" gutterBottom textAlign="center">

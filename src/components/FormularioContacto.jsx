@@ -109,10 +109,6 @@ function FormularioContacto() {
       alert('❌ Error en la conexión con el servidor.');
     }
   };
-  
-
-
-
   //Resetear el formulario cuando se enviar correctamente y mostrar un mensaje de éxito animado usando Snackbar de MUI
 
   const resetearFormulario = () => {
