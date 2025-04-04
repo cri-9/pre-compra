@@ -23,6 +23,7 @@ function FormularioContacto() {
   });
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [missingFields, setMissingFields] = useState([]);
+  const [openExito, setOpenExito] = useState(false);
 
   // ✅ Evita ciclo infinito: Solo actualiza si los datos han cambiado
   const handleDatosChange = (seccion, nuevosDatos) => {
@@ -33,7 +34,7 @@ function FormularioContacto() {
       return prevDatos;
     });
   };
-
+  
   // Validar formulario antes de avanzar
   const validarFormulario = (stepIndex) => {
     let fieldsToCheck = [];
@@ -85,6 +86,44 @@ function FormularioContacto() {
       return;
     }
     setOpenSnackbar(false);
+  };
+  //Funcion para enviar JSON: 
+  const handleEnviarFormulario = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/enviarCorreo.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos),
+      });
+  
+      const resultado = await response.json();
+  
+      if (resultado.success) {
+        setOpenExito(true);       // ✅ Muestra mensaje de éxito
+        resetearFormulario();     // 🧼 Limpia los datos
+      } else {
+        alert('❌ Error al enviar: ' + resultado.error);
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+      alert('❌ Error en la conexión con el servidor.');
+    }
+  };
+  
+
+
+
+  //Resetear el formulario cuando se enviar correctamente y mostrar un mensaje de éxito animado usando Snackbar de MUI
+
+  const resetearFormulario = () => {
+    setDatos({
+      vehiculo: { marca: '', modelo: '', año: '', patente: '' },
+      cliente: { nombre: '', apellido: '', email: '', telefono: '', rut: '', dirección: '', región: '' },
+      vendedor: { tipovendedor: '', nombre: '', telefono: '' , direccion: '', region: '' , comuna: ''},
+      agendamiento: { fecha: '', bloque: '' },
+      pago: { metodo: '' },
+    });
+    setPasoActual(0);
   };
 
   return (
@@ -170,9 +209,9 @@ function FormularioContacto() {
                 Siguiente
               </Button>
             ) : (
-              <Button variant="contained" color="success">
-                Finalizar
-              </Button>
+              <Button variant="contained" color="success" onClick={handleEnviarFormulario}>
+  Finalizar
+</Button>
             )}
           </Box>
         </Paper>
@@ -207,6 +246,21 @@ function FormularioContacto() {
           </ul>
         </Alert>
       </Snackbar>
+      {/* Snackbar para mostrar el mensaje de éxito */}
+  <Snackbar
+  open={openExito}
+  autoHideDuration={6000}
+  onClose={() => setOpenExito(false)}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+>
+  <Alert
+    onClose={() => setOpenExito(false)}
+    severity="success"
+    sx={{ width: '100%', backgroundColor: 'white', color: 'green', border: '1px solid green' }}
+  >
+    ¡Formulario enviado exitosamente!
+  </Alert>
+</Snackbar>
     </Container>
   );
 }

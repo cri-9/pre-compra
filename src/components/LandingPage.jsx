@@ -11,10 +11,15 @@ import HerramientasSection from './herramientasSection';
 import ValorServicio from './ValorServicio';
 import TestimoniosSection from "./TestimoniosSection.jsx";
 import Footer from "./Footer";
+import Confetti from 'react-confetti'; // Importar el componente de confeti
+import { useWindowSize } from '@react-hook/window-size'; // Importar el hook para obtener el tamaño de la ventana
 //import CardServicio from "./ServiceCards.jsx";
 
 function LandingPage() {
   const [openCotizacion, setOpenCotizacion] = useState(false);
+  const [width, height] = useWindowSize();
+  const [openExito, setOpenExito] = useState(false);
+
   
   {/*Navegación dentro de la misma pagian*/}
   useEffect(() => {
@@ -149,12 +154,16 @@ function LandingPage() {
 
     {/*Testimonios*/}
     <TestimoniosSection />
- 
+    {openExito && (
+  <Confetti width={width} height={height} />
+)}
+
       {/* Ventana emergente de Cotización */}
       <Cotizacion open={openCotizacion} handleClose={() => setOpenCotizacion(false)} />
 
       {/* Footer */}
       <Footer />
+      
     </div>
   );
 }
