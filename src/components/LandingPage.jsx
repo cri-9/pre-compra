@@ -13,13 +13,17 @@ import TestimoniosSection from "./TestimoniosSection.jsx";
 import Footer from "./Footer";
 import Confetti from 'react-confetti'; // Importar el componente de confeti
 import { useWindowSize } from '@react-hook/window-size'; // Importar el hook para obtener el tamaño de la ventana
+import BotonWhatsApp from "./BotonWhatsApp.jsx"; // Importar el botón de WhatsApp
+
+
+
 //import CardServicio from "./ServiceCards.jsx";
 
 function LandingPage() {
   const [openCotizacion, setOpenCotizacion] = useState(false);
   const [width, height] = useWindowSize();
   const [openExito, setOpenExito] = useState(false);
-
+  
   
   {/*Navegación dentro de la misma pagian*/}
   useEffect(() => {
@@ -38,6 +42,10 @@ function LandingPage() {
       });
     });
   }, []);
+   //Boton de WhatsApp
+  const numeroTelefono = "56997541042"; // Número de teléfono de WhatsApp
+  const mensajeInicial = "Visual Mecánica le da la Bienvenida;  Te podemos ayudar."; // Mensaje inicial
+   
 
   return (
     <div>      
@@ -48,8 +56,9 @@ function LandingPage() {
       No te pierdas la oportunidad de conocer nuestros servicios
     </Typography>
       </Box>
-      
-      {/* Header */}
+
+     
+      {/* Header */}      
       <AppBar position="static" sx={{ backgroundColor: "#fff", boxShadow: "none" }}>{/*Efectos al header*/}
         <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', paddingBottom: '15px'}}>
@@ -78,6 +87,7 @@ function LandingPage() {
         </Toolbar>
       </AppBar>
 
+      
       {/* Sección principal */}
       <Container sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 12, gap: 8 }}>
         <Box>
@@ -160,7 +170,20 @@ function LandingPage() {
 
       {/* Ventana emergente de Cotización */}
       <Cotizacion open={openCotizacion} handleClose={() => setOpenCotizacion(false)} />
+      {/* Opción 1: Botón flotante en la esquina inferior derecha */}
+      <BotonWhatsApp
+        numeroTelefono={numeroTelefono}
+        mensajeInicial={mensajeInicial}
+      />
 
+      {/* Opción 2: Botón dentro de una sección de contacto */}
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h6">Contáctanos por WhatsApp:</Typography>
+        <BotonWhatsApp
+          numeroTelefono={numeroTelefono}
+          mensajeInicial={mensajeInicial}
+        />
+      </Box>
       {/* Footer */}
       <Footer />
       
@@ -168,5 +191,5 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
 
+export default LandingPage;
