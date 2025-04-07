@@ -1,5 +1,5 @@
 .onda-fondo-svg {
-  background-image: url('/public/ondas2.jpg'); /* Inserta tu SVG aquí */
+  background-image: url('../assets/ondas2.jpg'); /* Inserta tu SVG aquí */
   background-size: cover;
   background-repeat: no-repeat;
   padding-bottom: 50px; /* Ajusta el padding inferior según la altura de las ondas */
