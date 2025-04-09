@@ -13,6 +13,7 @@ function FechaAgendamiento({ datos, onChange, onSiguiente, onAnterior }) {
     { value: "PM", label: "14:00 - 20:00 PM" },
   ];
 
+  
   // Sincronizar cambios si `datos` cambia (por ejemplo, si se confirma el agendamiento)
   useEffect(() => {
     if (datos?.fecha) {
@@ -66,7 +67,7 @@ function FechaAgendamiento({ datos, onChange, onSiguiente, onAnterior }) {
         variant="body1"
         sx={{ mt: 2, backgroundColor: "#c5d5e8", padding: 1, borderRadius: 1, textAlign: "center" }}
       >
-        Recuerda que al pagar y finalizar el agendamiento te llegará una notificación
+        Recuerda que al pagar y finalizar el agendamiento te llegará una notificación y un ejecutivo se pondra en contacto con usted. Gracias por preferirnos.
       </Typography>
     </Box>
   );
