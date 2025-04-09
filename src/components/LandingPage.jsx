@@ -50,29 +50,73 @@ function LandingPage() {
   return (
     <div>      
      {/* Sección superior */}
-     <Box sx={{ backgroundColor: "#dde4f4",  mx: "auto", maxWidth: "7xl", px: 5, py: 1, sm: { px: 6, py: 3 }, lg: { px: 8 } }}>
+     <Box sx={{ 
+      backgroundColor: "#7B1FA2",  // Color de fondo
+      mx: "auto",  // Margen automático para centrar
+      maxWidth: "5xl",  // Ancho máximo
+      px: { xs:2, sm: 6, lg: 8 }, // Padding horizontal
+      py: { xs: 1, sm: 3} , // Padding vertical
+      spacing: 2, // Espacio entre elementos
+      display: "flex", // Flex container
+      flexDirection: "column", // Dirección de los elementos
+      alignItems: "center", // Alineación de los elementos
+      justifyContent: "center", // Justificación de los elementos
+
+      }}
+      >
         {/* Puedes agregar contenido aquí si es necesario */}
-        <Typography align="center" style={{ color: '#6A6191' }}>
+        <Typography align="center" style={{ color: '#f8f9f9' , fontWeight: "bold"}}>
       No te pierdas la oportunidad de conocer nuestros servicios
     </Typography>
       </Box>
 
-     
       {/* Header */}      
       <AppBar position="static" sx={{ backgroundColor: "#fff", boxShadow: "none" }}>{/*Efectos al header*/}
-        <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', paddingBottom: '15px'}}>
+        <Toolbar
+          sx={{
+            flexDirection: { xs: "column", sm: "row" }, // Cambia la dirección del flex en pantallas pequeñas
+            alignItems: { xs: "center", sm: "flex-start"}, // Alineación del contenido
+            justifyContent: "space-between",
+            py: { xs: 1, sm: 0  }, // Padding vertical
+            px: { xs: 2, sm: 6  }, // Padding horizontal
+         
+          }}
+        >
+        <Typography variant="h6" 
+        sx={{ 
+          flexGrow: 1, // Asegura que el logo ocupe el espacio disponible
+          display: 'flex',  // Flexbox para centrar el logo
+          alignItems: 'center',  // Alineación del logo
+          justifyContent: { xs: "center", sm: "flex-start" }, // Alineación del logo
+          paddingBottom: { xs: 1, sm: "15px" }, // Padding inferior en pantallas pequeñas
+          }}
+          >
             <img 
               src={logo} 
-              alt="Logo" 
+              alt="Logo"  // Logo de la empresa
               style={{ 
-                height: "100px", // Aumenta el tamaño del logo
-                border: "1px solid",                 
-                margin: "1px",
-                imageRendering: "crisp-edges", // Mejora la nitidez
+                height: "auto", // Altura automática para mantener la proporción
+                maxHeight: "100px", // Altura máxima del logo
+                width: "auto", // Ancho automático para mantener la proporción
+                maxWidth: "100%", // Ancho máximo del logo
+                border: "1px solid", // Borde del logo
+                margin: "1px", // Margen del logo
+                imageRendering: "crisp-edges", // Mejora la calidad de la imagen
               }}
-            />
+              />
           </Typography>
+
+          {/* Botones de navegación */}
+          <Box 
+          sx={{ 
+            display: "flex" ,  // Flexbox para los botones
+            flexWrap: "wrap", // Permite que los botones se ajusten en pantallas pequeñas
+            justifyContent: { xs: "center", sm: "flex-end" }, // Alineació n de los botones            
+            gap: { xs: 1, sm: 2 }, // Espacio entre los botones
+            mt: { xs: 1, sm: 0 }, // Margen superior en pantallas pequeñas
+            paddingTop: 2, // Padding superior
+            }} 
+            > 
           <Button sx={{ color: "#7C70A1" }} component={Link} to="/">Inicio</Button>
           <Button sx={{ color: "#7C70A1" }} href="#nuestro-servicio">Nuestro Servicio</Button>
           <Button sx={{ color: "#7C70A1" }} href="#nuestras-herramientas">Nuestras Herramientas</Button>
@@ -80,65 +124,109 @@ function LandingPage() {
           <Button 
             component={Link} 
             to="/agendar"              
-            sx={{ width: "140px", height: "50px" , fontSize: "1rem" , fontWeight: "bold", backgroundColor: "#6a6191", color: "#ffffff", ml: 4, "&:hover": { backgroundColor: "#7B1FA2" } }} //Boton Agendar que esta en la barra menu
+            sx={{ 
+              width: { xs: "100%", sm: "140px" }, // Ancho del botón en pantallas pequeñas
+              height: "50px" , // Alto del botón
+              fontSize: "1rem" , // Tamaño de la fuente
+              fontWeight: "bold",  // Peso de la fuente
+              backgroundColor: "#6a6191", // Color de fondo del botón
+              color: "#ffffff", // Color del texto
+              ml: {sm: 4},  // Margen izquierdo en pantallas pequeñas
+              "&:hover": { 
+                backgroundColor: "#7B1FA2"  // Color de fondo al pasar el mouse
+              },
+            }}
           >
             Agendar
           </Button>
-        </Toolbar>
-      </AppBar>
-
+        </Box>
+      </Toolbar>
+    </AppBar>
       
       {/* Sección principal */}
-      <Container sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 12, gap: 8 }}>
-        <Box>
-          <img src={logo_sect} alt="Auto" style={{ width: "100%", maxWidth: "500px", height: "auto", borderRadius: "40px" }} />
-        </Box>
-        <Box sx={{ textAlign: "center", flex: 1 }}>
-          <Typography variant="h3" sx={{ fontWeight: "bold", mb: 2 }}>
-            Agenda con Nosotros
-          </Typography>
-          <Typography variant="h6" sx={{ color: "#555" ,  mb: 4 }}>
-            ¡Haz tu agendamiento rápido y fácil con nuestro formulario!
-          </Typography>
+      <Container
+  sx={{
+    display: "flex", // Flex container
+    flexDirection: { xs: "column", md: "row" }, // Columna en móviles, fila en escritorio
+    alignItems: "center", //      justifyContent: "space-between",
+    mt: 4, // Margen superior
+    gap: 6, // Espacio entre elementos
+  }}
+>
+  {/* Imagen de la sección */}
+  <Box sx={{ display: "flex", textAlign: "center" }}>
+    <img
+      src={logo_sect}
+      alt="Auto"
+      style={{
+        width: "100%", // Ancho de la imagen
+        maxWidth: "500px", // Ancho máximo de la imagen
+        height: "auto", // Altura automática para mantener la proporción
+        borderRadius: "40px", // Borde redondeado
+      }}
+    />
+  </Box>
 
-          
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '17vh' }}>
-            {/* Botón Cotización */}
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => setOpenCotizacion(true)}
-            sx={{ 
-              fontSize: "1.5rem",  //reduce el tamaño de la fuente si es necesario 
-              px: 5, //Reduce el padding horizontal 
-              py: 1, //Reduce el padding vertical
-              width: '450px', // Opcional: ajustar el ancho fijo
-              left: '12%', // Opcional: centrar el botón horizontalmente
-            }}
-          >
-            Cotización
-          </Button>
+  {/* Texto y botones */}
+  <Box
+    sx={{
+      textAlign: "center", // Alineación del texto
+      flex: 1, // Ocupa el espacio restante
+      mt: { xs: 4, md: 0 }, // Margen superior en móviles
+    }}
+  >
+    <Typography variant="h3" sx={{ fontWeight: "bold", mb: 2 }}> 
+      Agenda con Nosotros
+    </Typography>
 
-          {/* Botón Agendar */}
-          <Button
-            variant="contained"
-            
-            component={Link}
-            to="/agendar"
-            sx={{ 
-              backgroundColor: "#6a6191", "&:hover": { backgroundColor: "#7B1FA2" },  //Color de fondo
-              fontSize: "1.5rem",  // Reduce el tamaño de la fuente si es necesario
-              px: 5, // Reduce el padding horizontal
-              py: 2,  // Reduce el padding vertical
-              width: '450px', // Opcional: ajustar el ancho fijo
-              left: '12%', // Opcional: centrar el botón horizontalmente
-            }}
-          >
-            Agendar Ahora
-          </Button>
-          </div>
-        </Box>
-      </Container>
+    <Typography variant="h6" sx={{ color: "#555", mb: 4 }}>
+      ¡Haz tu agendamiento o cotización fácil con nuestros formularios!
+    </Typography>
+
+    {/* Contenedor de botones */}
+    <Box
+      sx={{
+        display: "flex", // Flex container
+        flexDirection: "column", // Columna para móviles
+        justifyContent: "space-between", // Espacio entre botones
+        gap: 2, // Espacio entre botones
+        maxWidth: "450px", // Ancho máximo del contenedor
+        margin: "0 auto", // Margen automático para centrar
+      }}
+    >
+      {/* Botón Cotización */}
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={() => setOpenCotizacion(true)}
+        sx={{
+          fontSize: "1.5rem", // Tamaño de la fuente
+          px: 5, // Padding horizontal
+          py: 1, // Padding vertical
+        }}
+      >
+        Cotización
+      </Button>
+
+      {/* Botón Agendar */}
+      <Button
+        variant="contained"
+        component={Link}
+        to="/agendar"
+        sx={{
+          backgroundColor: "#6a6191", // Color de fondo
+          "&:hover": { backgroundColor: "#7B1FA2" }, // Color de fondo al pasar el mouse
+          fontSize: "1.5rem", // Tamaño de la fuente
+          px: 5, // Padding horizontal
+          py: 2, // Padding vertical
+        }}
+      >
+        Agendar Ahora
+      </Button>
+    </Box>
+  </Box>
+</Container>
+   
 
       {/* Componente PrecioServicio */}
       <PrecioServicio />
