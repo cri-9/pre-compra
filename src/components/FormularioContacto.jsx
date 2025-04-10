@@ -92,7 +92,7 @@ function FormularioContacto() {
   //Funcion para enviar JSON: 
   const handleEnviarFormulario = async () => {
     try {
-      const response = await fetch('http://localhost:8000/enviarCorreo', { // Cambia aquí
+      const response = await fetch('http://localhost:8000/enviarAgendamiento', { // Cambia aquí
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos),

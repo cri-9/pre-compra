@@ -17,12 +17,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); // Limpia la ruta
 
 switch ($request) {
-    case '/enviarCorreo':
-        require 'enviarCorreo.php'; // Asegúrate de que el nombre del archivo sea correcto
+    case '/enviarAgendamiento':
+        require 'enviarAgendamiento.php'; // Asegúrate de que el nombre del archivo sea correcto
         break;
     case '/enviarCotizacion':
         require 'enviarCotizacion.php'; // Asegúrate de que el nombre del archivo sea correcto
         break;
+    case '/verificarBloque':
+        require 'verificarBloque.php'; // Asegúrate de que el nombre del archivo sea correcto            
+        break;
+    case '/guardarAgendamiento':
+        require 'guardarAgendamiento.php';
+        break;   
     default:
         http_response_code(404);
         echo json_encode(["success" => false, "error" => "Ruta no encontrada"]);
