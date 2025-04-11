@@ -1,16 +1,5 @@
 <?php
-$host = 'localhost';
-$db = 'precompra';
-$user = 'root';
-$pass = ' ' ;
-
-// Create connection
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'error' => 'Error de conexión: ' . $e->getMessage()]);
-    exit;
-}
+require 'conexionBD.php'; // Usamos la conexión centralizada
 
 $data = json_decode(file_get_contents("php://input"), true);
 if (!$data) {
@@ -26,7 +15,7 @@ $vendedor = $data['vendedor'] ?? [];
 $monto = $data['pago']['monto'] ?? 0;
 
 // Verificar si ya hay un agendamiento en esa fecha y bloque
-$check = $conn->prepare("SELECT COUNT(*) FROM agendamientos WHERE fecha = :fecha AND bloque = :bloque");
+$check = $conn->prepare("SELECT COUNT(*) FROM agendamientos WHERE fecha_agendada = :fecha AND bloque = :bloque");
 $check->execute([
     ':fecha' => $agendamiento['fecha'],
     ':bloque' => $agendamiento['bloque']
@@ -38,20 +27,44 @@ if ($count > 0) {
     exit;
 }
 
-// Insertar agendamiento si está disponible
-$sql = "INSERT INTO agendamientos (nombre_cliente, correo_cliente, telefono_cliente, fecha, bloque, vehiculo, vendedor, monto, estado_pago)
-        VALUES (:nombre, :correo, :telefono, :fecha, :bloque, :vehiculo, :vendedor, :monto, 'Pagado')";
+// Insertar agendamiento
+$sql = "INSERT INTO agendamientos (
+    marca_vehiculo, modelo_vehiculo, anio_vehiculo, patente,
+    nombre_cliente, apellido_cliente, email_cliente, telefono_cliente, rut_cliente,
+    direccion_cliente, region_cliente, comuna_cliente,
+    tipo_vendedor, nombre_vendedor, telefono_vendedor, direccion_vendedor, region_vendedor, comuna_vendedor,
+    fecha_agendada, bloque, metodo_pago
+) VALUES (
+    :marca, :modelo, :anio, :patente,
+    :nombre, :apellido, :email, :telefono, :rut,
+    :direccion, :region, :comuna,
+    :tipo_vendedor, :nombre_vendedor, :telefono_vendedor, :direccion_vendedor, :region_vendedor, :comuna_vendedor,
+    :fecha, :bloque, :metodo_pago
+)";
 
 $stmt = $conn->prepare($sql);
 $exito = $stmt->execute([
+    ':marca' => $vehiculo['marca'] ?? '',
+    ':modelo' => $vehiculo['modelo'] ?? '',
+    ':anio' => $vehiculo['anio'] ?? '',
+    ':patente' => $vehiculo['patente'] ?? '',
     ':nombre' => $cliente['nombre'] ?? '',
-    ':correo' => $cliente['correo'] ?? '',
+    ':apellido' => $cliente['apellido'] ?? '',
+    ':email' => $cliente['email'] ?? '',
     ':telefono' => $cliente['telefono'] ?? '',
+    ':rut' => $cliente['rut'] ?? '',
+    ':direccion' => $cliente['direccion'] ?? '',
+    ':region' => $cliente['region'] ?? '',
+    ':comuna' => $cliente['comuna'] ?? '',
+    ':tipo_vendedor' => $vendedor['tipo'] ?? '',
+    ':nombre_vendedor' => $vendedor['nombre'] ?? '',
+    ':telefono_vendedor' => $vendedor['telefono'] ?? '',
+    ':direccion_vendedor' => $vendedor['direccion'] ?? '',
+    ':region_vendedor' => $vendedor['region'] ?? '',
+    ':comuna_vendedor' => $vendedor['comuna'] ?? '',
     ':fecha' => $agendamiento['fecha'] ?? '',
     ':bloque' => $agendamiento['bloque'] ?? '',
-    ':vehiculo' => json_encode($vehiculo),
-    ':vendedor' => $vendedor['nombre'] ?? '',
-    ':monto' => $monto,
+    ':metodo_pago' => $data['pago']['metodo'] ?? 'WebPay',
 ]);
 
 if ($exito) {

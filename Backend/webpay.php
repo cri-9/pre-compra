@@ -1,54 +1,61 @@
 <?php
-session_start(); // Inicia la sesión para guardar los datos del agendamiento
 
-// Cargar las dependencias de Composer (si no lo has hecho antes)
-require 'vendor/autoload.php'; 
+// Mostrar errores en desarrollo
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-use Transbank\Webpay\Webpay;
-use Transbank\Webpay\Configuration;
+// Cabecera para indicar respuesta JSON
+header('Content-Type: application/json');
 
-// Configuración de Webpay
-$config = new Configuration();
-$config->setCommerceCode('TU_CODIGO_COMERCIO'); // Cambia esto por tu código de comercio
-$config->setPrivateKey('TU_LLAVE_PRIVADA'); // Cambia esto por tu llave privada
-$config->setPublicCert('TU_CERTIFICADO_PUBLICO'); // Cambia esto por tu certificado público
-$config->setWebpayCert('CERTIFICADO_WEBPAY'); // Cambia esto por el certificado WebPay de tu comercio
+session_start();
 
-// Inicializa Webpay con la configuración
-$webpay = new Webpay($config);
+// Autoload de SDK WebPay
+require_once __DIR__ . '/vendor/autoload.php';
 
-// Obtener los datos del frontend (React) a través de una solicitud POST
-$data = json_decode(file_get_contents("php://input"), true);
+use Transbank\Webpay\WebpayPlus\Transaction;
+use Transbank\Webpay\WebpayPlus\Options;
 
-// Verificar que los datos estén presentes
-if (isset($data['datos'])) {
-    // Guardamos los datos de agendamiento en la sesión para usarlos después
-    $_SESSION['datos_agendamiento'] = $data['datos'];
-} else {
-    echo json_encode(['success' => false, 'error' => 'Datos de agendamiento no recibidos']);
+// ⚠️ Configura correctamente tu código de comercio y ambiente aquí
+Options::setCommerceCode('597055555532'); // Código de comercio de prueba
+Options::setApiKey('X'); // Tu API Key si es necesaria
+Options::setIntegrationType(Options::ENVIRONMENT_INTEGRATION); // Modo integración
+
+// Recibir datos desde React
+$datosJSON = file_get_contents("php://input");
+$datos = json_decode($datosJSON, true);
+
+// Validar JSON recibido
+if (!$datos) {
+    echo json_encode(['success' => false, 'error' => 'Datos JSON inválidos.']);
     exit;
 }
 
-// Monto de la transacción (puedes cambiarlo según la lógica de tu aplicación)
-$amount = 35000; // Ejemplo, puedes obtenerlo de los datos enviados
-$buyOrder = uniqid("ORDER_"); // Crea una orden única
-$sessionId = session_id(); // Usamos el ID de la sesión como identificador
-$returnUrl = "http://localhost/webpayRespuesta.php"; // URL donde WebPay redirigirá después de procesar la transacción
-$finalUrl = "http://localhost/paginaPrincipal.php"; // URL donde redirigirás al usuario después de que se complete la transacción
+// Guardar en sesión para usarlos luego
+$_SESSION['datos_formulario'] = $datos;
 
-// Inicia la transacción de pago
-$transaction = $webpay->getNormalTransaction()->initTransaction($amount, $buyOrder, $sessionId, $returnUrl, $finalUrl);
+// Generar identificadores
+$buyOrder = 'ORDEN_' . uniqid();
+$sessionId = session_id();
+$returnUrl = 'http://localhost:8000/webpayRespuesta.php'; // URL de retorno de WebPay
 
-// Verifica si la transacción se creó exitosamente
-if ($transaction) {
-    // Responde con la URL de pago y el token necesario para completar la transacción
+// Obtener monto
+$monto = isset($datos['pago']['monto']) ? intval($datos['pago']['monto']) : 0;
+if ($monto <= 0) {
+    echo json_encode(['success' => false, 'error' => 'Monto inválido para la transacción.']);
+    exit;
+}
+
+try {
+    // Iniciar transacción con WebPay
+    $response = (new Transaction)->create($buyOrder, $sessionId, $monto, $returnUrl);
+
+    // Devolver datos al frontend
     echo json_encode([
         'success' => true,
-        'url' => $transaction->getUrl(),
-        'token' => $transaction->getToken()
+        'token' => $response->getToken(),
+        'url' => $response->getUrl()
     ]);
-} else {
-    // En caso de error, devuelve un mensaje
-    echo json_encode(['success' => false, 'error' => 'No se pudo crear la transacción.']);
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'error' => 'Error en la transacción: ' . $e->getMessage()]);
 }
-?>
