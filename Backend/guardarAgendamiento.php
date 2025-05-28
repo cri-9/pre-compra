@@ -1,4 +1,10 @@
 <?php
+
+//oculta errores de deprecated y notice
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
+ini_set('display_errors', 0);
+
+
 header('Content-Type: application/json');
 require 'conexionBD.php'; // Conexión a la base de datos
 

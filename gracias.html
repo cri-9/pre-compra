@@ -48,11 +48,103 @@
 </head>
 <body>
     <div class="container">
-        <h1>¡Gracias por tu compra!</h1>
-        <p>Tu pago fue exitoso y tu agendamiento ha sido registrado.</p>
-        <p>Recibirás un correo de confirmación y el evento ha sido añadido a tu Google Calendar.</p>
-        <p>¡Nos vemos pronto!</p>
-        <a href="index.html">Volver a la página principal</a>
+        <div class="success-animation">
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="checkmark__check" fill="none" d="M14 27l7 7 16-16"/>
+            </svg>
+        </div>
+        <h1 class="fade-in">¡Solicitud registrada con éxito!</h1>
+        <p class="fade-in" style="animation-delay: 0.2s">Por favor revisa tu correo para más detalles.<br>Serás redirigido automáticamente a la página principal.</p>
+        <a href="/" class="fade-in" style="animation-delay: 0.4s">Volver a la página principal</a>
     </div>
+    <script>
+        setTimeout(function() {
+            window.location.href = '/';
+        }, 6000);
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #e3f0ff 0%, #f9e6ff 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(123,31,162,0.10), 0 1.5px 6px rgba(38,92,255,0.07);
+            max-width: 420px;
+            margin: 60px auto 0 auto;
+            padding: 40px 30px 32px 30px;
+            text-align: center;
+            position: relative;
+        }
+        .success-animation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .checkmark {
+            width: 70px;
+            height: 70px;
+            display: block;
+        }
+        .checkmark__circle {
+            stroke: #27ae60;
+            stroke-width: 3;
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        .checkmark__check {
+            stroke: #27ae60;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke-check 0.4s 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes stroke-check {
+            100% { stroke-dashoffset: 0; }
+        }
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+        }
+        .fade-in[style*="animation-delay"] {
+            animation-delay: var(--delay, 0.2s);
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        h1 {
+            font-size: 2rem;
+            color: #27ae60;
+            margin-bottom: 14px;
+            font-weight: 700;
+        }
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+        a {
+            font-size: 18px;
+            color: #7B1FA2;
+            text-decoration: none;
+            border: 2px solid #7B1FA2;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #7B1FA2;
+            color: #fff;
+        }
+    </style>
 </body>
 </html>

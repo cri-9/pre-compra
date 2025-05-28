@@ -1,0 +1,48 @@
+```
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Fuerza HTTPS (opcional, recomendado)
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Excepción: NO redirigir webpayRespuesta.php a router.php
+  RewriteCond %{REQUEST_URI} ^/pre-compra/Backend/webpayRespuesta\.php$ [NC]
+  RewriteRule .* - [L]
+
+  # SI la url corresponde a /Backend/, deja que php maneje todo por router.php
+  RewriteCond %{REQUEST_URI} ^/Backend/ [NC]
+  RewriteRule ^(.*)$ router.php [QSA,L]
+
+  # Si el archivo o directorio existe, lo servimos normalmente (js, css, imágenes)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # SPA fallback: cualquier ruta no existente SERVIR index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+AcceptPathInfo On
+
+<IfModule mod_headers.c>
+  Header set Access-Control-Allow-Origin "https://visualmecanica.cl"
+  Header set Access-Control-Allow-Methods "POST, GET, OPTIONS"
+  Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+  Header set Access-Control-Allow-Credentials "true"
+</IfModule>
+```
+**¿Qué hace esto?**
+- Para `/Backend/*`, pasa a `router.php` (tu API PHP).
+- Para archivos existentes, los sirve directo.
+- Para rutas React SPA NO existentes, sirve `index.html`.
+- Puedes adaptar la ruta `/Backend/` según dónde esté tu backend en el server.
+- **Elimina lo que no corresponde a tu estructura si por ejemplo tienes el API PHP en otra parte.**
+
+---
+
+### **Conclusión y siguiente paso**
+- Renombra este archivo como **`.htaccess`** (sin `.txt`) en el server de producción.
+- Con esto, React funcionará como SPA y tu backend/Router PHP seguirá activo para API.
+
+¿Necesitas ayuda específica para ajustar esto si cambiaste el nombre de la carpeta backend o tienes otro flujo en el hosting? ¿Quieres la versión solo SPA o solo backend? ¿Necesitas instrucciones sobre permisos o activación de mod_rewrite en tu servidor?

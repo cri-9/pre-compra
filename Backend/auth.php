@@ -1,12 +1,29 @@
 <?php
+
+//echo "INICIO auth.php"; exit;
+//oculta errores de deprecated y notice
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
+ini_set('display_errors', 0);
+
+
+session_start();
 require_once 'vendor/autoload.php';
 
-$client = new Google_Client(); //
-$client->setAuthConfig('credenciales.json'); //Ruta del archivo de credenciales
-$client->addScope(Google_Service_Calendar::CALENDAR); //Permisos de Google Calendar
-$client->setAccessType('offline'); //Acceso offline
-$client->setPrompt('select_account consent'); //Solicitar consentimiento del usuario
+// Configuración del cliente de Google
+$client = new Google_Client();
+$client->setAuthConfig(__DIR__ . '/credenciales.json');
+$client->setRedirectUri('http://localhost/pre-compra/Backend/callback.php');
+$client->addScope(Google_Service_Calendar::CALENDAR_EVENTS);
+$client->setAccessType('offline');
+$client->setApprovalPrompt('force'); // legacy
+$client->setPrompt('consent');       // moderno
 
+$authUrl = $client->createAuthUrl();
+header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
+exit;
+
+
+// Función HTML para mostrar mensajes
 function html($contenido) {
     echo "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'>
     <meta http-equiv='refresh' content='5;url=paginaPrincipal.php'>
@@ -20,7 +37,7 @@ function html($contenido) {
     </head><body><div class='box'>$contenido</div></body></html>";
 }
 
-// ----- CERRAR SESIÓN -----
+// ----- Cerrar sesión -----
 if (isset($_GET['logout'])) {
     if (file_exists('token.json')) {
         unlink('token.json');
@@ -29,55 +46,62 @@ if (isset($_GET['logout'])) {
     exit;
 }
 
-// ----- CARGAR TOKEN -----
+// ----- Procesar código de autorización -----
+if (isset($_GET['code'])) {
+    $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+    $client->setAccessToken($accessToken);
+
+    if (!file_exists(dirname(__DIR__ . '/token.json'))) {
+        mkdir(dirname(__DIR__ . '/token.json'), 0700, true);
+    }
+    file_put_contents(__DIR__ . '/token.json', json_encode($client->getAccessToken()));
+
+    html("<h2>✅ Autenticación completada</h2><p>Redirigiendo a la página principal...</p><a href='paginaPrincipal.php'>Ir ahora</a>");
+    exit;
+}
+
+// ----- Token existente -----
 if (file_exists('token.json')) {
     $accessToken = json_decode(file_get_contents('token.json'), true);
     $client->setAccessToken($accessToken);
 
-    // Crear el servicio de calendario
-$service = new Google_Service_Calendar($client);
-
-// Obtener los eventos del calendario
-$calendarId = 'primary';
-$events = $service->events->listEvents($calendarId);
-
-foreach ($events->getItems() as $event) {
-    printf("Evento: %s\n", $event->getSummary());
-}
-
-    // Si está expirado y hay refresh_token, intenta renovarlo
+    // Renovar token si está expirado
     if ($client->isAccessTokenExpired()) {
         if (isset($accessToken['refresh_token'])) {
             $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
             file_put_contents('token.json', json_encode($client->getAccessToken()));
             html("<h2>🔁 Token renovado automáticamente</h2><p>Redirigiendo...</p>");
+            exit;
         } else {
             unlink('token.json');
             header("Location: auth.php");
             exit;
         }
     }
-}
 
-// ----- MANEJO DEL CÓDIGO DE RETORNO DE GOOGLE -----
-if (isset($_GET['code'])) {
-    $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-    $client->setAccessToken($accessToken);
+    // Obtener eventos
+    try {
+        $service = new Google_Service_Calendar($client);
+        $events = $service->events->listEvents('primary');
 
-    if (!file_exists(dirname('token.json'))) {
-        mkdir(dirname('token.json'), 0700, true);
+        $contenido = "<h2>✅ Ya estás autenticado</h2><p>Eventos encontrados:</p>";
+        foreach ($events->getItems() as $event) {
+            $contenido .= "📅 " . htmlspecialchars($event->getSummary()) . "<br>";
+        }
+        $contenido .= "<br><a href='paginaPrincipal.php'>Ir ahora</a><br><a href='auth.php?logout=1'>Cerrar sesión</a>";
+        html($contenido);
+        exit;
+    } catch (Exception $e) {
+        html("<h2>❌ Error al acceder a Google Calendar</h2><p>{$e->getMessage()}</p>");
+        exit;
     }
-    file_put_contents('token.json', json_encode($client->getAccessToken()));
-    html("<h2>✅ Autenticación completada</h2><p>Redirigiendo a la página principal...</p><a href='paginaPrincipal.php'>Ir ahora</a>");
-    exit;
 }
 
-// ----- REDIRECCIÓN SI NO HAY TOKEN -----
-if (!$client->getAccessToken()) {
-    $authUrl = $client->createAuthUrl();
-    header("Location: $authUrl");
-    exit;
-}
+// ----- Redirigir a autenticación si no hay token -----
+$authUrl = $client->createAuthUrl([
+    'access_type' => 'offline',
+    'prompt' => 'consent'
+]);
+header("Location: $authUrl");
+exit;
 
-// ----- AUTENTICACIÓN YA EXISTENTE -----
-html("<h2>✅ Ya estás autenticado</h2><p>Redirigiendo a la página principal...</p><a href='paginaPrincipal.php'>Ir ahora</a><br><a href='auth.php?logout=1'>Cerrar sesión</a>");

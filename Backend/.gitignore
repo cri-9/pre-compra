@@ -1,0 +1,27 @@
+```
+# Composer dependencies
+vendor/
+
+# Environment & creds
+.env
+*.env
+token.json
+credenciales.json
+
+# Logs y debugging
+*.log
+logs/
+
+# Archivos temporales
+tmp*
+tmp_*.json
+tmp_test.json
+tmpdatos_webpay_*.json
+*.bak
+
+# Archivos y scripts de pruebas
+prueba*
+test*
+testDB.php
+pruebaMailer.php
+```
