@@ -27,3 +27,12 @@ credenciales.json
 token.json
 auth.php
 callback.php
+
+# Ignorar variables de entorno
+.env
+.env.*
+Backend/.env
+Backend/.env.*
+
+# Ignorar carpeta de dependencias
+Backend/vendor/
