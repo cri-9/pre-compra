@@ -1,98 +1,125 @@
 <?php
-// enviarCorreo.php
+require_once __DIR__ . '/helpers/env.php';
+//oculta errores de deprecated y notice
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
+ini_set('display_errors', 0);
 
-// Cabeceras CORS
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-
-// Si es una solicitud OPTIONS, termina la ejecución
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
-
-// Obtener los datos JSON enviados
-$data = json_decode(file_get_contents('php://input'), true);
-
-// Depuración: Imprime el contenido de $data
-error_log(print_r($data, true));
-
-// Acceder a las claves con valores predeterminados
-$direccion = $data['cliente']['dirección'] ?? null;
-$region = $data['cliente']['región'] ?? null;
-
-// Verificar si faltan datos requeridos
-if ($direccion === null || $region === null) {
-    echo json_encode(["success" => false, "error" => "Faltan datos requeridos."]);
-    exit();
-}
-
-// Cargar PHPMailer (esto debe ir ANTES de los 'use')
-require 'vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$mail = new PHPMailer(true);
+require 'vendor/autoload.php';
 
-try {
-    // Configuración del servidor SMTP
-    $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'cotizacionautomotriz09@gmail.com';
-    $mail->Password = 'jewckbskarnbixwf';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
+/**
+ * Envía un correo usando PHPMailer, con opción de modo debug para depuración rápida.
+ *
+ * @param array $datos Array con claves: 'destinatario', 'asunto', 'mensajeHtml', 'mensajeTexto', opcional 'cc', 'bcc', 'adjuntos' (ruta o arreglo de rutas de archivos)
+ * @param bool $modoDebug Si es true, no envía el correo y simula éxito.
+ * @return array ['success' => bool, 'error' => string|null]
+ */
+function enviarCorreo($datos, $modoDebug = false) {
+    try {
+        error_log("INICIO enviarCorreo");
 
-    // Remitente y destinatario
-    $mail->setFrom('cesar.719@gmail.com', 'Sistema de Cotizaciones Visual Mecánica');
-    $mail->addAddress('cotizacionautomotriz09@gmail.com', 'Destinatario');
+        // Validación básica de email
+        if (empty($datos['destinatario']) || !filter_var($datos['destinatario'], FILTER_VALIDATE_EMAIL)) {
+            error_log("Email destinatario inválido: " . ($datos['destinatario'] ?? 'no especificado'));
+            return [
+                'success' => false,
+                'error' => 'Email destinatario inválido'
+            ];
+        }
 
-    // Contenido del correo
-    $mail->isHTML(true);
-    $mail->Subject = 'Nuevo Agendamiento';
+        if ($modoDebug) {
+            error_log("MODO DEBUG ACTIVADO: No se envía correo real.");
+            // Simula una respuesta exitosa sin enviar correo
+            return [
+                'success' => true,
+                'debug' => 'Correo simulado (no enviado realmente)'
+            ];
+        }
 
-    $body = "<h1>Datos del Agendamiento</h1>";
+        // === LEER VARIABLES SMTP DE .env ===
+        $smtpHost   = getenv_backend('SMTP_HOST', 'smtp.gmail.com');
+        $smtpPort   = (int)getenv_backend('SMTP_PORT', 587);
+        $smtpSecure = getenv_backend('SMTP_SECURE', PHPMailer::ENCRYPTION_STARTTLS);
+        $smtpUser   = getenv_backend('SMTP_USER');
+        $smtpPass   = getenv_backend('SMTP_PASS');
+        $mailFrom   = getenv_backend('MAIL_FROM', $smtpUser);
+        $fromName   = getenv_backend('MAIL_FROM_NAME', 'Sistema de Cotizaciones Visual Mecánica');
 
-    $body .= "<h2>Datos del Vehículo</h2>";
-    $body .= "<p><strong>Marca:</strong> " . $data['vehiculo']['marca'] . "</p>";
-    $body .= "<p><strong>Modelo:</strong> " . $data['vehiculo']['modelo'] . "</p>";
-    $body .= "<p><strong>Año:</strong> " . $data['vehiculo']['año'] . "</p>";
-    $body .= "<p><strong>Patente:</strong> " . $data['vehiculo']['patente'] . "</p>";
+        error_log("Instanciando PHPMailer...");
+        $mail = new PHPMailer(true);
 
-    $body .= "<h2>Datos del Cliente</h2>";
-    $body .= "<p><strong>Nombre:</strong> " . $data['cliente']['nombre'] . "</p>";
-    $body .= "<p><strong>Apellido:</strong> " . $data['cliente']['apellido'] . "</p>";
-    $body .= "<p><strong>Email:</strong> " . $data['cliente']['email'] . "</p>";
-    $body .= "<p><strong>Teléfono:</strong> " . $data['cliente']['telefono'] . "</p>";
-    $body .= "<p><strong>RUT:</strong> " . $data['cliente']['rut'] . "</p>";
-    $body .= "<p><strong>Direccion:</strong> " . $data['cliente']['direccion'] . "</p>";
-    $body .= "<p><strong>Región:</strong> " . $data['cliente']['region'] . "</p>";
-    $body .= "<p><strong>Comuna:</strong> " . $data['cliente']['comuna'] . "</p>";
+        // Debugging SMTP
+        $mail->SMTPDebug = 2; // Set to 0 on production
+        $mail->Debugoutput = function($str, $level) { error_log("SMTP: $str"); };
 
-    $body .= "<h2>Datos del Vendedor</h2>";
-    $body .= "<p><strong>Tipo de Vendedor:</strong> " . ($data['vendedor']['tipovendedor'] ?? 'No especificado') . "</p>";
-    $body .= "<p><strong>Nombre:</strong> " . ($data['vendedor']['nombre'] ?? 'No especificado') . "</p>";
-    $body .= "<p><strong>Teléfono:</strong> " . ($data['vendedor']['telefono'] ?? 'No especificado') . "</p>";
-    $body .= "<p><strong>Direccion:</strong> " . ($data['vendedor']['direccion'] ?? 'No especificado') . "</p>";
-    $body .= "<p><strong>Región:</strong> " . ($data['vendedor']['region'] ?? 'No especificado') . "</p>";
-    $body .= "<p><strong>Comuna:</strong> " . ($data['vendedor']['comuna'] ?? 'No especificado') . "</p>";
+        // Configuración SMTP
+        $mail->CharSet  = 'UTF-8';
+        $mail->Encoding = 'base64';
+        $mail->isSMTP();
+        $mail->Host       = $smtpHost;
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $smtpUser;
+        $mail->Password   = $smtpPass;
+        $mail->Port       = $smtpPort;
+        $mail->SMTPSecure = $smtpSecure;
+        $mail->Timeout    = 15;
 
-    $body .= "<h2>Fecha de Agendamiento</h2>";
-    $body .= "<p><strong>Fecha:</strong> " . ($data['agendamiento']['fecha'] ?? 'No especificada') . "</p>";
-    $body .= "<p><strong>Bloque:</strong> " . ($data['agendamiento']['bloque'] ?? 'No especificado') . "</p>";
+        // Remitente y destinatario
+        $mail->setFrom($mailFrom, $fromName);
+        $mail->addAddress($datos['destinatario']); // Solo el email, sin nombre fijo
 
-    $body .= "<h2>Método de Pago</h2>";
-    $body .= "<p><strong>Método:</strong> " . ($data['pago']['metodo'] ?? 'No especificado') . "</p>";
+        // CC y BCC opcionales
+        if (!empty($datos['cc']) && filter_var($datos['cc'], FILTER_VALIDATE_EMAIL)) {
+            $mail->addCC($datos['cc']);
+        }
+        if (!empty($datos['bcc']) && filter_var($datos['bcc'], FILTER_VALIDATE_EMAIL)) {
+            $mail->addBCC($datos['bcc']);
+        }
 
-    $mail->Body = $body;
+        // Adjuntos opcionales (puede ser string o array de rutas)
+        if (!empty($datos['adjuntos'])) {
+            $adjuntos = is_array($datos['adjuntos']) ? $datos['adjuntos'] : [$datos['adjuntos']];
+            foreach ($adjuntos as $adjunto) {
+                if (file_exists($adjunto)) {
+                    // Si es archivo .ics, forzar MIME para calendario
+                    $nombreArchivo = basename($adjunto);
+                    $mime = strtolower(pathinfo($adjunto, PATHINFO_EXTENSION)) === 'ics'
+                        ? 'text/calendar'
+                        : mime_content_type($adjunto);
+                    $mail->addAttachment($adjunto, $nombreArchivo, 'base64', $mime);
+                } else {
+                    error_log("Adjunto no encontrado: $adjunto. No será enviado.");
+                }
+            }
+        }
 
-    $mail->send();
-    echo json_encode(['success' => true, 'message' => 'Correo enviado con éxito']);
-} catch (Exception $e) {
-    echo json_encode(['success' => false, 'error' => 'Error al enviar el correo: ' . $mail->ErrorInfo]);
+        // Contenido
+        $mail->isHTML(true);
+        $mail->Subject = $datos['asunto'];
+        $mail->Body    = $datos['mensajeHtml'];
+        $mail->AltBody = $datos['mensajeTexto'];
+
+        error_log("Enviando correo a " . $datos['destinatario'] . "...");
+        $mail->send();
+        error_log("Correo enviado exitosamente a " . $datos['destinatario']);
+
+        return [
+            'success' => true
+        ];
+
+    } catch (Exception $e) {
+        error_log(
+            "ERROR en enviarCorreo: " . 
+            ($mail->ErrorInfo ?? 'No ErrorInfo') . 
+            " | Excepción: " . $e->getMessage() . 
+            " | Trace: " . $e->getTraceAsString()
+        );
+        return [
+            'success' => false,
+            'error' => $mail->ErrorInfo ?: $e->getMessage()
+        ];
+    }
 }
-?>

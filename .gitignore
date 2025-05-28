@@ -22,7 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-conexionBD.php
 credenciales.json
 token.json
 auth.php

@@ -1,4 +1,11 @@
 <?php
+
+
+//oculta errores de deprecated y notice
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
+ini_set('display_errors', 0);
+
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -8,7 +15,7 @@ require 'vendor/autoload.php';
 
 
 // Cabeceras CORS
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://visualmecanica.cl");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
@@ -62,8 +69,16 @@ try {
 
     // Enviar correo
     $mail->send();
-    echo json_encode(["success" => true, "message" => "Correo enviado correctamente."]);
+    // Simula un pequeño retraso para UX (puedes quitarlo si no lo deseas)
+    usleep(2000000); // 2 segundos
+    echo json_encode([
+        "success" => true,
+        "message" => "¡Tu solicitud fue enviada exitosamente!<br>En breve recibirás una respuesta.<br><span style='color:#4CAF50;font-weight:bold;'>Visual Mecánica</span>"
+    ]);
 } catch (Exception $e) {
-    echo json_encode(["success" => false, "error" => $mail->ErrorInfo]);
+    echo json_encode([
+        "success" => false,
+        "error" => "<span style='color:#F44336;font-weight:bold;'>Error al enviar el correo:</span> " . $mail->ErrorInfo
+    ]);
 }
 ?>
