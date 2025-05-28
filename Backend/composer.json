@@ -1,6 +1,9 @@
 {
     "require": {
         "phpmailer/phpmailer": "^6.9",
-        "transbank/transbank-sdk": "^4.0"
+        "transbank/transbank-sdk": "^4.0",
+        "google/apiclient": "2.14",
+        "google/apiclient-services": "0.323",
+        "google/auth": "1.10"
     }
 }

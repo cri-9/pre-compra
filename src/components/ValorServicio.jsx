@@ -1,9 +1,10 @@
+import { Link } from "react-router-dom";
 import React from "react";
 import { Button, Card, CardContent, CardMedia, Typography, Box, Grid, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
-import valores1 from '../assets/mecanica_valor1.jpg';
-import valores2 from '../assets/mecanica_valor2.jpg';
-import valores3 from '../assets/mecanica_valor3.jpg';
+import valores1 from '../assets/Valores_servicios/mecanica_valor1.webp';
+import valores2 from '../assets/Valores_servicios/mecanica_valor2.webp';
+import valores3 from '../assets/Valores_servicios/mecanica_valor3.webp';
 
 const valores = [
   {
@@ -49,7 +50,7 @@ const valores = [
 
 const ValorServicio = () => {
   return (
-    <Box sx={{ textAlign: "center", p: 4, mt: 3 }}>
+    <Box sx={{  textAlign: "center", p: 4, mt: 3 }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         Nuestros Valores de Servicio son todos a domicilio
       </Typography>
@@ -110,7 +111,10 @@ const ValorServicio = () => {
                 )}
               </CardContent>
               <Box sx={{ p: 1, textAlign: 'center' }}>
-                <Button variant="contained" sx={{ width: "170px", height: "60px", backgroundColor: "#6a6191", "&:hover": { backgroundColor: "#7B1FA2" }, fontSize: "1rem", fontWeight: "bold" }}>
+                <Button variant="contained" sx={{ width: "170px", height: "60px", backgroundColor: "#7B1FA2", fontSize: "1rem", fontWeight: "bold" }}
+                component={Link} to="/agendar"                
+                color="primary"
+                >
                   Agendar
                 </Button>
               </Box>

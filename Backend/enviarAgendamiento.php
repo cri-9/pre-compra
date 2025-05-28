@@ -67,18 +67,18 @@ use PHPMailer\PHPMailer\Exception;
 $mail = new PHPMailer(true);
 
 try {
-    // Configuración SMTP (mantén tus credenciales actuales)
+    // Configuración SMTP (mantén tus credenciales actuales)Se dejaron en el archivo .env
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
-    $mail->Username = 'cotizacionautomotriz09@gmail.com';
-    $mail->Password = 'jewckbskarnbixwf';
+    $mail->Username = getenv('GMAIL_USERNAME');
+    $mail->Password = getenv('GMAIL_PASSWORD');
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
     // Remitente y destinatario
-    $mail->setFrom('cesar.719@gmail.com', 'Sistema de Cotizaciones Visual Mecánica');
-    $mail->addAddress('cotizacionautomotriz09@gmail.com', 'Destinatario');
+    $mail->setFrom(getenv('GMAIL_USERNAME'), 'Sistema de Cotizaciones Visual Mecánica');
+    $mail->addAddress(getenv('GMAIL_USERNAME'), 'Destinatario');
 
     // Contenido del correo
     $mail->isHTML(true);
