@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, Typography, Grid, Box } from "@mui/material";
 import { Search, Home, Person, Lock } from "@mui/icons-material";
+import ChecklistSection from './ChecklistSection';
 
 const options = [
   { 
@@ -23,13 +24,6 @@ const options = [
     icon: <Person fontSize="large" />, 
     color: "#9C27B0",
     description: "Verificamos los documentos legales para asegurar una compra segura."
-  },
-  { 
-    number: "04", 
-    title: "Seguridad y Confianza", 
-    icon: <Lock fontSize="large" />, 
-    color: "#E44",
-    description: "Garantizamos transparencia en cada inspección realizada."
   }
 ];
 
@@ -74,6 +68,7 @@ const OptionCard = ({ number, title, icon, color, description }) => {
 
 const ServiceCards = () => {
   return (
+    <Box>
     <Grid container spacing={3} justifyContent="center" sx={{ p: 3 }}>
       {options.map((option, index) => (
         <Grid item key={index}>
@@ -81,7 +76,9 @@ const ServiceCards = () => {
         </Grid>
       ))}
     </Grid>
-    
+    {/* checklist animado */}
+      <ChecklistSection />
+    </Box>
   );
 };
 

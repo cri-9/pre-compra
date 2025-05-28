@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom"; // Importar useLocation para obtener la ubicación actual
 import '../Csspersonalizado/landingpage.css'; //Css personalizado para varios estilos
 import { AppBar, Toolbar, Typography, Button, Box, Container } from "@mui/material";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo_visual1.2.png";
-import logo_sect from "../assets/img_secction1.jpg";
+import logo from "../assets/Logo_Superior/logo_visual1.2.webp";
+import logo_sect from "../assets/img_secction1.webp";
 import PrecioServicio from "./PrecioServicio";
 import Cotizacion from "../components/Cotizacion"; // Importar el nuevo componente
 import ServiceCards from "./ServiceCards.jsx"; //nuevas card de prueba
-import HerramientasSection from './herramientasSection';
+import HerramientasSection from "./HerramientasSection.jsx";
 import ValorServicio from './ValorServicio';
+import About from './About';
+import PreguntasFrecuentes from './PreguntasFrecuentes.jsx';
 import TestimoniosSection from "./TestimoniosSection.jsx";
 import Footer from "./Footer";
 import Confetti from 'react-confetti'; // Importar el componente de confeti
 import { useWindowSize } from '@react-hook/window-size'; // Importar el hook para obtener el tamaño de la ventana
 import BotonWhatsApp from "./BotonWhatsApp.jsx"; // Importar el botón de WhatsApp
 
-
-
 //import CardServicio from "./ServiceCards.jsx";
 
 function LandingPage() {
-  const [openCotizacion, setOpenCotizacion] = useState(false);
-  const [width, height] = useWindowSize();
-  const [openExito, setOpenExito] = useState(false);
+  const [openCotizacion, setOpenCotizacion] = useState(false); // Estado para abrir/cerrar la ventana emergente de cotización
+  const [width, height] = useWindowSize(); // Obtener el tamaño de la ventana
+  const [openExito, setOpenExito] = useState(false); // Estado para el confeti
+  const location = useLocation(); // Obtener la ubicación actual
   
-  
-  {/*Navegación dentro de la misma pagian*/}
+  useEffect(() => {
+    const params = new URLSearchParams(location.search); // Obtener los parámetros de la URL
+    if (params.get("mensaje") === "exito") {
+      alert("!Su proceso de pago y agendamineto se realizón con éxito!"); // Mostrar alerta de éxito
+    }
+  }, [location]); // Ejecutar el efecto solo cuando la ubicación cambie
+
+  {/*Navegación dentro de la misma pagina*/}
   useEffect(() => {
     const links = document.querySelectorAll('nav a');
 
@@ -65,9 +73,24 @@ function LandingPage() {
       }}
       >
         {/* Puedes agregar contenido aquí si es necesario */}
-        <Typography align="center" style={{ color: '#f8f9f9' , fontWeight: "bold"}}>
-      No te pierdas la oportunidad de conocer nuestros servicios
-    </Typography>
+        <Typography
+          align="center"
+          variant="h8"
+          sx={{
+            color: '#ffffff',
+            fontWeight: '400',
+            fontSize: { xs: '1.2rem', sm: '1.2rem', md: '1.2rem' },
+            backgroundColor: '#7B1FA2',
+            padding: '2px',
+            borderRadius: '12px',
+            boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+            fontFamily: 'Roboto, sans-serif',
+            marginBottom: '3px'
+  }}
+>
+  No esperes más, asegura tu patrimonio ¡No te pierdas la oportunidad de conocer nuestros servicios a domicilio en la Novena Región!
+</Typography>
+
       </Box>
 
       {/* Header */}      
@@ -117,7 +140,8 @@ function LandingPage() {
             paddingTop: 2, // Padding superior
             }} 
             > 
-          <Button sx={{ color: "#7C70A1" }} component={Link} to="/">Inicio</Button>
+          <Button sx={{ color: "#7C70A1" }} component={Link} to="/">Inicio</Button>          
+          <Button sx={{ color: "#7C70A1" }} href="#about">Acerca de</Button>
           <Button sx={{ color: "#7C70A1" }} href="#nuestro-servicio">Nuestro Servicio</Button>
           <Button sx={{ color: "#7C70A1" }} href="#nuestras-herramientas">Nuestras Herramientas</Button>
           <Button sx={{ color: "#7C70A1" }} href="#valor-servicios">Valores</Button>         
@@ -175,7 +199,12 @@ function LandingPage() {
       mt: { xs: 4, md: 0 }, // Margen superior en móviles
     }}
   >
-    <Typography variant="h3" sx={{ fontWeight: "bold", mb: 2 }}> 
+    <Typography variant="h3" sx={{ 
+      fontWeight: "bold", 
+      mb: 2 
+      }}
+      className="efecto-titulo" //Efecto css nuevo
+      > 
       Agenda con Nosotros
     </Typography>
 
@@ -197,13 +226,15 @@ function LandingPage() {
       {/* Botón Cotización */}
       <Button
         variant="outlined"
-        color="secondary"
+        color="tertiary"
         onClick={() => setOpenCotizacion(true)}
         sx={{
-          fontSize: "1.5rem", // Tamaño de la fuente
+          fontSize: "1.6rem", // Tamaño de la fuente
           px: 5, // Padding horizontal
           py: 1, // Padding vertical
+          borderRadius: "7px", // Radio de borde
         }}
+        className="btn" //Clase para el boton nuevo estilo css
       >
         Cotización
       </Button>
@@ -219,8 +250,10 @@ function LandingPage() {
           fontSize: "1.5rem", // Tamaño de la fuente
           px: 5, // Padding horizontal
           py: 2, // Padding vertical
-        }}
-      >
+          borderRadius: "7px", // Radio de borde
+        }}      
+        className="btn" //Clase para el boton nuevo estilo css
+        >
         Agendar Ahora
       </Button>
     </Box>
@@ -230,13 +263,19 @@ function LandingPage() {
 
       {/* Componente PrecioServicio */}
       <PrecioServicio />
-{/*Aca va EL NUEVO CODIGO DE LAS CARS*/ }
+
+      {/* Componente About */}
+      <div id="about">
+      <About />
+      </div>
+      
+
 {/* Sección de Servicios */}
 <Container id="nuestro-servicio" sx={{ textAlign: "center", mt: 5 }}>
   <Typography variant="h4" fontWeight="bold" mb={3}>
     Nuestros Servicios
   </Typography>
-  <ServiceCards />
+  <ServiceCards />  
   </Container>
 
        {/* Se dejara sin efecta para probar otra Card --componente se guarda en block al final////// Componentes Card*/}
@@ -254,30 +293,35 @@ function LandingPage() {
     <TestimoniosSection />
     {openExito && (
   <Confetti width={width} height={height} />
-)}
+  
+)}  
 
-      {/* Ventana emergente de Cotización */}
-      <Cotizacion open={openCotizacion} handleClose={() => setOpenCotizacion(false)} />
-      {/* Opción 1: Botón flotante en la esquina inferior derecha */}
-      <BotonWhatsApp
-        numeroTelefono={numeroTelefono}
-        mensajeInicial={mensajeInicial}
-      />
+{/* Componente PreguntasFrecuentes */}
+<Container> 
+<PreguntasFrecuentes />
+</Container>
 
-      {/* Opción 2: Botón dentro de una sección de contacto */}
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h6">Contáctanos por WhatsApp:</Typography>
-        <BotonWhatsApp
-          numeroTelefono={numeroTelefono}
-          mensajeInicial={mensajeInicial}
-        />
-      </Box>
-      {/* Footer */}
-      <Footer />
+{/* Ventana emergente de Cotización */}
+<Cotizacion open={openCotizacion} handleClose={() => setOpenCotizacion(false)} />
+
+{/* Opción 1: Botón flotante en la esquina inferior derecha */}
+<BotonWhatsApp
+  numeroTelefono={numeroTelefono}
+  mensajeInicial={mensajeInicial}
+/>
+
+{/* Opción 2: Botón dentro de una sección de contacto */}
+<Box sx={{ mt: 4 }}>        
+<BotonWhatsApp
+  numeroTelefono={numeroTelefono}
+  mensajeInicial={mensajeInicial}
+/>
+</Box>
+{/* Footer */}
+<Footer />
       
-    </div>
+</div>
   );
 }
-
 
 export default LandingPage;

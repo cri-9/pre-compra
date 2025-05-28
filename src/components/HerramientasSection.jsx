@@ -2,13 +2,13 @@ import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 
 // Importador de imágenes
-import escaner from '../assets/escaner1.jpg';
-import estetos from '../assets/estetos1.PNG';
-import aceite from '../assets/aceite1.png';
-import multimetro1 from '../assets/multimetro1.jpg';
-import medidoneumaticos from '../assets/medidor_neumatico.jpg';
-import pintura from '../assets/medidor_pintura1.jpg';
-import informelegal from '../assets/informelegal.jpg';
+import escaner from '../assets/Nuestras_Herramientas/escaner1.webp';
+import estetos from '../assets/Nuestras_Herramientas/estetos1.webp';
+import aceite from '../assets/Nuestras_Herramientas/aceite1.webp';
+import multimetro1 from '../assets/Nuestras_Herramientas/multimetro1.webp';
+import medidoneumaticos from '../assets/Nuestras_Herramientas/medidor_neumatico.webp';
+import pintura from '../assets/Nuestras_Herramientas/medidor_pintura.webp';
+import informelegal from '../assets/nuestras_Herramientas/informelegal.webp';
 
 
 

@@ -6,14 +6,32 @@ function DatosCliente({ datos, onChange }) {
   const [nombre, setNombre] = useState(datos?.nombre || '');
   const [apellido, setApellido] = useState(datos?.apellido || '');
   const [email, setEmail] = useState(datos?.email || '');
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);  
   const [telefono, setTelefono] = useState(() => {
     const initialTelefono = datos?.telefono || '';
+    if (initialTelefono && initialTelefono.startsWith('+56') && initialTelefono.length >= 3) {
+      return initialTelefono;
+    }
     if (initialTelefono && /^\d+$/.test(initialTelefono)) {
       return '+56' + initialTelefono.slice(0, 9);
     }
     return '';
   });
+
+  // Sincroniza el estado local si cambia el prop datos.telefono
+  useEffect(() => {
+    if (datos?.telefono && datos.telefono !== telefono) {
+      if (datos.telefono.startsWith('+56') && datos.telefono.length >= 3) {
+        setTelefono(datos.telefono);
+      } else if (/^\d+$/.test(datos.telefono)) {
+        setTelefono('+56' + datos.telefono.slice(0, 9));
+      } else {
+        setTelefono('');
+      }
+    }
+    // Solo sincroniza si cambia datos.telefono
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [datos?.telefono]);
   const maximoDigitos = 9;
   const prefijo = '+56';
   const [rut, setRut] = useState(datos?.rut || '');
@@ -25,64 +43,104 @@ function DatosCliente({ datos, onChange }) {
   const [formErrors, setFormErrors] = useState({});
   const [touched, setTouched] = useState({});
 
-  const regiones = [
-    { value: 'RM', label: 'Región Metropolitana' },
-    { value: 'V', label: 'Valparaíso' },
-    { value: 'I', label: 'O’Higgins' },
-    { value: 'VI', label: 'Maule' },
-    { value: 'VII', label: 'Biobío' },
-    { value: 'VIII', label: 'Araucanía' },
-    { value: 'IX', label: 'Los Ríos' },
-    { value: 'X', label: 'Los Lagos' },
-    { value: 'XI', label: 'Aysén' },
-    { value: 'XII', label: 'Magallanes' },
-    { value: 'XIV', label: 'Los Ríos' },
-    { value: 'XV', label: 'Arica y Parinacota' },
-  ];
+  // Handlers que actualizan estado y notifican al padre
+  const handleNombreChange = (e) => {
+    setNombre(e.target.value);
+    onChange({ ...datos, nombre: e.target.value });
+  };
+  const handleApellidoChange = (e) => {
+    setApellido(e.target.value);
+    onChange({ ...datos, apellido: e.target.value });
+  };
+  const handleEmailChange = (e) => {
+    let value = e.target.value;
+    setEmail(value);
+    onChange({ ...datos, email: value });
+    // Sugerencias
+    if (value.includes("@")) {
+      const [localPart, domainPart] = value.split("@");
+      setSuggestions(
+        emailDomains
+          .filter((domain) => domain.startsWith(domainPart))
+          .map((domain) => `${localPart}@${domain}`)
+      );
+    } else {
+      setSuggestions([]);
+    }
+  };
+  const handleTelefonoChange = (event) => {
+    let inputValue = event.target.value.replace(/\D/g, '');
+    if (inputValue.startsWith('56')) {
+      inputValue = inputValue.slice(2);
+    }
+    const numerosLimitados = inputValue.slice(0, maximoDigitos);
+    const nuevoTelefono = prefijo + numerosLimitados;
+    setTelefono(nuevoTelefono);
+    onChange({ ...datos, telefono: nuevoTelefono });
+  };
+  const handleRutChange = (e) => {
+    const newRut = e.target.value.replace(/\./g, '').replace(/-/g, '');
+    setRut(newRut);
+    onChange({ ...datos, rut: newRut });
+    if (validateRut(newRut)) {
+      setRutError('');
+    } else {
+      setRutError('RUT inválido');
+    }
+  };
+  const handleDireccionChange = (e) => {
+    setDireccion(e.target.value);
+    onChange({ ...datos, direccion: e.target.value });
+  };
+  const handleRegionChange = (e) => {
+    setRegion(e.target.value);
+    setComuna('');
+    onChange({ ...datos, region: e.target.value, comuna: '' });
+  };
+  const handleComunaChange = (e) => {
+    setComuna(e.target.value);
+    onChange({ ...datos, comuna: e.target.value });
+  };
+  const handlePresenteChange = (e) => {
+    setPresente(e.target.value);
+    onChange({ ...datos, presente: e.target.value });
+  };
+
+  const regiones = [   
+  { value: 'V', label: 'Región de Valparaíso' },
+  { value: 'RM', label: 'Región Metropolitana de Santiago' },
+  { value: 'VI', label: 'Región del Libertador General Bernardo O’Higgins' },
+  { value: 'VII', label: 'Región del Maule' },
+  { value: 'XVI', label: 'Región de Ñuble' },
+  { value: 'VIII', label: 'Región del Biobío' },
+  { value: 'IX', label: 'Región de La Araucanía' },
+  { value: 'XIV', label: 'Región de Los Ríos' },
+  { value: 'X', label: 'Región de Los Lagos' }, 
+];
 
   const comunas = {
-    VIII: [
+    IX: [
       { value: "Temuco", label: "Temuco" },
       { value: "Padre Las Casas", label: "Padre Las Casas" },
-      { value: "Pucon", label: "Pucon" },
-      { value: "Villarrica", label: "Villarrica" },
-      { value: "Galvarino", label: "Galvarino" },
       { value: "Lautaro", label: "Lautaro" },
       { value: "Perquenco", label: "Perquenco" },
-      { value: "Cunco", label: "Cunco" },
-      { value: "Victoria", label: "Victoria" },
-      { value: "Carahue", label: "Carahue" },
       { value: "Freire", label: "Freire" },
+      { value: "Pucon", label: "Pucon" },
+      { value: "Villarrica", label: "Villarrica" },
+      { value: "Galvarino", label: "Galvarino" },      
+      { value: "Victoria", label: "Victoria" },
       { value: "Nueva Imperial", label: "Nueva Imperial" },
-      { value: "Gorbea", label: "Gorbea" },
-      { value: "Melipeuco", label: "Melipeuco" },
+      { value: "Gorbea", label: "Gorbea" },     
     ],
   };
 
-  useEffect(() => {
+  useEffect(() => {    
     onChange({ nombre, apellido, email, telefono, rut, direccion, region, comuna, presente });
   }, [nombre, apellido, email, telefono, rut, direccion, region, comuna, presente, onChange]);
 
   const handleBlur = (field) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
-//formato celular 
-const handleTelefonoChange = (event) => {
-  let inputValue = event.target.value.replace(/\D/g, ''); // Eliminar todo lo que no sea número
-
-  // Eliminar prefijo si ya existe y el usuario intenta escribirlo
-  if (inputValue.startsWith('56')) {
-    inputValue = inputValue.slice(2);
-  }
-
-  // Limitar a 9 dígitos después del prefijo
-  const numerosLimitados = inputValue.slice(0, maximoDigitos);
-
-  // Actualizar el estado con el prefijo fijo
-  setTelefono(prefijo + numerosLimitados);
-};
-//FIn Configuración de celular
-
 //Con Email segú extención
 const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
 
@@ -100,26 +158,6 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
       );
     } else {
       setSuggestions([]);
-    }
-  };
-
-  const handleRegionChange = (e) => {
-    setRegion(e.target.value);
-    setComuna(''); // Reset comuna when region changes
-  };
-
-  const handlePresenteChange = (e) => {
-    setPresente(e.target.value);
-  };
-//Inicio conf Rut
-  const handleRutChange = (e) => {
-    const newRut = e.target.value.replace(/\./g, '').replace(/-/g, ''); // Quita puntos y guión
-    setRut(newRut);
-
-    if (validateRut(newRut)) {
-      setRutError('');
-    } else {
-      setRutError('RUT inválido');
     }
   };
 
@@ -250,6 +288,8 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
           fullWidth
         />
       </FormItem>
+
+     {/*Estilo Lista de Regiones*/}
       <FormItem>
         <FormControl fullWidth error={touched.region && !region}>
           <InputLabel id="region-label">Región</InputLabel>
@@ -262,14 +302,20 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
             onBlur={() => handleBlur('region')}
           >
             {regiones.map((region) => (
-              <MenuItem key={region.value} value={region.value}>
-                {region.label}
-              </MenuItem>
+          <MenuItem
+          key={region.value}
+          value={region.value}
+          sx={region.value === 'IX' ? { color: 'purple', fontWeight: 'bold' } : {}} // Cambia el color y el peso de la fuente para la región IX
+          >
+          {region.label}
+          </MenuItem>
             ))}
           </Select>
           {touched.region && !region && <Typography color="error" variant="caption">Campo obligatorio</Typography>}
         </FormControl>
       </FormItem>
+
+      {/*Estilo Lista de Comunas*/}
       <FormItem>
         <FormControl fullWidth error={touched.comuna && !comuna}>
           <InputLabel id="comuna-label">Comuna</InputLabel>
@@ -282,7 +328,11 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
             onBlur={() => handleBlur('comuna')}
           >
             {comunas[region]?.map((comuna) => (
-              <MenuItem key={comuna.value} value={comuna.value}>
+              <MenuItem 
+              key={comuna.value} 
+              value={comuna.value}
+              sx={comuna.value === 'Temuco' ? { color: 'purple', fontWeight: 'bold' } : {}} // Cambia el color y el peso de la fuente para la comuna "Temuco"
+              >
                 {comuna.label}
               </MenuItem>
             ))}
@@ -290,6 +340,7 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
           {touched.comuna && !comuna && <Typography color="error" variant="caption">Campo obligatorio</Typography>}
         </FormControl>
       </FormItem>
+
       <FormItem>
         <FormControl component="fieldset" sx={{ textAlign: 'center' }}>
           ¿Estarás presente en la inspección?
@@ -300,13 +351,13 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
         </FormControl>
       </FormItem>
       {presente === 'si' && (
-        <Typography variant="body1" sx={{ backgroundColor: '#dff0d8', color: '#3c763d', padding: 1, borderRadius: 1 }}>
-          Perfecto, el inspector se comunicará cuando llegue al lugar de la revisión.
+        <Typography variant="body1" sx={{ fontWeight: 'bold', backgroundColor: '#f7dc6f', color: '#85929e', padding: 1, borderRadius: 1 }}>
+          Perfecto, nuestro técnico se comunicará cuando llegue al lugar de la revisión.
         </Typography>
       )}
       {presente === 'no' && (
-        <Typography variant="body1" sx={{ backgroundColor: '#f2dede', color: '#a94442', padding: 1, borderRadius: 1 }}>
-          No hay problema, el inspector se comunicará con el vendedor cuando llegue al lugar.
+        <Typography variant="body1" sx={{ fontWeight: 'bold', backgroundColor: '#f2dede', color: '#a94442', padding: 1, borderRadius: 1 }}>
+          No hay problema, nuestro técnico se comunicará con el vendedor cuando llegue al lugar.
         </Typography>
       )}
     </Box>

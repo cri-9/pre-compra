@@ -1,93 +1,178 @@
 import React, { useState, useEffect } from "react";
 import {
-  Button,
   Select,
   MenuItem,
   InputLabel,
   FormControl,
   Typography,
   Box,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import FormItem from "./FormItem";
+import { sumarMinutosAHora } from "../utils/timeHelpers";
 
-function FechaAgendamiento({ datos, onChange, onSiguiente, onAnterior }) {
-  const [fecha, setFecha] = useState(datos?.fecha ? new Date(datos.fecha) : new Date());
-  const [bloque, setBloque] = useState(datos?.bloque || "");
+function FechaAgendamiento({ datos, onChange }) {
+  // El estado local solo para loading, error y bloques
   const [bloquesDisponibles, setBloquesDisponibles] = useState([]);
   const [cargandoBloques, setCargandoBloques] = useState(false);
-  const [fetchRealizado, setFetchRealizado] = useState(false);
-  const [fechaSeleccionadaPorUsuario, setFechaSeleccionadaPorUsuario] = useState(false);
+  const [errorBloques, setErrorBloques] = useState(null);
+  const [fechaInicializada, setFechaInicializada] = useState(false);
 
 
+  // Const para traducir fecha string a objeto Date
+  const fechaAsDate = datos?.fecha ? new Date(datos.fecha) : new Date();
+
+  // DatePicker con botón personalizado
+  const ExampleCustomInput = React.forwardRef(({ value, onClick, className }, ref) => (
+    <button className={className} onClick={onClick} ref={ref} style={{
+      background: '#fff',
+      border: '1px solid #1976d2',
+      borderRadius: '6px',
+      padding: '8px 18px',
+      fontSize: '1rem',
+      color: '#1976d2',
+      cursor: 'pointer',
+      fontWeight: 500
+    }}>
+      {value}
+    </button>
+  ));
+
+  const handleDateChange = (date) => {
+    const fechaISO = date.toISOString().split("T")[0];
+    fetchBloquesDisponibles(fechaISO); // Recarga los bloques disponibles
+    onChange({ ...datos, fecha: fechaISO, bloque: "", horario: "" }); // Limpia bloque y horario al cambiar fecha
+  };
 
 
-  const todosLosBloques = [
-    { value: "AM", label: "8:00 - 14:00 AM" },
-    { value: "PM", label: "14:00 - 20:00 PM" },
-  ];
+  const horariosPorBloque = {
+    AM: ["10:00", "11:00", "13:00"],
+    PM: ["16:30", "17:30", "18:30", "19:30"],
+  };
+
+  // --- Calendario de selección de fecha ---
+  // Puedes poner esto donde quieras mostrar el calendario en el return principal:
+  // <FormItem>
+  //   <DatePicker
+  //     selected={fechaAsDate}
+  //     onChange={handleDateChange}
+  //     customInput={<ExampleCustomInput className="example-custom-input" />}
+  //     dateFormat="yyyy-MM-dd"
+  //     minDate={new Date()}
+  //     locale="es"
+  //   />
+  // </FormItem>
+
+  // NOTIFICAR FECHA INICIAL AL PADRE SIEMPRE SI ESTA VACÍA
+  useEffect(() => {
+    if (!fechaInicializada && (!datos?.fecha || datos.fecha === "")) {
+      const hoyISO = new Date().toISOString().split("T")[0];
+      onChange({ ...datos, fecha: hoyISO });
+      fetchBloquesDisponibles(hoyISO);
+      setFechaInicializada(true);
+    } else if (!fechaInicializada) {
+      fetchBloquesDisponibles(datos.fecha);
+      setFechaInicializada(true);
+    }
+    // eslint-disable-next-line
+  }, []);
 
   const fetchBloquesDisponibles = async (fechaISO) => {
     try {
       setCargandoBloques(true);
-      const response = await fetch("http://localhost:8000/verificarBloque", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fecha: fechaISO }),
-      })
-      
-  
-      const data = await response.json();      
+      setErrorBloques(null);
 
-    console.log("Respuesta de backend:", data); // Verifica la respuesta del backend
+      const response = await fetch('http://localhost/pre-compra/Backend/verificarBloque.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fecha: fechaISO })
+      });
 
-      // Verifica si la respuesta contiene la propiedad "success" y si "disponibles" es un array
-      if (data.success && Array.isArray(data.disponibles)) {
-        setBloquesDisponibles(data.disponibles);  
-          } else {
-          setBloquesDisponibles([]);
-}
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response from server:", errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
+      const data = await response.json();
+      if (!data || !Array.isArray(data.disponibles)) {
+        setBloquesDisponibles(['AM', 'PM']);
+        return;
+      }
+
+      setBloquesDisponibles(data.disponibles.length > 0 ? data.disponibles : []);
     } catch (error) {
-      console.error("Error al obtener bloques:", error);
+      setErrorBloques("No se pudo cargar los bloques. Intenta más tarde.");
       setBloquesDisponibles([]);
     } finally {
       setCargandoBloques(false);
     }
   };
 
-  useEffect(() => {
-    if (fecha) {
-      const fechaISO = fecha.toISOString().split("T")[0];
-      fetchBloquesDisponibles(fechaISO);
-    }
-  }, [fecha]);
-
-  // Este efecto se ejecuta cuando la fecha seleccionada por el usuario cambia y no hay bloques disponibles
-  useEffect(() => {
-    if (
-      !cargandoBloques &&
-      fechaSeleccionadaPorUsuario &&
-      bloquesDisponibles.length === 0
-    ) {
-      window.alert("No hay bloques disponibles para la fecha seleccionada. Por favor elige otra.");
-    }
-  }, [bloquesDisponibles, cargandoBloques, fechaSeleccionadaPorUsuario]);
-  
-  
-  // Este efecto se ejecuta cuando la fecha cambia y no hay bloques disponibles handler actuando como un "debounce"
   const handleFechaChange = (date) => {
-    setFecha(date);
-    setBloque("");
-    setFechaSeleccionadaPorUsuario(true); // ✅ activamos el "modo usuario"
-    onChange({ fecha: date.toISOString(), bloque: "" });
+    const fechaISO = date.toISOString().split("T")[0];
+    fetchBloquesDisponibles(fechaISO);
+    onChange({ ...datos, fecha: fechaISO, bloque: "", horario: "" });
   };
-  
 
-  const handleBloqueChange = (event) => {
-    setBloque(event.target.value);
-    onChange({ fecha, bloque: event.target.value });
+  const validarBloqueDisponible = async (fechaISO, bloqueSeleccionado) => {
+    try {
+      const response = await fetch('http://localhost/pre-compra/Backend/verificarBloque.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fecha: fechaISO })
+      });
+      if (!response.ok) return false;
+      const data = await response.json();
+      return data.disponibles && data.disponibles.includes(bloqueSeleccionado);
+    } catch {
+      return false;
+    }
+  };
+
+  const bloqueToHorario = (bloque) => {
+    if (bloque === "AM") return "10:00 - 13:00";
+    if (bloque === "PM") return "16:30 - 19:30";
+    return "";
+  };
+
+  // Cambia para que al seleccionar bloque, NO asigne horario, sino que espere selección de hora exacta
+  const handleBloqueChange = async (e) => {
+    const nuevoBloque = e.target.value;
+    const fechaISO = datos?.fecha ? datos.fecha : new Date().toISOString().split("T")[0];
+    const disponible = await validarBloqueDisponible(fechaISO, nuevoBloque);
+    if (!disponible) {
+      setErrorBloques("Este bloque ya fue reservado por otra persona. Por favor, elige otro.");
+      onChange({ ...datos, bloque: "", horario: "" });
+      fetchBloquesDisponibles(fechaISO);
+      return;
+    }
+    // Ahora no asignamos horario, esperamos que el usuario elija la hora exacta
+    onChange({ ...datos, bloque: nuevoBloque, horario: "" });
+  };
+
+  // Nuevo handler para seleccionar la hora exacta
+  const handleHoraChange = (e) => {
+    const horaSeleccionada = e.target.value;
+    // Calcula hora_fin sumando 1 hora
+    const [h, m] = horaSeleccionada.split(':').map(Number);
+    const date = new Date();
+    date.setHours(h, m);
+    date.setMinutes(date.getMinutes() + 60); // Suma 60 minutos
+    const horaFin = date.toTimeString().slice(0, 5); // "HH:MM"
+    onChange({
+      ...datos,
+      horario: horaSeleccionada,
+      hora_inicio: horaSeleccionada,
+      hora_fin: horaFin
+    });
   };
 
   return (
@@ -98,44 +183,74 @@ function FechaAgendamiento({ datos, onChange, onSiguiente, onAnterior }) {
 
       <FormItem label="Fecha">
         <DatePicker
-          selected={fecha}
-          onChange={handleFechaChange}
-          dateFormat="yyyy-MM-dd"
-          minDate={new Date()}
+           selected={fechaAsDate}
+           onChange={handleDateChange}
+           customInput={<ExampleCustomInput className="example-custom-input" />}
+           dateFormat="yyyy-MM-dd"
+           minDate={new Date()}
+           locale="es"
         />
       </FormItem>
 
       <FormItem label="Bloque horario">
-      <FormControl fullWidth variant="outlined" size="small" sx={{ mb: 2 }}>
-  <InputLabel id="bloque-label">Bloque horario</InputLabel>
-  <Select
-    labelId="bloque-label"
-    value={bloque}
-    onChange={handleBloqueChange}
-    label="Bloque horario"
-  >
-    {bloquesDisponibles.map((bloque) => (
-      <MenuItem key={bloque} value={bloque}>
-        {bloque}
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
+        {errorBloques && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {errorBloques}
+          </Alert>
+        )}
+        {cargandoBloques ? (
+          <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: 56 }}>
+            <CircularProgress size={24} />
+          </Box>
+        ) : bloquesDisponibles.length === 0 ? (
+          <Alert severity="warning" sx={{ mb: 2, fontWeight: 'bold', fontSize: 16 }}>
+            No hay bloques disponibles para la fecha seleccionada. Por favor, elige otra fecha.
+          </Alert>
+        ) : (
+          <>
+            <FormControl fullWidth variant="outlined" size="small" sx={{ mb: 2 }}>
+              <InputLabel id="bloque-label">Bloque horario</InputLabel>
+              <Select
+                labelId="bloque-label"
+                value={datos.bloque || ""}
+                onChange={handleBloqueChange}
+                label="Bloque horario"
+              >
+                <MenuItem value="">
+                  <em>Selecciona un bloque</em>
+                </MenuItem>
+                {bloquesDisponibles.map((b) => (
+                  <MenuItem key={b} value={b}>
+                    {b === "AM" ? "AM (10:00 - 13:00)" : b === "PM" ? "PM (16:30 - 19:30)" : b}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-</FormItem>
-
-
-      <Box mt={3} display="flex" justifyContent="space-between">
-        <Button variant="outlined" onClick={onAnterior}>
-          Atrás
-        </Button>
-        <Button
-        onClick={onSiguiente}
-        disabled={!bloque || bloquesDisponibles.length === 0}
->
-       Siguiente
-        </Button>
-      </Box>
+            {/* Selector de hora exacta dentro del bloque */}
+            {datos?.bloque && horariosPorBloque[datos.bloque] && (
+              <FormControl fullWidth margin="normal" variant="outlined" size="small">
+                <InputLabel id="hora-label">Hora exacta</InputLabel>
+                <Select
+                  labelId="hora-label"
+                  value={datos.horario || ""}
+                  onChange={handleHoraChange}
+                  label="Hora exacta"
+                >
+                  <MenuItem value="">
+                    <em>Selecciona una hora</em>
+                  </MenuItem>
+                  {horariosPorBloque[datos.bloque].map((hora) => (
+                    <MenuItem key={hora} value={hora}>
+                      {hora}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          </>
+        )}
+      </FormItem>      
     </Box>
   );
 }

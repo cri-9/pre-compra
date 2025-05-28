@@ -1,24 +1,62 @@
-# Logs
-logs
+# .gitignore optimizado para proyectos Fullstack (Frontend + Backend)
+# ---------------------------------------------------------------
+# Mantiene el repositorio limpio y seguro, excluyendo archivos generados,
+# temporales, sensibles y específicos de entorno/editor.
+
+#########################
+# Node & Frontend
+#########################
+node_modules/
+dist/
+build/
+out/
+*.tsbuildinfo
+.cache/
+.eslintcache
+.stylelintcache
+.vite/
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+logs/
+*.lcov
+coverage/
+.env*
+.env
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
+#########################
+# Editor/IDE/OS
+#########################
+.vscode/
 !.vscode/extensions.json
-.idea
+!.vscode/settings.json
+.idea/
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+#########################
+# Backend PHP/Composer
+#########################
+Backend/vendor/
+Backend/node_modules/
+Backend/token.json
+Backend/credenciales.json
+Backend/.env
+Backend/.env.local
+Backend/.env.production
+Backend/.env.development
+Backend/*.log
+Backend/tmp*
+Backend/*.bak
+Backend/testDB.php
+Backend/pruebaMailer.php
+Backend/tmp_*
+Backend/tmp*.json
+
+#########################
+# Otros/Misceláneos
+#########################
+*.qodo

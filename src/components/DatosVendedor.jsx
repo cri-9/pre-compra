@@ -1,57 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Box, FormControl, InputLabel, Select, MenuItem, Typography } from '@mui/material';
+import { TextField, Box, FormControl, InputLabel, Select, MenuItem, Typography, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import FormItem from './FormItem';
 
 function DatosVendedor({ datos, onChange }) {
   const [tipovendedor, setTipoVendedor] = useState(datos?.tipovendedor || '');
   const [nombre, setNombre] = useState(datos?.nombre || '');
   const [telefono, setTelefono] = useState(() => {
       const initialTelefono = datos?.telefono || '';
+      if (initialTelefono && initialTelefono.startsWith('+56') && initialTelefono.length >= 3) {
+        return initialTelefono;
+      }
       if (initialTelefono && /^\d+$/.test(initialTelefono)) {
         return '+56' + initialTelefono.slice(0, 9);
       }
       return '';
-    });  
+    });
+    
+   
   const [direccion, setDireccion] = useState(datos?.direccion || '');
   const [region, setRegion] = useState(datos?.region || '');
   const [comuna, setComuna] = useState(datos?.comuna || '');
+  const [touched, setTouched] = useState({});
 
-  const regiones = [
-    { value: 'RM', label: 'Región Metropolitana' },
-    { value: 'V', label: 'Valparaíso' },
-    { value: 'I', label: 'O’Higgins' },
-    { value: 'VI', label: 'Maule' },
-    { value: 'VII', label: 'Biobío' },
-    { value: 'VIII', label: 'Araucanía' },
-    { value: 'IX', label: 'Los Ríos' },
-    { value: 'X', label: 'Los Lagos' },
-    { value: 'XI', label: 'Aysén' },
-    { value: 'XII', label: 'Magallanes' },
-    { value: 'XIV', label: 'Los Ríos' },
-    { value: 'XV', label: 'Arica y Parinacota' },
-  ];
+  const regiones = [  
+  { value: 'V', label: 'Región de Valparaíso' },
+  { value: 'RM', label: 'Región Metropolitana de Santiago' },
+  { value: 'VI', label: 'Región del Libertador General Bernardo O’Higgins' },
+  { value: 'VII', label: 'Región del Maule' },
+  { value: 'XVI', label: 'Región de Ñuble' },
+  { value: 'VIII', label: 'Región del Biobío' },
+  { value: 'IX', label: 'Región de La Araucanía' },
+  { value: 'XIV', label: 'Región de Los Ríos' },
+  { value: 'X', label: 'Región de Los Lagos' },  
+];
 
   const comunas = {
-    VIII: [
+    IX: [
       { value: "Temuco", label: "Temuco" },
       { value: "Padre Las Casas", label: "Padre Las Casas" },
-      { value: "Pucon", label: "Pucon" },
-      { value: "Villarrica", label: "Villarrica" },
-      { value: "Galvarino", label: "Galvarino" },
       { value: "Lautaro", label: "Lautaro" },
       { value: "Perquenco", label: "Perquenco" },
-      { value: "Cunco", label: "Cunco" },
-      { value: "Victoria", label: "Victoria" },
-      { value: "Carahue", label: "Carahue" },
       { value: "Freire", label: "Freire" },
+      { value: "Pucon", label: "Pucon" },
+      { value: "Villarrica", label: "Villarrica" },
+      { value: "Galvarino", label: "Galvarino" },      
+      { value: "Victoria", label: "Victoria" },
       { value: "Nueva Imperial", label: "Nueva Imperial" },
-      { value: "Gorbea", label: "Gorbea" },
-      { value: "Melipeuco", label: "Melipeuco" },
+      { value: "Gorbea", label: "Gorbea" },     
     ],
   };
 
   useEffect(() => {
     onChange({ tipovendedor, nombre, telefono, direccion, region, comuna });
   }, [tipovendedor, nombre, telefono, direccion, region, comuna, onChange]);
+
+  const handleBlur = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
 
   //formato celular 
   const prefijo = "+56";
@@ -92,59 +97,115 @@ function DatosVendedor({ datos, onChange }) {
           <MenuItem value="empresa">Empresa</MenuItem>
         </Select>
       </FormControl>
-      <TextField
-        label="Nombre"
-        value={nombre}
-        onChange={(e) => setNombre(e.target.value)}
-        fullWidth
-        sx={{ mb: 2 }}
+
+      { /* Estilo Nombre */}
+      <FormItem>
+        <TextField
+          label="Nombre Cliente *"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          onBlur={() => handleBlur('nombre')}
+          error={touched.nombre && !nombre} // Solo muestra error si el campo ha sido tocado y está vacío
+          helperText={touched.nombre && !nombre ? 'Campo obligatorio' : ''}
+          fullWidth
+        />
+      </FormItem>
+
+      { /* Estilo Telefono */}
+      <FormItem>
+        <TextField
+          label="Teléfono"
+          value={telefono}
+          onChange={handleTelefonoChange}
+          fullWidth
+          inputProps={{
+            maxLength: prefijo.length + maximoDigitos, // Limitar la longitud total en el input
+        }}
       />
-      <TextField
-        label="Teléfono"
-        value={telefono}
-        onChange={handleTelefonoChange}
-        fullWidth
-        sx={{ mb: 2 }}
-      />
-      <TextField
-        label="Dirección"
-        value={direccion}
-        onChange={(e) => setDireccion(e.target.value)}
-        fullWidth
-        sx={{ mb: 2 }}
-      />
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel id="region-label">Región</InputLabel>
-        <Select
-          labelId="region-label"
-          id="region"
-          value={region}
-          onChange={handleRegionChange}
-          onClose={() => document.activeElement.blur()} // Forzar el foco fuera del menú
-        >
-          {regiones.map((region) => (
-            <MenuItem key={region.value} value={region.value}>
-              {region.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
+    </FormItem>
+
+    { /* Estilo Dirección */}
+      <FormItem>
+        <TextField
+          label="Dirección"
+          value={direccion}
+          onChange={(e) => setDireccion(e.target.value)}
+          onBlur={() => handleBlur('direccion')}
+          error={touched.direccion && !direccion}
+          helperText={touched.direccion && !direccion ? 'Campo obligatorio' : ''}
+          fullWidth
+        />
+      </FormItem>
+      
+      {/*Estilo Lista de Regiones*/}
+      <FormItem>
+        <FormControl fullWidth error={touched.region && !region}>
+          <InputLabel id="region-label">Región</InputLabel>
+          <Select
+            labelId="region-label"
+            id="region"
+            value={region}
+            label="Región"
+            onChange={handleRegionChange}
+            onBlur={() => handleBlur('region')}
+          >
+            {regiones.map((region) => (
+          <MenuItem
+          key={region.value}
+          value={region.value}
+          sx={region.value === 'IX' ? { color: 'purple', fontWeight: 'bold' } : {}} // Cambia el color y el peso de la fuente para la región IX
+          >
+          {region.label}
+          </MenuItem>
+            ))}
+          </Select>
+          {touched.region && !region && <Typography color="error" variant="caption">Campo obligatorio</Typography>}
+        </FormControl>
+      </FormItem>
+
+      {/*Estilo Lista de Comunas*/}
+      <FormItem>
+      <FormControl fullWidth error={touched.comuna && !comuna}>
         <InputLabel id="comuna-label">Comuna</InputLabel>
         <Select
           labelId="comuna-label"
           id="comuna"
           value={comuna}
+          label="Comuna"
           onChange={(e) => setComuna(e.target.value)}
-          onClose={() => document.activeElement.blur()} // Forzar el foco fuera del menú
-        >
+          onBlur={() => handleBlur('comuna')} // Forzar el foco fuera del menú
+        >         
           {comunas[region]?.map((comuna) => (
-            <MenuItem key={comuna.value} value={comuna.value}>
+            <MenuItem 
+            key={comuna.value} 
+            value={comuna.value}
+            sx={comuna.value === 'Temuco' ? { color: 'purple', fontWeight: 'bold' } : {}} // Cambia el color y el peso de la fuente para la comuna "Temuco"
+            >
               {comuna.label}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
+      </FormItem>
+
+      {/* Alerta de recargo para comunas específicas de la Región IX */}
+      {region === 'IX' && [
+        "Pucon", "Villarrica", "Villarrica", "Galvarino", "Victoria", "Nueva Imperial", "Gorbea"
+      ].includes(comuna) && (
+        <Box sx={{ 
+            my: 2,
+            backgroundColor: '#f7dc6f',
+            color: '#b2babb',
+            padding: 1,
+            borderRadius: 1,
+            textAlign: 'center'
+            }}>
+          <strong style={{ color: '#5D6D7E' }}>
+            Recuerde: El cliente deberá pagar un recargo extra de 15.000 CLP por la comuna seleccionada.
+          </strong>
+        </Box>
+      )}
+
     </Box>
   );
 }

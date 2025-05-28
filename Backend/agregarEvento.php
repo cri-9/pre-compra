@@ -1,17 +1,82 @@
 <?php
 
+/**
+ * Wrapper genérico para agregar un evento a Google Calendar.
+ * Recibe un array con los datos del evento (summary, location, description, start, end).
+ * Permite compatibilidad con scripts que esperan la función agregarEvento.
+ */
+function agregarEvento($datos, $modoDebug = false) {
+    return agregarEventoGoogleCalendar($datos, $modoDebug);
+}
+
+//oculta errores de deprecated y notice
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
+ini_set('display_errors', 0);
+
+
 require 'vendor/autoload.php';
 
-function agregarEventoGoogleCalendar($datos) {
+
+function agregarEventoGoogleCalendar($datos, $modoDebug = false) {
     try {
+        error_log("INICIO agregarEventoGoogleCalendar");
+
+        if ($modoDebug) {
+            error_log("MODO DEBUG ACTIVADO: No se conecta a Google Calendar.");
+            // Simula una respuesta exitosa sin llamar a Google Calendar
+            return [
+                'success' => true,
+                'eventLink' => 'https://calendar.google.com/fake-event-link'
+            ];
+        }
+
+        error_log("Creando cliente de Google...");
         $client = new Google_Client();
         $client->setApplicationName('Visual Mecánica');
-        $client->setScopes(Google_Service_Calendar::CALENDAR);
+        $client->setScopes(Google_Service_Calendar::CALENDAR_EVENTS);
         $client->setAuthConfig('credenciales.json');
         $client->setAccessType('offline');
 
+        // Cargar token de acceso
+        $tokenPath = __DIR__ . '/token.json';
+        if (!file_exists($tokenPath)) {
+            error_log('No hay token de acceso');
+            return [
+                'success' => false,
+                'error' => 'No hay token de acceso para Google Calendar.'
+            ];
+        }
+        $accessToken = json_decode(file_get_contents($tokenPath), true);
+        $client->setAccessToken($accessToken);
+
+        // Log del token antes de refrescar
+        error_log('Token antes de refrescar: ' . json_encode($client->getAccessToken()));
+
+        // Renovar token si expiró
+        if ($client->isAccessTokenExpired()) {
+            $refreshToken = $client->getRefreshToken();
+            if ($refreshToken) {
+                error_log('Intentando refrescar token con refresh_token: ' . $refreshToken);
+                $newToken = $client->fetchAccessTokenWithRefreshToken($refreshToken);
+                $client->setAccessToken($newToken);
+                file_put_contents($tokenPath, json_encode($client->getAccessToken()));
+                error_log('Token después de refrescar: ' . json_encode($client->getAccessToken()));
+            } else {
+                error_log('Token expirado y sin refresh token');
+                return [
+                    'success' => false,
+                    'error' => 'Token expirado y sin refresh token'
+                ];
+            }
+        }
+
+        // Log final del token usado
+        error_log('Token FINAL usado por Google Client: ' . json_encode($client->getAccessToken()));
+
+        error_log("Instanciando servicio de Google Calendar...");
         $service = new Google_Service_Calendar($client);
 
+        error_log("Preparando evento...");
         $event = new Google_Service_Calendar_Event([
             'summary'     => $datos['summary'],
             'location'    => $datos['location'],
@@ -26,7 +91,18 @@ function agregarEventoGoogleCalendar($datos) {
             ],
         ]);
 
+        error_log("Insertando evento en Google Calendar...");
         $createdEvent = $service->events->insert('primary', $event);
+
+        if (!$createdEvent || !isset($createdEvent->htmlLink)) {
+            error_log("No se pudo crear el evento en Google Calendar.");
+            return [
+                'success' => false,
+                'error' => 'No se pudo crear el evento en Google Calendar. Por favor, intenta nuevamente o contacta soporte.'
+            ];
+        }
+
+        error_log("Evento creado exitosamente: " . $createdEvent->htmlLink);
 
         return [
             'success' => true,
@@ -34,6 +110,7 @@ function agregarEventoGoogleCalendar($datos) {
         ];
 
     } catch (Exception $e) {
+        error_log("ERROR en agregarEventoGoogleCalendar: " . $e->getMessage());
         return [
             'success' => false,
             'error' => $e->getMessage()

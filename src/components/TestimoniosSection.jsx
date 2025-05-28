@@ -1,5 +1,7 @@
 import React from "react";
 import { Box, Typography, Card, CardContent, Avatar } from "@mui/material";
+import { Grid } from "@mui/material";
+import { Star } from "@mui/icons-material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -7,63 +9,63 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // Importador de imágenes
-import persona1 from "../assets/persona1.jpg";
-import persona2 from "../assets/persona2.jpg";
-import persona3 from "../assets/persona3.jpg";
+import persona1 from "../assets/Testimonios/persona1.webp";
+import persona2 from "../assets/Testimonios/persona2.webp";
+import persona3 from "../assets/Testimonios/persona3.webp";
 
 // Datos de testimonios
 const testimonios = [
   {
     nombre: "Juan Pérez",
     comentario: "El servicio fue excelente, muy recomendado.",
-    imagen: persona1,
+    foto: persona1,
   },
   {
     nombre: "María López",
     comentario: "Muy profesional y confiable, volveré a usarlo.",
-    imagen: persona2,
+    foto: persona2,
   },
   {
     nombre: "Carlos Gómez",
-    comentario: "Rápido y eficiente, muy satisfecho con la experiencia.",
-    imagen: persona3,
+    comentario: "Rápido y eficiente, 100% recomendado.",
+    foto: persona3,
   },
 ];
 
 function TestimoniosSection() {
   return (
-    <Box sx={{ maxWidth: 800, margin: "auto", padding: 4 }}>
-      <Typography variant="h4" textAlign="center" gutterBottom>
+    <Box sx={{ mt: 5, px: 2, textAlign: "center" }}>
+      <Typography variant="h4" fontWeight="bold" gutterBottom>
         Testimonios de Clientes
       </Typography>
-      <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        spaceBetween={20}
-        slidesPerView={1}
-        loop={true}
-        pagination={{ clickable: true }}
-        navigation={true}
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
-      >
+      <Box sx={{ maxWidth: "80%", margin: "0 auto" }}>
+      <Grid container spacing={4} justifyContent="center">
         {testimonios.map((testimonio, index) => (
-          <SwiperSlide key={index}>
-            <Card sx={{ padding: 3, textAlign: "center", boxShadow: 3 }}>
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Card sx={{ p: 3, textAlign: "center", borderRadius: 3, boxShadow: 4 }}>
               <Avatar
-                src={testimonio.imagen}
-                sx={{ width: 80, height: 80, margin: "auto", mb: 2 }}
+                src={testimonio.foto}
+                alt={testimonio.nombre}
+                sx={{ width: 80, height: 80, margin: "0 auto", mb: 2 }}
               />
-              <CardContent>
-                <Typography variant="body1">{testimonio.comentario}</Typography>
-                <Typography variant="subtitle2" fontWeight="bold" mt={1}>
-                  - {testimonio.nombre}
-                </Typography>
-              </CardContent>
+              <Box display="flex" justifyContent="center" mb={1}>
+                {[1, 2, 3].map((_, i) => (
+                  <Star key={i} sx={{ color: "#FFD700" }} />
+                ))}
+              </Box>
+              <Typography variant="body1" color="text.secondary">
+                "{testimonio.comentario}"
+              </Typography>
+              <Typography variant="subtitle2" mt={2} fontWeight="bold">
+                - {testimonio.nombre}
+              </Typography>
             </Card>
-          </SwiperSlide>
+          </Grid>
         ))}
-      </Swiper>
+      </Grid>
+      </Box>
     </Box>
   );
-}
+};
 
 export default TestimoniosSection;
