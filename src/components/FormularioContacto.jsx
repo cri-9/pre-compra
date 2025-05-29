@@ -11,14 +11,17 @@ import Pago from './Pago';
 const pasos = ["Datos del Vehiculo", "Datos del Cliente", "Datos del Vendedor", "Fecha de Agendamiento", "Seleccion de Servicio", "Pago"];
 
 import { useTheme } from '@mui/material/styles';
+import theme from '../theme';
+
 
 //Colores de los iconos de los pasos
 function CustomStepIcon(props) {
   const { active, completed, icon, colorIndex } = props;
-  const theme = useTheme();
-  // Only color steps 0-4 (first five)
+  // Usar el theme importado directamente para customColors
   const isTertiary = colorIndex < 5;
-  const color = isTertiary ? theme.palette.tertiary.main : theme.palette.text.disabled;
+  const color = isTertiary && theme.customColors?.tertiary
+    ? theme.customColors.tertiary
+    : theme.palette.primary.main;
   return (
     <span
       style={{
@@ -29,7 +32,7 @@ function CustomStepIcon(props) {
         height: 32,
         borderRadius: '50%',
         backgroundColor: active || completed ? color : '#fff',
-        color: active || completed ? '#fff' : color,
+        color: (active || completed) ? '#fff' : color,
         fontWeight: 'bold',
         fontSize: 18,
         border: `2px solid ${color}`,

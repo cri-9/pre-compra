@@ -225,19 +225,25 @@ function LandingPage() {
     >
       {/* Botón Cotización */}
       <Button
-        variant="outlined"
-        color="tertiary"
-        onClick={() => setOpenCotizacion(true)}
-        sx={{
-          fontSize: "1.6rem", // Tamaño de la fuente
-          px: 5, // Padding horizontal
-          py: 1, // Padding vertical
-          borderRadius: "7px", // Radio de borde
-        }}
-        className="btn" //Clase para el boton nuevo estilo css
-      >
-        Cotización
-      </Button>
+  variant="outlined"
+  onClick={() => setOpenCotizacion(true)}
+  sx={{
+    fontSize: "1.6rem",
+    px: 5,
+    py: 1,
+    borderRadius: "7px",
+    color: "#7B1FA2", // Color del texto normal
+    borderColor: "#7B1FA2", // Borde morado
+    '&:hover': {
+      backgroundColor: '#ffb74d', // tertiary
+      color: '#fff', // Texto blanco en hover
+      borderColor: "#ffb74d", // Borde tertiary en hover
+    },
+  }}
+  className="btn"
+  >
+  Cotización
+  </Button>
 
       {/* Botón Agendar */}
       <Button

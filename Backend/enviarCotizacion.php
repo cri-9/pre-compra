@@ -45,7 +45,7 @@ try {
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'cotizacionautomotriz09@gmail.com'; // Cambia esto por tu correo
-    $mail->Password = 'jewckbskarnbixwf'; // Cambia esto por tu contraseña
+    $mail->Password = ''; // Cambia esto por tu contraseña
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
