@@ -9,19 +9,19 @@ const pasos = [
     step: "01",
     title: "Agenda tu Cita",
     description: "Selecciona fecha, hora y ubicación. Nos adaptamos a tu horario.",
-    icon: <AccessTimeIcon fontSize="large" color="primary" />,
+    icon: <AccessTimeIcon fontSize="large" color="secondary" />,
   },
   {
     step: "02",
     title: "Inspección Completa",
     description: "Nuestro técnico certificado revisa 200+ puntos en 2-3 horas.",
-    icon: <DirectionsCarIcon fontSize="large" color="primary" />,
+    icon: <DirectionsCarIcon fontSize="large" color="secondary" />,
   },
   {
     step: "03",
     title: "Recibe tu Reporte",
     description: "Reporte digital detallado con fotos y recomendaciones en 24h.",
-    icon: <CheckCircleIcon fontSize="large" color="primary" />,
+    icon: <CheckCircleIcon fontSize="large" color="secondary" />,
   },
 ];
 
