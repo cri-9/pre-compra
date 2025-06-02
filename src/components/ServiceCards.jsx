@@ -59,7 +59,7 @@ const OptionCard = ({ number, title, icon, color, description }) => {
           >
             {icon}
           </Box>
-          <Typography mt={1} fontSize={14} fontWeight="bold">DATA INFO</Typography>
+          <Typography mt={1} fontSize={14} fontWeight="bold">INFORMACIÓN</Typography>
         </Box>
       </CardContent>
     </Card>

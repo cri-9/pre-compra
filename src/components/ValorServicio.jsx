@@ -50,7 +50,7 @@ const valores = [
 
 const ValorServicio = () => {
   return (
-    <Box sx={{  textAlign: "center", p: 4, mt: 3 }}>
+    <Box sx={{  textAlign: "center", p: 14, mt: 3 }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         Nuestros Valores de Servicio son todos a domicilio
       </Typography>

@@ -5,6 +5,7 @@ import { AppBar, Toolbar, Typography, Button, Box, Container } from "@mui/materi
 import { Link } from "react-router-dom";
 import logo from "../assets/Logo_Superior/logo_visual1.2.webp";
 import logo_sect from "../assets/img_secction1.webp";
+import ProcesoSection from "./ProcesoSection.jsx";
 import PrecioServicio from "./PrecioServicio";
 import Cotizacion from "../components/Cotizacion"; // Importar el nuevo componente
 import ServiceCards from "./ServiceCards.jsx"; //nuevas card de prueba
@@ -283,6 +284,9 @@ function LandingPage() {
   </Typography>
   <ServiceCards />  
   </Container>
+
+  {/* Componente ProcesoSection */}
+  <ProcesoSection />
 
        {/* Se dejara sin efecta para probar otra Card --componente se guarda en block al final////// Componentes Card*/}
        {/* Sección de Herramientas */}

@@ -3,12 +3,18 @@ import { CheckCircleOutline } from "@mui/icons-material";
 import { motion } from "framer-motion";
 
 const items = [
-  "Imágenes",
-  "Kilometraje",
-  "Informe",
+  "Motor y transmision",
+  "Sistema de Frenos",
+  "Suspención",
+  "Aire acondicionado",
+  "Análisis de pintura",
+  "Detección de accidentes",
+  "Estado de llantas",
   "Prueba de ruta",
-  "Detalle Pintura",
-  "Confianza",  
+  "Interiores",
+  "Información legal",
+  "Historial de multas",
+  "Kilomentraje real",
 ];
 
 const ChecklistSection = () => {
