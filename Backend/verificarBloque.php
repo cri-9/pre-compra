@@ -4,21 +4,21 @@ require_once __DIR__ . '/helpers/env.php';
 require_once __DIR__ . '/helpers/rateLimiter.php';
 
 rateLimit();
-//oculta errores de deprecated y notice
+
+// Configurar cabeceras CORS automáticamente
+require_once 'helpers/corsHeaders.php';
+setCorsHeaders();
+
+// Configurar errores para desarrollo
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
 ini_set('display_errors', 0);
 
+// Siempre devolver JSON
+header('Content-Type: application/json');
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-header("Access-Control-Allow-Origin: https://visualmecanica.cl");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST");
-
-// Conexión a la base de datos
-$conn = new mysqli("localhost", "root", "", "precompra_db");
+// Conexión a la base de datos usando variables de entorno
+require_once 'conexionBD.php';
+$conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
     echo json_encode(['success' => false, 'error' => 'Error de conexión: ' . $conn->connect_error]);
     exit;

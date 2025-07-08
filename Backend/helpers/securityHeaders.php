@@ -1,8 +1,9 @@
 <?php
 // securityHeaders.php
-header('Access-Control-Allow-Origin: https://visualmecanica.cl'); // Cambia al dominio de producción
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+// Configurar cabeceras CORS automáticamente
+require_once __DIR__ . '/corsHeaders.php';
+setCorsHeaders();
+
 header('Referrer-Policy: no-referrer-when-downgrade');
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');

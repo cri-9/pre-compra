@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/helpers/env.php';
 
 /**
  * Wrapper genérico para agregar un evento a Google Calendar.
@@ -21,12 +22,25 @@ function agregarEventoGoogleCalendar($datos, $modoDebug = false) {
     try {
         error_log("INICIO agregarEventoGoogleCalendar");
 
-        if ($modoDebug) {
-            error_log("MODO DEBUG ACTIVADO: No se conecta a Google Calendar.");
+        // Verificar si estamos en modo de desarrollo y simulación de calendar
+        $devMode = in_array(getenv_backend('DEV_MODE', 'false'), ['true', '1', 'yes', 'on']);
+        $simulateCalendar = in_array(getenv_backend('SIMULATE_CALENDAR', 'false'), ['true', '1', 'yes', 'on']);
+        $esModoSimulacion = $modoDebug || ($devMode && $simulateCalendar);
+
+        if ($esModoSimulacion) {
+            error_log("MODO SIMULACIÓN ACTIVADO: No se conecta a Google Calendar.");
+            error_log("Datos del evento simulado: " . json_encode([
+                'summary' => $datos['summary'] ?? 'Sin título',
+                'location' => $datos['location'] ?? 'Sin ubicación',
+                'description' => $datos['description'] ?? 'Sin descripción',
+                'start' => $datos['start'] ?? 'Sin fecha inicio',
+                'end' => $datos['end'] ?? 'Sin fecha fin'
+            ]));
             // Simula una respuesta exitosa sin llamar a Google Calendar
             return [
                 'success' => true,
-                'eventLink' => 'https://calendar.google.com/fake-event-link'
+                'eventLink' => 'https://calendar.google.com/fake-event-link-desarrollo',
+                'debug' => 'Evento simulado (no creado realmente) - Modo desarrollo'
             ];
         }
 

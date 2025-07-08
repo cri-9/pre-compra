@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/helpers/env.php';
 
 /**
  * Consulta si un bloque horario está ocupado en Google Calendar.
@@ -9,6 +10,21 @@ require_once __DIR__ . '/vendor/autoload.php';
  */
 function estaBloqueOcupadoEnGoogleCalendar($fechaInicio, $fechaFin) {
     try {
+        // Verificar si estamos en modo de desarrollo y simulación de calendar
+        $devMode = in_array(getenv_backend('DEV_MODE', 'false'), ['true', '1', 'yes', 'on']);
+        $simulateCalendar = in_array(getenv_backend('SIMULATE_CALENDAR', 'false'), ['true', '1', 'yes', 'on']);
+        $esModoSimulacion = $devMode && $simulateCalendar;
+
+        if ($esModoSimulacion) {
+            error_log("MODO SIMULACIÓN ACTIVADO: No se consulta Google Calendar.");
+            error_log("Consulta simulada de disponibilidad: $fechaInicio a $fechaFin");
+            // Simula que el bloque está libre
+            return [
+                'ocupado' => false,
+                'eventos' => [],
+                'debug' => 'Consulta simulada (no real) - Modo desarrollo'
+            ];
+        }
         $client = new Google_Client();
 $client->setApplicationName('Visual Mecánica');
 $client->setScopes(Google_Service_Calendar::CALENDAR_EVENTS);

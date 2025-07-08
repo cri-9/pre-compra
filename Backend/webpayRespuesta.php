@@ -8,9 +8,10 @@ rateLimit();
 // webpayRespuesta.php: refactorizado
 // --------------------------
 
-header('Access-Control-Allow-Origin: https://visualmecanica.cl');
-header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+// Configurar cabeceras CORS automáticamente
+require_once 'helpers/corsHeaders.php';
+setCorsHeaders();
+
 header('Content-Type: application/json');
 
 session_set_cookie_params([
@@ -442,7 +443,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Solo redirige al frontend (no proceses lógica ni envíes correos aquí)
     $estado = 'exitoso'; // o 'fallido', puedes mejorar esto leyendo de la BD si quieres mostrar el estado real
     error_log('GET recibido. Redirigiendo a frontend con estado: ' . $estado);
-    header('Location: http://localhost:3000/resultado-pago?estado=' . $estado);
+    
+    // Obtener la URL del frontend desde la configuración
+    $frontendUrl = getenv_backend('FRONTEND_URL', 'http://localhost:3002');
+    header('Location: ' . $frontendUrl . '/resultado-pago?estado=' . $estado);
     exit;
 }
 

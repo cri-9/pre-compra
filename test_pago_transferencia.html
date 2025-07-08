@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Pago con Transferencia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prueba de Pago con Transferencia</h1>
+        <p>Este formulario simula el proceso de pago con transferencia para probar la simulación de servicios externos.</p>
+        
+        <form id="pagoForm">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="Juan Pérez" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="juan.perez@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="telefono">Teléfono:</label>
+                <input type="tel" id="telefono" name="telefono" value="912345678" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="servicio">Servicio:</label>
+                <select id="servicio" name="servicio" required>
+                    <option value="Pre-compra Básica">Pre-compra Básica</option>
+                    <option value="Pre-compra Completa">Pre-compra Completa</option>
+                    <option value="Inspección Premium">Inspección Premium</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="monto">Monto:</label>
+                <input type="number" id="monto" name="monto" value="45000" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" name="direccion" value="Av. Providencia 123" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="region">Región:</label>
+                <select id="region" name="region" required>
+                    <option value="Región Metropolitana">Región Metropolitana</option>
+                    <option value="Valparaíso">Valparaíso</option>
+                    <option value="Biobío">Biobío</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="comuna">Comuna:</label>
+                <select id="comuna" name="comuna" required>
+                    <option value="Providencia">Providencia</option>
+                    <option value="Las Condes">Las Condes</option>
+                    <option value="Santiago">Santiago</option>
+                </select>
+            </div>
+            
+            <button type="submit">Enviar Notificación de Transferencia</button>
+        </form>
+        
+        <div id="resultado" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        document.getElementById('pagoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const datos = Object.fromEntries(formData);
+            
+            // Agregar datos adicionales que normalmente vendrían del flujo de pago
+            datos.metodoPago = 'transferencia';
+            datos.montoBase = datos.monto;
+            datos.total = datos.monto;
+            datos.recargo = 0;
+            datos.descuento = 0;
+            
+            const resultDiv = document.getElementById('resultado');
+            resultDiv.textContent = 'Enviando...';
+            resultDiv.className = 'result';
+            resultDiv.style.display = 'block';
+            
+            try {
+                const response = await fetch('http://localhost/pre-compra/Backend/notificarTransferencia.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(datos)
+                });
+                
+                const result = await response.json();
+                
+                resultDiv.textContent = JSON.stringify(result, null, 2);
+                resultDiv.className = 'result ' + (result.success ? 'success' : 'error');
+                
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+                resultDiv.className = 'result error';
+            }
+        });
+    </script>
+</body>
+</html>

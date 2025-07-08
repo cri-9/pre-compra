@@ -1,63 +1,64 @@
-# Pre-Compra Application
+# Aplicación de Pre-Compra
 
-## Setup Instructions
+## Instrucciones de Configuración
 
-### Frontend Setup
-1. Copy `.env.example` to `.env`:
+### Configuración del Frontend
+1. Copiar `.env.example` a `.env`:
 ```bash
 cp .env.example .env
 ```
 
-2. Install dependencies:
+2. Instalar dependencias:
 ```bash
 npm install
 ```
 
-3. Start development server:
+3. Iniciar el servidor de desarrollo:
 ```bash
 npm run dev
 ```
 
-### Backend Setup
-1. Copy `Backend/.env.example` to `Backend/.env`:
+### Configuración del Backend
+1. Copiar `Backend/.env.example` a `Backend/.env`:
 ```bash
 cp Backend/.env.example Backend/.env
 ```
 
-2. Configure your database settings in `Backend/.env`
+2. Configurar los ajustes de la base de datos en `Backend/.env`
 
-3. Configure WebPay credentials in `Backend/.env`
+3. Configurar las credenciales de WebPay en `Backend/.env`
 
-4. Ensure XAMPP is running (Apache and MySQL)
+4. Asegurarse de que XAMPP esté ejecutándose (Apache y MySQL)
 
-## Recent Improvements
+## Mejoras Recientes
 
 ### Frontend
-- Added environment configuration for API URLs
-- Improved error handling for network requests
-- Added loading states and input validation
-- Enhanced user feedback with Snackbar notifications
-- Added automatic redirect after successful form submission
-- Fixed duplicate loading state calls
-- Added proper HTTP status code handling
+- Configuración de entorno añadida para las URL de la API
+- Gestión de errores mejorada para las solicitudes de red
+- Estados de carga y validación de entrada añadidos
+- Mejora de la respuesta del usuario con las notificaciones de Snackbar
+- Redirección automática añadida tras el envío correcto del formulario
+- Corrección de llamadas duplicadas al estado de carga
+- Gestión adecuada de los códigos de estado HTTP
 
 ### Backend
-- Added environment variables support
-- Improved error handling and logging
-- Added input sanitization
-- Added database transaction support
-- Removed debug output from connection handling
-- Added proper HTTP status codes
-- Added security headers
-- Added validation for email and phone formats
+- Compatibilidad con variables de entorno añadida
+- Gestión y registro de errores mejorados
+- Saneamiento de entrada añadido
+- Compatibilidad con transacciones de base de datos añadida
+- Eliminación de la salida de depuración de la gestión de conexiones
+- Códigos de estado HTTP adecuados añadidos
+- Encabezados de seguridad añadidos
+- Validación para formatos de correo electrónico y teléfono añadidos
 
-### WebPay Integration
-- Moved credentials to environment variables
-- Added proper error handling
-- Added session token validation
-- Added sanitization for payment data
+### Integración con WebPay
+- Credenciales movidas a variables de entorno
+- Gestión de errores adecuada añadida
+- Validación del token de sesión añadida
+- Saneamiento de los datos de pago añadidos
 
-## Project Structure
+## Estructura del proyecto
+
 
 ```
 pre-compra/
@@ -73,45 +74,45 @@ pre-compra/
 └── public/             # Public assets
 ```
 
-## Environment Variables
+## Variables de entorno
 
 ### Frontend (.env)
-- `VITE_API_URL`: Backend API URL
-- `VITE_WEBPAY_ENABLED`: Enable/disable WebPay integration
-- `VITE_ENV`: Environment (development/production)
+- `VITE_API_URL`: URL de la API del backend
+- `VITE_WEBPAY_ENABLED`: Habilitar/deshabilitar la integración con WebPay
+- `VITE_ENV`: Entorno (desarrollo/producción)
 
 ### Backend (.env)
-- `DB_HOST`: Database host
-- `DB_NAME`: Database name
-- `DB_USER`: Database user
-- `DB_PASS`: Database password
-- `WEBPAY_COMMERCE_CODE`: WebPay commerce code
-- `WEBPAY_API_KEY`: WebPay API key
-- `WEBPAY_ENVIRONMENT`: WebPay environment (integration/production)
-- `APP_ENV`: Application environment
-- `APP_URL`: Application URL
+- `DB_HOST`: Host de la base de datos
+- `DB_NAME`: Nombre de la base de datos
+- `DB_USER`: Usuario de la base de datos
+- `DB_PASS`: Contraseña de la base de datos
+- `WEBPAY_COMMERCE_CODE`: Código de comercio de WebPay
+- `WEBPAY_API_KEY`: Clave de la API de WebPay
+- `WEBPAY_ENVIRONMENT`: Entorno de WebPay (integración/producción)
+- `APP_ENV`: Entorno de la aplicación
+- `APP_URL`: URL de la aplicación
 
-## Security Improvements
-- Added input sanitization for all user inputs
-- Moved sensitive credentials to environment variables
-- Added proper error handling to prevent information leakage
-- Added validation for email and phone formats
-- Added database transaction support for data integrity
-- Added session token validation for WebPay transactions
+## Mejoras de seguridad
+- Se ha añadido la limpieza de entradas para todas las entradas de usuario
+- Se han trasladado las credenciales confidenciales al entorno Variables
+- Se agregó un manejo adecuado de errores para evitar la fuga de información
+- Se agregó validación para formatos de correo electrónico y teléfono
+- Se agregó compatibilidad con transacciones de base de datos para la integridad de los datos
+- Se agregó validación de token de sesión para transacciones de WebPay
 
-## Error Handling
-- Added proper HTTP status codes
-- Enhanced error messages for better user feedback
-- Added logging for backend errors
-- Added validation for required fields
-- Added network error handling
+## Manejo de errores
+- Se agregaron códigos de estado HTTP correctos
+- Mensajes de error mejorados para una mejor respuesta del usuario
+- Se agregó registro para errores de backend
+- Se agregó validación para campos obligatorios
+- Se agregó manejo de errores de red
 
-## Future Improvements
-1. Add rate limiting for API endpoints
-2. Implement request caching
-3. Add automated testing
-4. Add CI/CD pipeline
-5. Implement monitoring and logging system
-6. Add data backup system
-7. Implement user authentication
-8. Add admin dashboard
+## Mejoras futuras
+1. Agregar límite de velocidad para endpoints de API
+2. Implementar almacenamiento en caché de solicitudes
+3. Agregar pruebas automatizadas
+4. Agregar pipeline de CI/CD
+5. Implementar un sistema de monitoreo y registro
+6. Agregar un sistema de respaldo de datos
+7. Implementar autenticación de usuarios
+8. Agregar panel de administración

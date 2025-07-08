@@ -4,37 +4,12 @@
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
 ini_set('display_errors', 0);
 
-
 // === CONFIGURACIÓN DE MODO DEBUG GLOBAL ===
 $MODO_DEBUG = false; // Cambia a false para ejecución real
 
-// CORS headers
-$allowed_origins = [
-    'http://localhost:3000',
-    'http://localhost:5173'
-];
-
-$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
-
-if (in_array($origin, $allowed_origins)) {
-    header("Access-Control-Allow-Origin: https://visualmecanica.cl");
-    header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization");
-    header("Access-Control-Allow-Credentials: true");
-} else {
-    // Si la petición tiene Origin pero no está permitida, responde con error CORS
-    if ($origin !== '') {
-        header('Content-Type: application/json');
-        http_response_code(403);
-        echo json_encode([
-            "success" => false,
-            "error" => "CORS no permitido",
-            "details" => "El origen '$origin' no está autorizado."
-        ]);
-        exit;
-    }
-    // Si no hay Origin, permite continuar (por ejemplo, acceso local directo)
-}
+// Configurar cabeceras CORS automáticamente
+require_once 'helpers/corsHeaders.php';
+setCorsHeaders();
 
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -442,10 +417,15 @@ try {
 }
 
 function crearEventoCalendar($nombre, $telefono, $email, $servicio, $monto, $modoDebug = false) {
-    // Si estamos en modo debug, simular la creación del evento
-    if ($modoDebug) {
-        error_log("[MODO DEBUG] Simulando creación de evento en Google Calendar");
-        error_log("[MODO DEBUG] Datos: Nombre={$nombre}, Email={$email}, Servicio={$servicio}");
+    // Verificar si estamos en modo de desarrollo y simulación de calendar
+    $devMode = in_array(getenv_backend('DEV_MODE', 'false'), ['true', '1', 'yes', 'on']);
+    $simulateCalendar = in_array(getenv_backend('SIMULATE_CALENDAR', 'false'), ['true', '1', 'yes', 'on']);
+    $esModoSimulacion = $modoDebug || ($devMode && $simulateCalendar);
+    
+    // Si estamos en modo simulación, simular la creación del evento
+    if ($esModoSimulacion) {
+        error_log("[MODO SIMULACIÓN] Simulando creación de evento en Google Calendar");
+        error_log("[MODO SIMULACIÓN] Datos: Nombre={$nombre}, Email={$email}, Servicio={$servicio}");
         
         // Simular éxito con datos ficticios
         return [
@@ -453,7 +433,8 @@ function crearEventoCalendar($nombre, $telefono, $email, $servicio, $monto, $mod
             "message" => "[SIMULADO] Evento creado en Google Calendar",
             "eventLink" => "https://calendar.google.com/calendar/event?eid=SIMULADO",
             "eventId" => "simulado_event_id_" . time(),
-            "debug_mode" => true
+            "debug_mode" => true,
+            "simulated" => true
         ];
     }
     
@@ -608,6 +589,13 @@ function crearEventoCalendar($nombre, $telefono, $email, $servicio, $monto, $mod
 $mailSuccess = $mailResult['success'];
 $calendarSuccess = $calendarResult['success'] ?? false;
 
+// Verificar si estamos en modo de desarrollo y simulación
+$devMode = in_array(getenv_backend('DEV_MODE', 'false'), ['true', '1', 'yes', 'on']);
+$simulateEmail = in_array(getenv_backend('SIMULATE_EMAIL', 'false'), ['true', '1', 'yes', 'on']);
+$simulateCalendar = in_array(getenv_backend('SIMULATE_CALENDAR', 'false'), ['true', '1', 'yes', 'on']);
+$mailSimulated = $MODO_DEBUG || ($devMode && $simulateEmail) || isset($mailResult['debug']);
+$calendarSimulated = $MODO_DEBUG || ($devMode && $simulateCalendar) || isset($calendarResult['simulated']);
+
 // Si el correo se envió correctamente, consideramos la operación exitosa
 // aunque el calendario haya fallado
 $globalSuccess = $mailSuccess;
@@ -622,13 +610,13 @@ $response = [
         "success" => $mailSuccess,
         "error" => $mailSuccess ? null : ($mailResult['error'] ?? "Error desconocido"),
         "details" => $mailSuccess ? null : ($mailResult['details'] ?? null),
-        "simulated" => $MODO_DEBUG
+        "simulated" => $mailSimulated
     ],
     "calendar" => [
         "success" => $calendarSuccess,
         "error" => $calendarSuccess ? null : ($calendarResult['error'] ?? "Error desconocido"),
         "details" => $calendarSuccess ? null : ($calendarResult['details'] ?? null),
-        "simulated" => $MODO_DEBUG
+        "simulated" => $calendarSimulated
     ]
 ];
 

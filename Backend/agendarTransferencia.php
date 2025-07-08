@@ -4,11 +4,10 @@
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
 ini_set('display_errors', 0);
 
+// Configurar cabeceras CORS automáticamente
+require_once 'helpers/corsHeaders.php';
+setCorsHeaders();
 
-// Encabezados CORS
-header("Access-Control-Allow-Origin: https://visualmecanica.cl");   
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
 // Manejar solicitud OPTIONS

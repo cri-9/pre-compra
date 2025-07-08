@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Verificar Bloque</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba Verificar Bloque</h1>
+    <p>Esta página prueba directamente la función verificarBloque.php</p>
+    
+    <button onclick="testVerificarBloque()">🧪 Probar Verificar Bloque</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function testVerificarBloque() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="result success">🔄 Probando verificarBloque.php...</div>';
+            
+            const testData = {
+                fecha: '2024-07-15'  // Fecha de prueba
+            };
+            
+            try {
+                const response = await fetch('http://localhost/pre-compra/Backend/verificarBloque.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                const responseText = await response.text();
+                console.log('Response Text:', responseText);
+                
+                // Intentar parsear como JSON
+                try {
+                    const data = JSON.parse(responseText);
+                    resultsDiv.innerHTML = `
+                        <div class="result success">
+                            <strong>✅ Éxito - verificarBloque.php</strong>
+                            ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                } catch (jsonError) {
+                    // Si no es JSON válido, mostrar el texto crudo
+                    resultsDiv.innerHTML = `
+                        <div class="result error">
+                            <strong>❌ Error - Respuesta no es JSON válido</strong>
+                            Response Status: ${response.status}
+                            Response Text:
+                            ${responseText}
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="result error">
+                        <strong>❌ Error de Conexión</strong>
+                        ${error.message}
+                        Type: ${error.name}
+                    </div>
+                `;
+            }
+        }
+        
+        // Ejecutar automáticamente al cargar
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(testVerificarBloque, 1000);
+        });
+    </script>
+</body>
+</html>

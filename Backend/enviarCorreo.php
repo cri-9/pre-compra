@@ -30,12 +30,26 @@ function enviarCorreo($datos, $modoDebug = false) {
             ];
         }
 
-        if ($modoDebug) {
-            error_log("MODO DEBUG ACTIVADO: No se envía correo real.");
+        // Verificar si estamos en modo de desarrollo y simulación de email
+        $devMode = in_array(getenv_backend('DEV_MODE', 'false'), ['true', '1', 'yes', 'on']);
+        $simulateEmail = in_array(getenv_backend('SIMULATE_EMAIL', 'false'), ['true', '1', 'yes', 'on']);
+        $esModoSimulacion = $modoDebug || ($devMode && $simulateEmail);
+
+        if ($esModoSimulacion) {
+            error_log("MODO SIMULACIÓN ACTIVADO: No se envía correo real.");
+            error_log("Datos del correo simulado: " . json_encode([
+                'destinatario' => $datos['destinatario'],
+                'asunto' => $datos['asunto'],
+                'tiene_html' => !empty($datos['mensajeHtml']),
+                'tiene_texto' => !empty($datos['mensajeTexto']),
+                'cc' => $datos['cc'] ?? null,
+                'bcc' => $datos['bcc'] ?? null,
+                'adjuntos' => !empty($datos['adjuntos']) ? 'sí' : 'no'
+            ]));
             // Simula una respuesta exitosa sin enviar correo
             return [
                 'success' => true,
-                'debug' => 'Correo simulado (no enviado realmente)'
+                'debug' => 'Correo simulado (no enviado realmente) - Modo desarrollo'
             ];
         }
 
