@@ -1,23 +1,16 @@
 <?php
+// Deshabilitar warnings de deprecated para evitar problemas en respuesta JSON
+error_reporting(E_ALL & ~E_DEPRECATED);
+
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/helpers/env.php'; // <--- ¡Agrega esto aquí!
+require_once __DIR__ . '/helpers/env.php';
 require_once __DIR__ . '/helpers/rateLimiter.php';
 
-$allowedOrigin = "http://localhost:3000";
-header("Access-Control-Allow-Origin: https://visualmecanica.cl");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Allow-Credentials: true");
-header('Content-Type: application/json');
+// Configurar cabeceras CORS automáticamente
+require_once 'helpers/corsHeaders.php';
+setCorsHeaders();
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    header("Access-Control-Allow-Origin: https://visualmecanica.cl");
-    header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization");
-    header("Access-Control-Allow-Credentials: true");
-    http_response_code(200);
-    exit;
-}
+header('Content-Type: application/json');
 
 error_log("Datos recibidos: " . print_r($_POST, true));
 
@@ -37,13 +30,20 @@ register_shutdown_function(function() {
 
 session_start();
 
-require_once __DIR__ . '/vendor/autoload.php';
+// Cargar clases de Transbank sin mostrar warnings deprecated
 use Transbank\Webpay\WebpayPlus\Transaction;
 use Transbank\Webpay\Options;
 
 $apiKey = getenv_backend('WEBPAY_API_KEY');
 $commerceCode = getenv_backend('WEBPAY_COMMERCE_CODE');
 $environment = getenv_backend('WEBPAY_ENVIRONMENT', 'integration');
+
+// Validar que las credenciales estén configuradas
+if (empty($apiKey) || empty($commerceCode)) {
+    error_log("ERROR: Credenciales de Webpay no configuradas correctamente");
+    throw new Exception("Configuración de pago no disponible");
+}
+
 $options = new Options(
   $apiKey,
   $commerceCode,
@@ -110,15 +110,28 @@ try {
     $datos['pago']['monto'] = $amount;
     $buyOrder = $datos['buyOrder'] ?? uniqid();
     $sessionId = $datos['sessionId'] ?? session_id();
-    $returnUrl = $baseUrl . '/Backend/webpayRespuesta.php';
+    
+    // Definir la URL base para la URL de retorno
+    $baseUrl = getenv_backend('APP_URL', 'http://localhost/pre-compra/Backend');
+    $returnUrl = $baseUrl . '/webpayRespuesta.php';
 
     error_log($nowLog . "Creando transacción Webpay: buyOrder=$buyOrder, sessionId=$sessionId, amount=$amount, returnUrl=$returnUrl");
 
-    $transaction = new Transaction($options);
-    $response = $transaction->create($buyOrder, $sessionId, $amount, $returnUrl);
-    $token = $response->getToken();
-
-    error_log($nowLog . "Transacción WebpayPlus creada. Token real: $token, URL de pago: " . $response->getUrl());
+    try {
+        $transaction = new Transaction($options);
+        $response = $transaction->create($buyOrder, $sessionId, $amount, $returnUrl);
+        $token = $response->getToken();
+        
+        if (empty($token)) {
+            throw new Exception("No se pudo obtener el token de Webpay");
+        }
+        
+        error_log($nowLog . "Transacción WebpayPlus creada exitosamente. Token: $token, URL: " . $response->getUrl());
+        
+    } catch (Exception $e) {
+        error_log($nowLog . "Error creando transacción Webpay: " . $e->getMessage());
+        throw new Exception("Error al crear la transacción de pago: " . $e->getMessage());
+    }
 
     // Actualizamos el monto total en el array de pago antes de guardar
     $datos['pago']['monto'] = $amount;
