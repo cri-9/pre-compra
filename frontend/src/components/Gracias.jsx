@@ -1,10 +1,28 @@
 import React from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const Gracias = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const metodoPago = location.state?.metodoPago || 'tarjeta';
+
+  // Mensajes personalizados
+  const mensajes = {
+    tarjeta: {
+      titulo: '¡Gracias!',
+      subtitulo: 'Tu pago ha sido procesado exitosamente',
+      detalle: 'Hemos recibido tu pago correctamente. Te enviaremos un correo de confirmación con todos los detalles de tu transacción.'
+    },
+    transferencia: {
+      titulo: '¡Gracias por tu reserva!',
+      subtitulo: 'Reserva recibida. Falta completar el pago',
+      detalle: 'Nos pondremos en contacto contigo para enviarte los datos de transferencia y confirmar tu reserva. También recibirás un correo con los detalles.'
+    }
+  };
+
+  const { titulo, subtitulo, detalle } = mensajes[metodoPago] || mensajes.tarjeta;
 
   return (
     <Container maxWidth="sm">
@@ -32,7 +50,7 @@ const Gracias = () => {
           color="success.main"
           fontWeight="bold"
         >
-          ¡Gracias!
+          {titulo}
         </Typography>
         
         <Typography
@@ -42,7 +60,7 @@ const Gracias = () => {
           color="text.primary"
           sx={{ mb: 3 }}
         >
-          Tu pago ha sido procesado exitosamente
+          {subtitulo}
         </Typography>
         
         <Typography
@@ -50,8 +68,7 @@ const Gracias = () => {
           color="text.secondary"
           sx={{ mb: 4, maxWidth: 400 }}
         >
-          Hemos recibido tu pago correctamente. Te enviaremos un correo de confirmación 
-          con todos los detalles de tu transacción.
+          {detalle}
         </Typography>
         
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>

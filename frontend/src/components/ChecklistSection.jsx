@@ -3,12 +3,17 @@ import { CheckCircleOutline } from "@mui/icons-material";
 import { motion } from "framer-motion";
 
 const items = [
+  "Exterior",
+  "Interior",
+  "Motor",
   "Imágenes",
   "Kilometraje",
   "Informe",
   "Prueba de ruta",
   "Detalle Pintura",
-  "Confianza",  
+  "Confianza",
+  "Historial del Vehiculo",
+  "Recomendaciones",  
 ];
 
 const ChecklistSection = () => {
@@ -21,7 +26,7 @@ const ChecklistSection = () => {
       <Typography variant="h5" fontWeight="bold" textAlign="center" 
       gutterBottom mb={6} //Añade un margen inferior de 48px (6 * 8px)
       >
-        Nuestra verificación incluye:
+        ¿Qué incluye nuestra inspección pre-compra?
       </Typography>
 
       {/* checklist animado */}

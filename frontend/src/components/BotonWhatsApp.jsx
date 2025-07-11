@@ -8,7 +8,7 @@ function BotonWhatsApp({ numeroTelefono, mensajeInicial }) {
       target="_blank"
       rel="noopener noreferrer"
       color="success"
-      sx={{ position: 'fixed', bottom: 16, right: 16 }}
+      sx={{ position: 'fixed', bottom: 16, right: 16, backgroundColor: "#25D366" }}
     >
       <WhatsAppIcon />
     </Fab>

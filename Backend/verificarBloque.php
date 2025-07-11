@@ -1,10 +1,5 @@
 <?php
 
-require_once __DIR__ . '/helpers/env.php';
-require_once __DIR__ . '/helpers/rateLimiter.php';
-
-rateLimit();
-
 // Configurar cabeceras CORS automáticamente
 require_once 'helpers/corsHeaders.php';
 setCorsHeaders();
@@ -16,17 +11,18 @@ ini_set('display_errors', 0);
 // Siempre devolver JSON
 header('Content-Type: application/json');
 
-// Conexión a la base de datos usando variables de entorno
-require_once 'conexionBD.php';
-$conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) {
-    echo json_encode(['success' => false, 'error' => 'Error de conexión: ' . $conn->connect_error]);
-    exit;
-}
+try {
+    // Conexión a la base de datos usando variables de entorno
+    require_once 'conexionBD.php';
+    $conn = new mysqli($host, $user, $pass, $db);
+    if ($conn->connect_error) {
+        echo json_encode(['success' => false, 'error' => 'Error de conexión: ' . $conn->connect_error]);
+        exit;
+    }
 
-// Obtener entrada desde router.php
-$rawInput = file_get_contents('php://input');
-$input = json_decode($rawInput, true);
+    // Obtener entrada desde el cuerpo de la petición
+    $rawInput = file_get_contents('php://input');
+    $input = json_decode($rawInput, true);
 
 // Verificación de datos
 if (!isset($input['fecha'])) {
@@ -55,12 +51,20 @@ while ($row = $result->fetch_assoc()) {
 $todosLosBloques = ["AM", "PM"];
 $disponibles = array_values(array_diff($todosLosBloques, $bloquesOcupados));
 
-// Respuesta
-http_response_code(200);
-echo json_encode([
-    "success" => true,
-    "disponibles" => $disponibles
-]);
+    // Respuesta
+    http_response_code(200);
+    echo json_encode([
+        "success" => true,
+        "disponibles" => $disponibles
+    ]);
 
-$stmt->close();
-$conn->close();
+    $stmt->close();
+    $conn->close();
+
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'Error interno: ' . $e->getMessage()
+    ]);
+}
+?>

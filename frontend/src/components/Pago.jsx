@@ -217,52 +217,89 @@ const Pago = ({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
           comuna: datosCliente?.comuna
         });
     
-        console.log('Enviando datos al servidor:', datosTransferencia);
-        
-        try {
-          const response = await axios.post(
-            API_URLS.NOTIFICAR_TRANSFERENCIA,
-            datosTransferencia,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              timeout: 10000 // 10 segundos de timeout
+        console.log('Enviando datos al servidor:', datosTransferencia);          try {
+            console.log('URL del endpoint:', API_URLS.NOTIFICAR_TRANSFERENCIA);
+            console.log('Datos enviados (formato JSON):', JSON.stringify(datosTransferencia, null, 2));
+            
+            const response = await axios.post(
+              API_URLS.NOTIFICAR_TRANSFERENCIA,
+              datosTransferencia,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                timeout: 30000 // 30 segundos de timeout (aumentado)
+              }
+            );
+
+            console.log('Respuesta del servidor:', response.data);
+
+            // Si la transferencia fue exitosa, redirigir a la landing page principal
+            if (response.data.success) {
+              navigate('/gracias', { state: { metodoPago: datos.metodo } });
+              return;
             }
-          );
 
-          console.log('Respuesta del servidor:', response.data);
+            // Si hay un error general del backend
+            if (response.data.error) {
+              throw new Error(`Error del servidor: ${response.data.error} - Detalles: ${response.data.details || 'No hay detalles disponibles'}`);
+            }
 
-          // Si la transferencia fue exitosa, redirigir a la landing page principal
-          if (response.data.success) {
-            navigate('/gracias');
-            return;
+            // Si llegamos aquí, algo inesperado ocurrió
+            throw new Error("Error inesperado al procesar la solicitud. La respuesta del servidor no tiene el formato esperado.");
+
+          } catch (axiosError) {
+            // Manejo de errores de red y otros
+            console.error("Error en la petición axios:", axiosError);
+            
+            // Información detallada en console para depuración
+            let errorMsg = "Error desconocido. Por favor, inténtelo más tarde.";
+            let errorDetails = "";
+            
+            if (axiosError.code === 'ECONNABORTED') {
+              errorMsg = "La conexión con el servidor ha tardado demasiado. Por favor intente nuevamente.";
+              errorDetails = "Timeout de la conexión";
+            } else if (axiosError.response) {
+              // Error con respuesta del servidor
+              console.error("Respuesta de error:", {
+                status: axiosError.response.status,
+                statusText: axiosError.response.statusText,
+                headers: axiosError.response.headers,
+                data: axiosError.response.data
+              });
+              
+              // Mostrar mensaje de error del backend si existe
+              errorMsg = "Error del servidor: ";
+              
+              // Intentar extraer información útil de la respuesta
+              if (typeof axiosError.response.data === 'object') {
+                errorMsg += axiosError.response.data.error || "Error desconocido";
+                errorDetails = axiosError.response.data.details || "";
+              } else if (typeof axiosError.response.data === 'string') {
+                // Intentar parsear respuesta HTML/texto para buscar mensajes de error de PHP
+                const errorMatch = axiosError.response.data.match(/<b>.*?Error<\/b>:.*?<br/i);
+                if (errorMatch) {
+                  errorDetails = errorMatch[0].replace(/<[^>]*>/g, ' ').trim();
+                } else {
+                  errorDetails = "Respuesta no procesable del servidor";
+                }
+                console.log("Respuesta en texto plano:", axiosError.response.data);
+              }
+            } else if (axiosError.request) {
+              // No se recibió respuesta
+              errorMsg = "No se recibió respuesta del servidor";
+              errorDetails = "Verifique su conexión a internet";
+            } else {
+              // Error de configuración
+              errorMsg = "Error al configurar la solicitud";
+              errorDetails = axiosError.message;
+            }
+            
+            // Mostrar un alert con información más detallada
+            alert(`${errorMsg}\n\nDetalles: ${errorDetails}`);
+          } finally {
+            setProcesando(false);
           }
-
-          // Si hay un error general del backend
-          if (response.data.error) {
-            throw new Error(response.data.error);
-          }
-
-          // Si llegamos aquí, algo inesperado ocurrió
-          throw new Error("Error inesperado al procesar la solicitud");
-
-        } catch (axiosError) {
-          // Manejo de errores de red y otros
-          console.error("Error en la petición axios:", axiosError);
-          if (axiosError.code === 'ECONNABORTED') {
-            alert("La conexión con el servidor ha tardado demasiado. Por favor intente nuevamente.");
-            return;
-          }
-          if (!axiosError.response) {
-            alert(`No se pudo conectar con el servidor. Detalle: ${axiosError.message}`);
-            return;
-          }
-          // Mostrar mensaje de error del backend si existe
-          alert(`Error del servidor: ${axiosError.response?.data?.error || axiosError.message}`);
-        } finally {
-          setProcesando(false);
-        }
       } catch (error) {
         // Mostrar detalles del error en consola para debug
         console.error("Error completo:", error);

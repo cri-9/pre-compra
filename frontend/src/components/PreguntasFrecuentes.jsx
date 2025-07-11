@@ -28,9 +28,12 @@ const preguntas = [
     respuesta: "Nuestro enfoque es para autos usados, pero también podemos realizar revisión en vehículos nuevos si el cliente lo desea."
   },
   {
-    pregunta: "¿Qué formas de pago aceptan?",
-    respuesta: "Aceptamos tarjetas de crédito/débito, transferencia electrónica y WebPay."
-  },
+  pregunta: "¿Qué formas de pago aceptan?",
+  respuesta: [
+    "Aceptamos tarjetas de crédito/débito WebPay.",
+    "Si eliges transferencia, te llegará un correo para continuar con la reserva."
+  ]
+},
   {
     pregunta: "¿Revisan vehículos en regiones?",
     respuesta: "No, solo estamos presentes en la Novena Región, principalmente en Temuco y alrededores."

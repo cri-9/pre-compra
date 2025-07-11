@@ -87,32 +87,68 @@ function FechaAgendamiento({ datos, onChange }) {
   }, []);
 
   const fetchBloquesDisponibles = async (fechaISO) => {
+    console.log('🔍 Iniciando fetchBloquesDisponibles con fecha:', fechaISO);
+    console.log('🔍 URL que se usará:', API_URLS.VERIFICAR_BLOQUE);
+    
     try {
       setCargandoBloques(true);
       setErrorBloques(null);
+
+      const requestBody = { fecha: fechaISO };
+      console.log('🔍 Datos que se enviarán:', requestBody);
 
       const response = await fetch(API_URLS.VERIFICAR_BLOQUE, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fecha: fechaISO })
+        body: JSON.stringify(requestBody)
       });
+
+      console.log('🔍 Respuesta HTTP status:', response.status);
+      console.log('🔍 Respuesta HTTP ok:', response.ok);
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Error response from server:", errorText);
+        console.error("🔍 Error response from server:", errorText);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      // Primero obtener el texto crudo para ver qué estamos recibiendo
+      const responseText = await response.text();
+      console.log('🔍 Texto crudo de la respuesta:', responseText);
+      console.log('🔍 Longitud del texto:', responseText.length);
+
+      if (!responseText || responseText.trim() === '') {
+        console.error('🔍 Respuesta vacía del servidor');
+        throw new Error('El servidor devolvió una respuesta vacía');
+      }
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+        console.log('🔍 Datos parseados correctamente:', data);
+      } catch (parseError) {
+        console.error('🔍 Error al parsear JSON:', parseError);
+        console.error('🔍 Texto que causó el error:', responseText);
+        throw new Error(`Respuesta del servidor no es JSON válido: ${parseError.message}`);
+      }
+
       if (!data || !Array.isArray(data.disponibles)) {
+        console.warn('🔍 Datos no válidos, usando valores por defecto');
         setBloquesDisponibles(['AM', 'PM']);
         return;
       }
 
+      console.log('🔍 Bloques disponibles:', data.disponibles);
       setBloquesDisponibles(data.disponibles.length > 0 ? data.disponibles : []);
+      
+      if (data.disponibles.length === 0) {
+        setErrorBloques("No hay bloques disponibles para la fecha seleccionada. Por favor, elige otra fecha.");
+      }
+      
     } catch (error) {
+      console.error('🔍 Error en fetchBloquesDisponibles:', error);
       setErrorBloques("No se pudo cargar los bloques. Intenta más tarde.");
       setBloquesDisponibles([]);
     } finally {

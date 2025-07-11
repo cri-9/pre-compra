@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Endpoints CORS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba de Endpoints CORS</h1>
+    <p>Esta página prueba los endpoints para verificar que no haya problemas de CORS.</p>
+
+    <div class="test-section">
+        <h2>1. Prueba de verificarBloque_ultra.php</h2>
+        <button onclick="testVerificarBloqueUltra()">Probar Endpoint</button>
+        <button onclick="clearResults('bloque-ultra-result')">Limpiar</button>
+        <div id="bloque-ultra-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Prueba de notificarTransferencia.php</h2>
+        <button onclick="testNotificarTransferencia()">Probar Endpoint</button>
+        <button onclick="clearResults('notificar-result')">Limpiar</button>
+        <div id="notificar-result"></div>
+    </div>
+
+    <script>
+        // Función para mostrar resultados
+        function showResult(elementId, data, success = true) {
+            const resultElement = document.getElementById(elementId);
+            const statusClass = success ? 'success' : 'error';
+            
+            let content = '';
+            if (typeof data === 'object') {
+                content = JSON.stringify(data, null, 2);
+            } else {
+                content = data.toString();
+            }
+            
+            resultElement.innerHTML += `<p class="${statusClass}">${success ? 'ÉXITO' : 'ERROR'}</p><pre>${content}</pre>`;
+        }
+
+        // Función para limpiar resultados
+        function clearResults(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        // Prueba de verificarBloque_ultra.php
+        async function testVerificarBloqueUltra() {
+            try {
+                const response = await fetch('http://localhost:8080/verificarBloque_ultra.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fecha: '2023-12-01'
+                    })
+                });
+
+                const responseHeaders = {};
+                for (const [key, value] of response.headers.entries()) {
+                    responseHeaders[key] = value;
+                }
+
+                // Mostrar headers de respuesta
+                showResult('bloque-ultra-result', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: responseHeaders
+                });
+
+                // Mostrar cuerpo de la respuesta
+                const data = await response.json();
+                showResult('bloque-ultra-result', data);
+            } catch (error) {
+                showResult('bloque-ultra-result', error.message, false);
+            }
+        }
+
+        // Prueba de notificarTransferencia.php
+        async function testNotificarTransferencia() {
+            try {
+                const response = await fetch('http://localhost:8080/notificarTransferencia.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_agendamiento: '123',
+                        monto: 5000,
+                        metodo_pago: 'transferencia'
+                    })
+                });
+
+                const responseHeaders = {};
+                for (const [key, value] of response.headers.entries()) {
+                    responseHeaders[key] = value;
+                }
+
+                // Mostrar headers de respuesta
+                showResult('notificar-result', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: responseHeaders
+                });
+
+                // Mostrar cuerpo de la respuesta
+                const data = await response.json();
+                showResult('notificar-result', data);
+            } catch (error) {
+                showResult('notificar-result', error.message, false);
+            }
+        }
+    </script>
+</body>
+</html>

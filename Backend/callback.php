@@ -4,8 +4,10 @@
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
 ini_set('display_errors', 0);
 
-// Habilitar CORS para desarrollo
-header("Access-Control-Allow-Origin: *");
+// Configurar cabeceras CORS automáticamente
+require_once 'helpers/corsHeaders.php';
+setCorsHeaders();
+
 header("Content-Type: application/json");
 
 
