@@ -138,7 +138,7 @@ function Footer() {
       <Box 
         sx={{
           display: 'flex',
-          justifyContent: 'flex-end', 
+          justifyContent: 'flex-start', 
           pr: 6, 
           pb: 2 
         }}

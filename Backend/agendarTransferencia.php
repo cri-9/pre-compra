@@ -135,6 +135,49 @@ try {
         // Confirmar transacción
         $conn->commit();
 
+        // Enviar correo de notificación al cliente y a la empresa
+        require_once __DIR__ . '/enviarCorreo.php';
+        require_once __DIR__ . '/helpers/generarHtmlCorreoAgendamiento.php';
+
+        // Formatear datos para el correo
+        $nombreCliente = $input['cliente']['nombre'] . ' ' . $input['cliente']['apellido'];
+        $servicio = $input['servicio']['nombre'] ?? 'Servicio agendado';
+        $fecha = $input['agendamiento']['fecha'];
+        $hora = $input['agendamiento']['bloque'];
+        $correoContacto = 'cotizacionautomotriz09@gmail.com';
+        $montoBase = $input['servicio']['monto'] ?? null;
+        $recargo = $input['servicio']['recargo'] ?? 0;
+        $montoTotal = $montoBase !== null ? ($montoBase + $recargo) : null;
+
+        $htmlCorreo = generarHtmlCorreoAgendamiento(
+            $nombreCliente,
+            $servicio,
+            $fecha,
+            $hora,
+            $correoContacto,
+            $montoBase,
+            $recargo,
+            $montoTotal
+        );
+
+        $asunto = 'Confirmación de Agendamiento - Visual Mecánica';
+        $mensajeTexto = "Hola $nombreCliente, tu agendamiento para el servicio $servicio fue recibido exitosamente para el $fecha ($hora).";
+
+        // Enviar al cliente
+        enviarCorreo([
+            'destinatario' => $input['cliente']['email'],
+            'asunto' => $asunto,
+            'mensajeHtml' => $htmlCorreo,
+            'mensajeTexto' => $mensajeTexto
+        ]);
+        // Enviar a la empresa
+        enviarCorreo([
+            'destinatario' => $correoContacto,
+            'asunto' => 'Nuevo agendamiento recibido',
+            'mensajeHtml' => $htmlCorreo,
+            'mensajeTexto' => $mensajeTexto
+        ]);
+
         // Respuesta exitosa
         echo json_encode([
             'success' => true,

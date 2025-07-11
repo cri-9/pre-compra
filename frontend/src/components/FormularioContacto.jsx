@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Step, StepLabel, Stepper, Typography, Paper, Container, AppBar, Toolbar, Snackbar, Alert } from '@mui/material';
+import { Box, Button, Step, StepLabel, Stepper, Typography, Paper, Container, AppBar, Toolbar, Snackbar, Alert, Grid } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { useNavigate } from 'react-router-dom';
 import { API_URLS } from '../config/api';
+import logoForm from '../assets/Logo_Formulario/logo_form.webp';
 import DatosVehiculo from './DatosVehiculo';
 import DatosCliente from './DatosCliente';
 import DatosVendedor from './DatosVendedor';
@@ -336,103 +339,217 @@ const handleEnviarFormulario = async () => {
   };
 
   return (
-    <Container sx={{ p: { xs: 2, sm: 3, md: 4 }, borderRadius: 3, backgroundColor: '#f8f9f9', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-      <AppBar position="static" sx={{ backgroundColor: 'primary.main', mb: { xs: 3, sm: 4, md: 6 }, width: '100%', alignItems: 'center' }}>
-        <Toolbar sx={{ width: '100%', maxWidth: 800 }}>
-          <Typography variant="h5" sx={{ flexGrow: 1, color: '#fff', p: { xs: 2, sm: 3 }, textAlign: 'center', fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' } }}>
-            Formulario de Contacto
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box sx={{ width: '100%', maxWidth: 800, display: 'flex', flexDirection: 'column', alignItems: 'center', px: { xs: 1, sm: 2 } }}>
-        <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, width: '100%' }}>
-          <Stepper activeStep={pasoActual} alternativeLabel sx={{ mb: 4, display: { xs: 'none', md: 'flex' } }}>
-  {pasos.map((label, index) => (
-    <Step key={index} completed={pasoActual > index}>
-      <StepLabel StepIconComponent={(stepProps) => {
-        // Custom step icon for first five steps
-        if (index < 5) {
-          return (
-            <CustomStepIcon {...stepProps} colorIndex={index} />
-          );
-        } else {
-          // Default icon for step 6 (Pago)
-          const DefaultStepIcon = stepProps.icon;
-          return <span>{DefaultStepIcon}</span>;
-        }
-      }}>{label}</StepLabel>
-    </Step>
-  ))}
-</Stepper>
-          <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', alignItems: 'center', gap: 2, mb: 4 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-              {pasos.slice(0, 3).map((label, index) => (
-                <Step key={index} completed={pasoActual > index}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
+    <Box sx={{ minHeight: '100vh', backgroundColor: '#f8f9f9' }}>
+      {/* Contenido principal dividido en dos columnas */}
+      <Container maxWidth="xl" sx={{ py: 4 }}>
+        <Grid container spacing={4} sx={{ minHeight: '100vh' }}>
+
+           {/* Columna izquierda - Información */}
+        <Grid item xs={12} md={5}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center',
+            height: '100%',
+            px: { xs: 2, md: 3 },
+            mt: { xs: 2, md: 4 }
+          }}>
+            {/* Logo */}
+            <Box sx={{ mb: 4, textAlign: 'center' }}>
+              <img 
+                src={logoForm} 
+                alt="Visual Mecánica Logo" 
+                style={{ 
+                  maxWidth: '200px', 
+                  height: 'auto',
+                  width: '100%'
+                }} 
+              />
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-              {pasos.slice(3).map((label, index) => (
-                <Step key={index + 3} completed={pasoActual > index + 3}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
+
+            {/* Información del proceso */}
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 3, width: '100%' }}>
+              <Typography variant="h4" component="h2" sx={{ 
+                mb: 3, 
+                color: 'primary.main',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                fontSize: { xs: '1.5rem', md: '2rem' },
+                lineHeight: 1.4
+              }}>
+                Solicita tu reserva para una inspección precompra
+              </Typography>
+              
+              <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.8, textAlign: 'justify', color: 'text.secondary' }}>
+                Llena el formulario a continuación y nuestro equipo validará la disponibilidad. 
+                Te contactaremos por correo electrónico con una cotización formal. Una vez recibas 
+                la cotización, tendrás 1 hora para realizar el pago y confirmar tu inspección.
+              </Typography>
+
+              <Typography variant="h5" component="h3" sx={{ 
+                mb: 3, 
+                color: 'primary.main',
+                fontWeight: 'bold',
+                fontSize: { xs: '1.3rem', md: '1.5rem' }
+              }}>
+                ¿Cómo funciona?
+              </Typography>
+
+              <Box component="ol" sx={{ pl: 2, '& li': { mb: 2 } }}>
+                <Typography component="li" variant="body1" sx={{ lineHeight: 1.8 }}>
+                  <strong>Completa el formulario</strong> con tu información personal y la hora preferida para la inspección.
+                </Typography>
+                <Typography component="li" variant="body1" sx={{ lineHeight: 1.8 }}>
+                  <strong>Validación y cotización:</strong> Nuestro equipo verificará la disponibilidad y te enviará la cotización formal por correo.
+                </Typography>
+                <Typography component="li" variant="body1" sx={{ lineHeight: 1.8 }}>
+                  <strong>Confirmación de la reserva:</strong> Realiza el pago dentro de la hora siguiente a la cotización para asegurar tu inspección.
+                </Typography>
+                <Typography component="li" variant="body1" sx={{ lineHeight: 1.8 }}>
+                  <strong>Inspección confirmada:</strong> Una vez completado el pago, recibirás la confirmación final y la hora exacta de tu inspección.
+                </Typography>
+              </Box>
+            </Paper>
+          </Box>
+        </Grid>
+
+          {/* Columna derecha - Formulario */}
+          <Grid item xs={12} md={7}>
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center',
+              height: '100%',
+              px: { xs: 1, md: 2 },
+              mt: { xs: 2, md: 4 }
+            }}>
+              {/* Título del formulario FUERA del Paper */}
+              <Box sx={{
+                width: '100%',
+                backgroundColor: 'primary.main',
+                borderRadius: 2,
+                mb: 5, //Mayor separación entre el título y el formulario
+                px: 2,
+                py: 2,
+                textAlign: 'center'
+              }}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    color: '#fff',
+                    fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' },
+                    fontWeight: 'bold'
+                  }}
+                >
+                  Formulario de Contacto
+                </Typography>
+              </Box>
+              
+              <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, width: '100%' }}>
+                {/* Header del formulario */}                
+                <Stepper activeStep={pasoActual} alternativeLabel sx={{ mb: 4, display: { xs: 'none', md: 'flex' } }}>
+                  {pasos.map((label, index) => (
+                    <Step key={index} completed={pasoActual > index}>
+                      <StepLabel StepIconComponent={(stepProps) => {
+                        // Custom step icon for first five steps
+                        if (index < 5) {
+                          return (
+                            <CustomStepIcon {...stepProps} colorIndex={index} />
+                          );
+                        } else {
+                          // Default icon for step 6 (Pago)
+                          const DefaultStepIcon = stepProps.icon;
+                          return <span>{DefaultStepIcon}</span>;
+                        }
+                      }}>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+                
+                <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', alignItems: 'center', gap: 2, mb: 4 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+                    {pasos.slice(0, 3).map((label, index) => (
+                      <Step key={index} completed={pasoActual > index}>
+                        <StepLabel>{label}</StepLabel>
+                      </Step>
+                    ))}
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+                    {pasos.slice(3).map((label, index) => (
+                      <Step key={index + 3} completed={pasoActual > index + 3}>
+                        <StepLabel>{label}</StepLabel>
+                      </Step>
+                    ))}
+                  </Box>
+                </Box>
+                
+                <Box sx={{ p: 2 }}>
+                  {pasoActual === 0 && <DatosVehiculo datos={datos.vehiculo} onChange={(data) => handleDatosChange('vehiculo', data)} />}
+                  {pasoActual === 1 && <DatosCliente datos={datos.cliente} onChange={(data) => handleDatosChange('cliente', data)} />}
+                  {pasoActual === 2 && <DatosVendedor datos={datos.vendedor} onChange={(data) => handleDatosChange('vendedor', data)} />}
+                  {pasoActual === 3 && <FechaAgendamiento datos={datos.agendamiento} onChange={(data) => handleDatosChange('agendamiento', data)} />}
+                  {pasoActual === 4 && <SeleccionServicio datos={datos.servicio} onChange={(data) => handleDatosChange('servicio', data)} />}
+                  {pasoActual === 5 && (
+                    <Pago   
+                      datos={{
+                        ...datos.pago,
+                        email: datos.cliente.email,
+                        nombre: datos.cliente.nombre,
+                        telefono: datos.cliente.telefono,
+                        nombreServicio: datos.servicio.nombreServicio,
+                        monto: datos.servicio.monto,
+                        bloque: datos.agendamiento.bloque,
+                        fecha: datos.agendamiento.fecha,
+                        horario: datos.agendamiento.horario,
+                        datosVendedor: {
+                          ...datos.vendedor,  
+                          tipo: datos.vendedor.tipovendedor
+                        }
+                      }}
+                      datosCliente={datos.cliente}
+                      onChange={(data) => handleDatosChange('pago', data)}   
+                      iniciarWebPay={iniciarWebPay}
+                      loading={loading}
+                      nombreServicio={datos.servicio.nombreServicio}
+                      pagoDeshabilitado={!datos.agendamiento.fecha || !datos.agendamiento.bloque}
+                    />
+                  )}
+                </Box>
+                
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: 'center', mt: 4, gap: 2 }}>
+                  {pasoActual > 0 && (
+                    <Button fullWidth 
+                      variant="contained" 
+                      color="secondary" 
+                      onClick={() => setPasoActual((prev) => prev - 1)}>
+                      Atrás
+                    </Button>
+                  )}
+                  {pasoActual < pasos.length - 1 && (
+                    <Button fullWidth variant="contained" color="secondary" onClick={handleSiguiente}>
+                      Siguiente
+                    </Button>
+                  )}     
+                </Box>                
+                  {/* 👇  Se agrega este bloque justo dentro del Paper */}
+                <Box sx={{ mt: 2 }}>
+                <Button
+                variant="outlined"
+                color="primary"
+                fullWidth
+                onClick={handleVolverInicio}
+                startIcon={<DirectionsCarIcon />}
+                >
+                Volver a Inicio
+                </Button>
+                </Box>
+              </Paper>             
             </Box>
-          </Box>
-          <Box sx={{ p: 2 }}>
-            {pasoActual === 0 && <DatosVehiculo datos={datos.vehiculo} onChange={(data) => handleDatosChange('vehiculo', data)} />}
-            {pasoActual === 1 && <DatosCliente datos={datos.cliente} onChange={(data) => handleDatosChange('cliente', data)} />}
-            {pasoActual === 2 && <DatosVendedor datos={datos.vendedor} onChange={(data) => handleDatosChange('vendedor', data)} />}
-            {pasoActual === 3 && <FechaAgendamiento datos={datos.agendamiento} onChange={(data) => handleDatosChange('agendamiento', data)} />}
-            {pasoActual === 4 && <SeleccionServicio datos={datos.servicio} onChange={(data) => handleDatosChange('servicio', data)} />}
-            {pasoActual === 5 && (
-  <Pago   
-    datos={{
-      ...datos.pago,
-      email: datos.cliente.email,
-      nombre: datos.cliente.nombre,
-      telefono: datos.cliente.telefono,
-      nombreServicio: datos.servicio.nombreServicio,
-      monto: datos.servicio.monto,
-      bloque: datos.agendamiento.bloque, // <-- Asegura que bloque se pase como prop
-      fecha: datos.agendamiento.fecha, // <-- Asegura que fecha se pase como prop
-      horario: datos.agendamiento.horario, // <-- Asegura que horario se pase como prop
-      datosVendedor: {
-        ...datos.vendedor,  
-        tipo: datos.vendedor.tipovendedor
-      }
-    }}
-    datosCliente={datos.cliente}
-    onChange={(data) => handleDatosChange('pago', data)}   
-    iniciarWebPay={iniciarWebPay} // La función ya incluye todas las validaciones necesarias
-    loading={loading}
-    nombreServicio={datos.servicio.nombreServicio}
-    pagoDeshabilitado={!datos.agendamiento.fecha || !datos.agendamiento.bloque} // <-- NUEVO: deshabilita si falta fecha o bloque
-  />
-)}
-          </Box>
-          
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: 'center', mt: 4, gap: 2 }}>{/*Boton Pagar y finalizar*/}
-          {pasoActual > 0 && (
-          <Button fullWidth 
-          variant="contained" 
-          color="secondary" 
-          onClick={() => setPasoActual((prev) => prev - 1)}>
-          Atrás
-        </Button>
-        )}
-        {pasoActual < pasos.length - 1 && (
-        <Button fullWidth variant="contained" color="secondary" onClick={handleSiguiente}>
-        Siguiente
-        </Button>
-        )}     
-        </Box>
-        </Paper>
-      </Box>
-      <Button variant="contained" color="primary" sx={{ mt: 4, textTransform: 'none', fontSize: { xs: '14px', sm: '16px' }, px: { xs: 2, sm: 4 } }} onClick={handleVolverInicio}>
-        Volver a Inicio
-      </Button>
+          </Grid>
+        </Grid>
+      </Container>
+
+      {/* Snackbars */}
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
         <Alert onClose={handleSnackbarClose} severity="error">
           Por favor, complete los siguientes campos:
@@ -458,7 +575,7 @@ const handleEnviarFormulario = async () => {
           {autoDateMsg}
         </Alert>
       </Snackbar>
-    </Container>
+    </Box>
   );
 }
 

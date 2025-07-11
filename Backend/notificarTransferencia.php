@@ -1,28 +1,88 @@
 <?php
 
-//oculta errores de deprecated y notice
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
-ini_set('display_errors', 0);
+debug_log("===== INICIO DE EJECUCIÓN DE notificarTransferencia.php =====");
+
+// Cargar el helper de env
+if (file_exists(__DIR__ . '/helpers/env.php')) {
+    require_once __DIR__ . '/helpers/env.php';
+    debug_log("Archivo helpers/env.php cargado correctamente", "INFO");
+} else {
+    debug_log("Archivo helpers/env.php no encontrado", "WARNING");
+    // Definir una versión temporal
+    if (!function_exists('getenv_backend')) {
+        function getenv_backend($nombre, $default = null) {
+            error_log("Usando getenv_backend temporal para: $nombre");
+            return $default;
+        }
+    }
+}
+
+// === CONFIGURACIÓN DE MODO DEBUG GLOBAL ===culta errores de deprecated y notice
+//error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
+error_reporting(E_ALL); // Mostrar todos los errores para depuración
+ini_set('display_errors', 1); // Mostrar errores en la respuesta para depuración
+ini_set('log_errors', 1); // Asegurar que los errores se registren
+error_log("===== INICIO DE EJECUCIÓN DE notificarTransferencia.php =====");
 
 // === CONFIGURACIÓN DE MODO DEBUG GLOBAL ===
-$MODO_DEBUG = false; // Cambia a false para ejecución real
+$MODO_DEBUG = true; // Cambia a false para producción
 
-// Configurar cabeceras CORS automáticamente
-require_once 'helpers/corsHeaders.php';
-setCorsHeaders();
+// Función para log detallado durante desarrollo
+function debug_log($mensaje, $nivel = 'INFO') {
+    error_log("[$nivel] " . $mensaje);
+}
 
-header("Content-Type: application/json; charset=UTF-8");
+// Verificar función getenv_backend
+if (!function_exists('getenv_backend')) {
+    debug_log("getenv_backend no está definida, definiendo función auxiliar", "WARNING");
+    
+    // Implementación predeterminada si la función no existe
+    function getenv_backend($nombre, $default = null) {
+        $valor = getenv($nombre);
+        if ($valor === false) {
+            debug_log("Variable no encontrada en environment, usando valor predeterminado: $nombre", "DEBUG");
+            return $default;
+        }
+        return $valor;
+    }
+}
 
+// Verificar si estamos en modo de desarrollo y simulación de calendar
+$devMode = in_array(getenv_backend('DEV_MODE', 'false'), ['true', '1', 'yes', 'on']);
+$simulateCalendar = in_array(getenv_backend('SIMULATE_CALENDAR', 'false'), ['true', '1', 'yes', 'on']);
+$esModoSimulacion = $MODO_DEBUG || ($devMode && $simulateCalendar);
+
+debug_log("Iniciando configuración");
+
+// Configurar cabeceras CORS directamente (sin usar helpers/corsHeaders.php)
+// Solución temporal para evitar problemas de duplicación de encabezados
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+if (preg_match('/^https?:\/\/localhost(:[0-9]+)?$/', $origin)) {
+    header("Access-Control-Allow-Origin: $origin");
+} else {
+    header("Access-Control-Allow-Origin: http://localhost:3001");
+}
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+header("Access-Control-Allow-Credentials: true");
+
+// Manejar preflight OPTIONS
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
 
+header("Content-Type: application/json; charset=UTF-8");
+
 // Validación del método---
+debug_log("Verificando método y Content-Type", "DEBUG");
+debug_log("Método: " . $_SERVER['REQUEST_METHOD'], "DEBUG");
+debug_log("Content-Type: " . ($_SERVER['CONTENT_TYPE'] ?? 'no especificado'), "DEBUG");
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && 
     (!isset($_SERVER['CONTENT_TYPE']) || 
      stripos($_SERVER['CONTENT_TYPE'], 'application/json') === false)) {
-    error_log("Content-Type inválido: " . ($_SERVER['CONTENT_TYPE'] ?? 'no especificado'));
+    debug_log("Content-Type inválido: " . ($_SERVER['CONTENT_TYPE'] ?? 'no especificado'), "ERROR");
     http_response_code(415);
     echo json_encode([
         "success" => false,
@@ -32,9 +92,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' &&
     exit;
 }
 
-error_log("Iniciando notificarTransferencia.php");
+debug_log("Iniciando proceso de verificación", "INFO");
 
 // Verificar extensiones requeridas
+debug_log("Verificando extensiones requeridas", "DEBUG");
 $required_extensions = ['openssl', 'json', 'mbstring'];
 $missing_extensions = [];
 
@@ -114,6 +175,15 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     exit;
 }
 
+// Log detallado de datos recibidos
+debug_log("Datos recibidos en notificarTransferencia.php: " . json_encode($input, JSON_PRETTY_PRINT));
+
+// Registrar estructura completa de la petición para diagnóstico
+debug_log("Headers de la petición: " . json_encode(getallheaders()), "DEBUG");
+debug_log("GET: " . json_encode($_GET), "DEBUG"); 
+debug_log("POST: " . json_encode($_POST), "DEBUG");
+debug_log("SERVER: " . json_encode($_SERVER), "DEBUG");
+
 // Definir límites máximos para los campos
 $maxLengths = [
     'email' => 100,
@@ -182,32 +252,48 @@ if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-$email_parts = explode('@', $input['email']);
-$domain = $email_parts[1];
-if (!checkdnsrr($domain, 'MX')) {
-    error_log("Dominio de email inválido: " . $domain);
-    echo json_encode([
-        "success" => false,
-        "error" => "Dominio de email inválido",
-        "details" => "Por favor ingrese una dirección de correo con un dominio válido"
-    ]);
-    exit;
+// Verificación MX opcional (solo en producción)
+if (!$MODO_DEBUG) {
+    $email_parts = explode('@', $input['email']);
+    $domain = $email_parts[1];
+    if (!checkdnsrr($domain, 'MX')) {
+        debug_log("Advertencia: Dominio de email sin registros MX: " . $domain, "WARNING");
+        // En producción, podríamos rechazar, pero para desarrollo lo permitimos y solo registramos
+    }
 }
 
 $input['email'] = filter_var($input['email'], FILTER_SANITIZE_EMAIL);
 
 $telefono = preg_replace('/[^0-9]/', '', $input['telefono']);
-if (!preg_match('/^(\+?56|0)?[9][0-9]{8}$/', $telefono)) {
-    error_log("Número de teléfono inválido: " . $input['telefono']);
+// Comprobación más flexible para teléfonos chilenos
+// Permitir tanto números con 9 como sin 9 al principio
+if (strlen($telefono) < 8 || strlen($telefono) > 11) {
+    error_log("Número de teléfono inválido (longitud): " . $input['telefono'] . " (limpio: $telefono)");
     echo json_encode([
         "success" => false,
         "error" => "Número de teléfono inválido",
-        "details" => "Por favor ingrese un número de teléfono móvil chileno válido (9 dígitos comenzando con 9)"
+        "details" => "Por favor ingrese un número de teléfono válido (8-11 dígitos)"
     ]);
     exit;
 }
 
-$input['telefono'] = '+56' . substr($telefono, -9);
+// Formatear el número para almacenamiento
+if (strlen($telefono) == 8) {
+    // Asumiendo número fijo sin código de área
+    $input['telefono'] = '+569' . $telefono; // Convertir a móvil por defecto
+} else if (strlen($telefono) == 9 && $telefono[0] == '9') {
+    // Móvil chileno sin código de país
+    $input['telefono'] = '+56' . $telefono;
+} else if (strlen($telefono) == 10 && substr($telefono, 0, 2) == '56') {
+    // Con código de país sin +
+    $input['telefono'] = '+' . $telefono;
+} else if (strlen($telefono) == 11 && substr($telefono, 0, 3) == '569') {
+    // Con código de país 56 y 9 para móvil
+    $input['telefono'] = '+' . $telefono;
+} else {
+    // Otro formato, lo dejamos como está pero con + si no lo tiene
+    $input['telefono'] = '+' . $telefono;
+}
 
 // Validar monto base (precio del servicio)
 if (!isset($input['monto']) || !is_numeric($input['monto']) || $input['monto'] <= 0) {
@@ -324,6 +410,7 @@ require_once __DIR__ . '/enviarCorreo.php';
 
 try {
     // --- Generar el HTML y el texto plano del correo usando array (cliente)---
+    debug_log("Preparando datos para envío de correo", "INFO");
     $datosTransfer = [
         'nombre'      => $nombre,
         'email'       => $email,
@@ -399,24 +486,92 @@ try {
 
  
     // 2. Crear evento en Google Calendar (opcional)
-    try {
-        error_log("Intentando crear evento en Google Calendar" . ($MODO_DEBUG ? " (MODO DEBUG)" : ""));
-        $calendarResult = crearEventoCalendar($nombre, $telefono, $email, $servicio, (int)$monto, $MODO_DEBUG);
-        error_log("Resultado de Google Calendar: " . json_encode($calendarResult));
-    } catch (Exception $e) {
-        error_log("Error al crear evento en Google Calendar: " . $e->getMessage());
-        $calendarResult = [
-            "success" => false,
-            "error" => "Error al crear evento en Google Calendar",
-            "details" => $e->getMessage()
-        ];
+    $calendarResult = [
+        "success" => false,
+        "error" => "No se intentó crear evento en calendario",
+        "details" => "Omitido"
+    ];
+
+    // Solo intentamos calendario si todo lo demás está bien
+    if ($mailResult['success']) {
+        try {
+            error_log("Intentando crear evento en Google Calendar" . ($MODO_DEBUG ? " (MODO DEBUG)" : ""));
+            
+            // En modo debug o simulación, podemos simular un calendario exitoso
+            if ($MODO_DEBUG || $esModoSimulacion) {
+                debug_log("Simulando creación de evento en Calendar debido a modo debug/simulación", "INFO");
+                $calendarResult = [
+                    "success" => true,
+                    "message" => "[SIMULADO] Evento creado en Google Calendar",
+                    "eventLink" => "https://calendar.google.com/calendar/event?eid=SIMULADO",
+                    "eventId" => "simulado_event_id_" . time(),
+                    "debug_mode" => true,
+                    "simulated" => true
+                ];
+            } else {
+                // Solo intentamos con Google Calendar si no estamos en modo debug/simulación
+                $calendarResult = crearEventoCalendar($nombre, $telefono, $email, $servicio, (int)$monto, $MODO_DEBUG);
+            }
+            
+            error_log("Resultado de Google Calendar: " . json_encode($calendarResult));
+        } catch (Exception $e) {
+            error_log("Error al crear evento en Google Calendar: " . $e->getMessage());
+            $calendarResult = [
+                "success" => false,
+                "error" => "Error al crear evento en Google Calendar",
+                "details" => $e->getMessage()
+            ];
+        }
     }
 
 } catch (Exception $e) {
     error_log("Error general: " . $e->getMessage());
 }
 
+// Log de errores internos
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+    debug_log("Error interno: [$errno] $errstr en $errfile:$errline", "ERROR");
+    $errorDetails = [
+        'errno' => $errno,
+        'errstr' => $errstr,
+        'errfile' => $errfile,
+        'errline' => $errline,
+        'backtrace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
+    ];
+    debug_log("Detalles del error: " . json_encode($errorDetails, JSON_PRETTY_PRINT), "ERROR");
+    http_response_code(500);
+    echo json_encode([
+        "success" => false,
+        "error" => "Error interno en el servidor",
+        "details" => $errstr,
+        "debug_info" => $errorDetails
+    ]);
+    exit;
+});
+
+// Log de excepciones no capturadas
+set_exception_handler(function ($exception) {
+    debug_log("Excepción no capturada: " . $exception->getMessage(), "ERROR");
+    $exceptionDetails = [
+        'message' => $exception->getMessage(),
+        'code' => $exception->getCode(),
+        'file' => $exception->getFile(),
+        'line' => $exception->getLine(),
+        'trace' => $exception->getTraceAsString()
+    ];
+    debug_log("Detalles de la excepción: " . json_encode($exceptionDetails, JSON_PRETTY_PRINT), "ERROR");
+    http_response_code(500);
+    echo json_encode([
+        "success" => false,
+        "error" => "Excepción no capturada",
+        "details" => $exception->getMessage(),
+        "debug_info" => $exceptionDetails
+    ]);
+    exit;
+});
+
 function crearEventoCalendar($nombre, $telefono, $email, $servicio, $monto, $modoDebug = false) {
+    debug_log("Iniciando creación de evento en Calendar", "INFO");
     // Verificar si estamos en modo de desarrollo y simulación de calendar
     $devMode = in_array(getenv_backend('DEV_MODE', 'false'), ['true', '1', 'yes', 'on']);
     $simulateCalendar = in_array(getenv_backend('SIMULATE_CALENDAR', 'false'), ['true', '1', 'yes', 'on']);

@@ -6,7 +6,7 @@ const API_CONFIG = {
   // Endpoints específicos
   ENDPOINTS: {
     ENVIAR_COTIZACION: '/enviarCotizacion.php',
-    VERIFICAR_BLOQUE: '/verificarBloque.php',
+    VERIFICAR_BLOQUE: '/verificarBloque_ultra.php',
     WEBPAY: '/webpay.php',
     WEBPAY_RESPUESTA: '/webpayRespuesta.php',
     NOTIFICAR_TRANSFERENCIA: '/notificarTransferencia.php'

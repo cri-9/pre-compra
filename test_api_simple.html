@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Simple de Transferencia</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .loading {
+            display: none;
+            margin-top: 20px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .endpoints {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba Simple de API de Transferencia</h1>
+    <p>Esta página prueba diferentes endpoints para identificar dónde está el problema.</p>
+
+    <div class="endpoints">
+        <button id="testSimple">1. Probar Endpoint Simplificado</button>
+        <button id="testReal">2. Probar Endpoint Real</button>
+        <button id="testDirectFetch">3. Probar con Fetch (método alternativo)</button>
+    </div>
+
+    <div id="loading" class="loading">Procesando solicitud...</div>
+    <div id="result" class="result"></div>
+
+    <script>
+        // Datos de prueba para los endpoints
+        const testData = {
+            email: 'test@example.com',
+            nombre: 'Usuario Prueba',
+            telefono: '912345678',
+            metodoPago: 'Transferencia',
+            servicio: 'Servicio Básico',
+            monto: 30000,
+            recargo: 0,
+            descuento: 0,
+            total: 30000,
+            direccion: 'Calle Prueba 123',
+            region: 'Región Metropolitana',
+            comuna: 'Santiago'
+        };
+
+        // Elemento para mostrar los resultados
+        const resultElement = document.getElementById('result');
+        const loadingElement = document.getElementById('loading');
+
+        // Función para mostrar resultados
+        function showResult(title, data, error = false) {
+            let html = `<h3>${title}</h3>`;
+            
+            if (error) {
+                html += `<div style="color: red; margin-bottom: 10px;">Error: ${data.message || 'Error desconocido'}</div>`;
+                
+                if (data.response) {
+                    html += `<p>Estado: ${data.response.status} ${data.response.statusText}</p>`;
+                    html += `<p>Datos de respuesta:</p>`;
+                    html += `<pre>${JSON.stringify(data.response.data || {}, null, 2)}</pre>`;
+                } else if (data.request) {
+                    html += `<p>No se recibió respuesta del servidor (posible problema de red)</p>`;
+                } else {
+                    html += `<p>Error de configuración: ${data.message}</p>`;
+                }
+            } else {
+                html += `<p>Respuesta exitosa (${typeof data}):</p>`;
+                html += `<pre>${typeof data === 'string' ? data : JSON.stringify(data, null, 2)}</pre>`;
+            }
+            
+            resultElement.innerHTML = html;
+            loadingElement.style.display = 'none';
+        }
+
+        // 1. Endpoint Simplificado
+        document.getElementById('testSimple').addEventListener('click', async function() {
+            loadingElement.style.display = 'block';
+            resultElement.innerHTML = '';
+            
+            try {
+                console.log('Enviando datos al endpoint simplificado:', testData);
+                const response = await axios.post(
+                    'http://localhost:8080/test_notificar_transferencia_simple.php',
+                    testData,
+                    {
+                        headers: { 'Content-Type': 'application/json' },
+                        timeout: 5000
+                    }
+                );
+                
+                showResult('Resultado del Endpoint Simplificado', response.data);
+            } catch (error) {
+                console.error('Error completo:', error);
+                showResult('Error en Endpoint Simplificado', error, true);
+            }
+        });
+
+        // 2. Endpoint Real 
+        document.getElementById('testReal').addEventListener('click', async function() {
+            loadingElement.style.display = 'block';
+            resultElement.innerHTML = '';
+            
+            try {
+                console.log('Enviando datos al endpoint real:', testData);
+                const response = await axios.post(
+                    'http://localhost:8080/notificarTransferencia.php',
+                    testData,
+                    {
+                        headers: { 'Content-Type': 'application/json' },
+                        timeout: 30000 // 30 segundos para dar tiempo a procesar
+                    }
+                );
+                
+                showResult('Resultado del Endpoint Real', response.data);
+            } catch (error) {
+                console.error('Error completo:', error);
+                showResult('Error en Endpoint Real', error, true);
+            }
+        });
+
+        // 3. Usando Fetch (alternativa a axios)
+        document.getElementById('testDirectFetch').addEventListener('click', async function() {
+            loadingElement.style.display = 'block';
+            resultElement.innerHTML = '';
+            
+            try {
+                console.log('Enviando datos con fetch:', testData);
+                
+                const response = await fetch('http://localhost:8080/notificarTransferencia.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                let responseText = await response.text();
+                let responseData;
+                
+                try {
+                    // Intentar parsear como JSON
+                    responseData = JSON.parse(responseText);
+                } catch (e) {
+                    // Si no es JSON válido, mostrar como texto
+                    responseData = responseText;
+                }
+                
+                showResult('Resultado usando Fetch', responseData);
+            } catch (error) {
+                console.error('Error con fetch:', error);
+                showResult('Error usando Fetch', { message: error.toString() }, true);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Transferencia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .loading {
+            display: none;
+            margin-top: 20px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba de Endpoint notificarTransferencia.php</h1>
+    <p>Este formulario prueba directamente el endpoint de notificación de transferencia sin pasar por la aplicación React.</p>
+
+    <button id="testBtn">Probar Endpoint</button>
+    <div id="loading" class="loading">Procesando solicitud...</div>
+    <div id="result" class="result"></div>
+
+    <script>
+        document.getElementById('testBtn').addEventListener('click', async function() {
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            
+            loading.style.display = 'block';
+            result.innerHTML = '';
+            
+            // Datos de prueba
+            const testData = {
+                email: 'test@example.com',
+                nombre: 'Usuario Prueba',
+                telefono: '912345678',
+                metodoPago: 'Transferencia',
+                servicio: 'Servicio Básico',
+                monto: 30000,
+                recargo: 0,
+                descuento: 0,
+                total: 30000,
+                direccion: 'Calle Prueba 123',
+                region: 'Región Metropolitana',
+                comuna: 'Santiago'
+            };
+            
+            try {
+                console.log('Enviando datos:', testData);
+                
+                // Tiempo de inicio
+                const startTime = new Date().getTime();
+                
+                // Realizar la petición
+                const response = await fetch('http://localhost:8080/notificarTransferencia.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                // Tiempo de finalización
+                const endTime = new Date().getTime();
+                const duration = (endTime - startTime) / 1000;
+                
+                // Obtener datos y generar reporte
+                let responseData;
+                let responseText = await response.text();
+                
+                try {
+                    // Intentar parsear como JSON
+                    responseData = JSON.parse(responseText);
+                    responseText = JSON.stringify(responseData, null, 2);
+                } catch (e) {
+                    // Si no es JSON, dejarlo como texto
+                    console.error('Error al parsear respuesta como JSON:', e);
+                }
+                
+                const report = `
+                    <h3>Resultados de la prueba</h3>
+                    <p><strong>Código de estado:</strong> ${response.status} ${response.statusText}</p>
+                    <p><strong>Tiempo de respuesta:</strong> ${duration} segundos</p>
+                    <p><strong>Tipo de contenido:</strong> ${response.headers.get('Content-Type') || 'No especificado'}</p>
+                    
+                    <h3>Datos enviados:</h3>
+                    <pre>${JSON.stringify(testData, null, 2)}</pre>
+                    
+                    <h3>Respuesta del servidor:</h3>
+                    <pre>${responseText}</pre>
+                `;
+                
+                result.innerHTML = report;
+            } catch (error) {
+                result.innerHTML = `
+                    <h3>Error en la solicitud</h3>
+                    <pre>${error.message}</pre>
+                `;
+                console.error('Error completo:', error);
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

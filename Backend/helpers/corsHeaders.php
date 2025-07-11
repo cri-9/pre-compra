@@ -3,6 +3,12 @@
 // Configuración automática de cabeceras CORS para desarrollo y producción
 
 function setCorsHeaders() {
+    // Verificar si ya se han enviado los encabezados para evitar duplicación
+    static $headersSent = false;
+    if ($headersSent) {
+        return;
+    }
+    
     // Cargar configuración del entorno
     $envFile = __DIR__ . '/../.env';
     $isProduction = false;
@@ -43,6 +49,9 @@ function setCorsHeaders() {
     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
     header("Access-Control-Allow-Credentials: true");
+    
+    // Marcar que los encabezados ya se enviaron
+    $headersSent = true;
     
     // Manejar preflight OPTIONS
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {

@@ -186,10 +186,33 @@ function LandingPage() {
                 Agendar
               </Button>
             </Box>
+            <Button
+              component="a"
+                href="https://wa.me/56997541042" // Reemplaza con tu número real
+                  target="_blank"
+                    rel="noopener"
+                      sx={{
+                      width: "120px",
+                      height: "36px",
+                      fontSize: "0.9rem",
+                      fontWeight: "bold",
+                      backgroundColor: "#25D366", // Verde WhatsApp
+                      color: "#ffffff",
+                      ml: 1,
+                      "&:hover": {
+                      backgroundColor: "#1ebc59"
+                        },
+                      textTransform: 'none',
+                      borderRadius: '8px',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                  WhatsApp
+                </Button>
           </Box>
 
           {/* Botón de menú móvil y tablet */}
-          <Box sx={{ display: { xs: 'flex', lg: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', lg: 'none' }, justifyContent: 'flex-end', width: '100%' }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -201,7 +224,7 @@ function LandingPage() {
                   color: '#7C70A1',
                 },
                 p: 0.5,
-                mr: -0.5,
+                mr: { xs: 1, sm: 2, md: 3 }, // Más margen a la derecha en pantallas pequeñas
               }}
             >
               {isMenuOpen ? <CloseIcon sx={{ fontSize: '1.3rem' }} /> : <MenuIcon sx={{ fontSize: '1.3rem' }} />}
@@ -286,6 +309,32 @@ function LandingPage() {
                     />
                   </ListItemButton>
                 </ListItem>
+                {/* Botón WhatsApp en Drawer móvil/tablet */}
+                <ListItem disablePadding sx={{ mt: 2, mb: 2, justifyContent: 'center', display: 'flex' }}>
+                  <Button
+                    component="a"
+                    href={`https://wa.me/${numeroTelefono}`}
+                    target="_blank"
+                    rel="noopener"
+                    sx={{
+                      width: "100%",
+                      height: "40px",
+                      fontSize: "1rem",
+                      fontWeight: "bold",
+                      backgroundColor: "#25D366",
+                      color: "#ffffff",
+                      mt: 1,
+                      mb: 1,
+                      '&:hover': {
+                        backgroundColor: '#1ebc59',
+                      },
+                      textTransform: 'none',
+                      borderRadius: '8px',
+                    }}
+                  >
+                    WhatsApp
+                  </Button>
+                </ListItem>
               </List>
             </Box>
           </Drawer>
@@ -320,7 +369,7 @@ function LandingPage() {
           >
             {/* Chip/Etiqueta para "Servicios de Autoseguro Profesionales" */}
             <Chip
-              label="Servicios de Autoseguro Profesionales"
+              label="Servicio de Inspección Profesional"
               sx={{
                 display: 'inline-flex', // Para que se comporte como un bloque en línea
                 px: 4, // Padding horizontal (4 unidades de MUI, cada una 8px)
@@ -361,7 +410,7 @@ function LandingPage() {
                 fontSize: '1.125rem', // Tamaño de fuente grande (text-lg)
                 color: 'grey.600', // Color de texto gris (del tema MUI)
                 mb: 4, // Margen inferior
-                maxWidth: 'lg', // Ancho máximo
+                maxWidth: 'lg', // Ancho máximo en el contenedor
                 mx: { xs: 'auto', md: 0 }, // Margen horizontal automático para centrar en móviles, a la izquierda en escritorio
               }}
             >
@@ -569,6 +618,12 @@ function LandingPage() {
 <BotonWhatsApp
   numeroTelefono={numeroTelefono}
   mensajeInicial={mensajeInicial}
+  sx={{
+    position: 'fixed',
+    bottom: 24,
+    right: 24,
+    zIndex: 2000 
+  }}
 />
 
 {/* Opción 2: Botón dentro de una sección de contacto */}

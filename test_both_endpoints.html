@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Verificar Bloque - Directo</title>
+</head>
+<body>
+    <h1>Prueba Verificar Bloque</h1>
+    <button onclick="testOriginal()">Probar verificarBloque.php</button>
+    <button onclick="testDebug()">Probar debug_verificar_bloque.php</button>
+    <div id="results"></div>
+
+    <script>
+        async function testOriginal() {
+            await testEndpoint('http://localhost:8080/verificarBloque.php', 'Original');
+        }
+
+        async function testDebug() {
+            await testEndpoint('http://localhost:8080/debug_verificar_bloque.php', 'Debug');
+        }
+
+        async function testEndpoint(url, title) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `<p>🔄 Probando ${title}...</p>`;
+            
+            const testData = {
+                fecha: '2025-07-15'
+            };
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                console.log(`${title} - Status:`, response.status);
+                console.log(`${title} - OK:`, response.ok);
+                
+                const responseText = await response.text();
+                console.log(`${title} - Response text:`, responseText);
+                
+                if (!responseText || responseText.trim() === '') {
+                    resultsDiv.innerHTML += `<p>❌ ${title}: Respuesta vacía</p>`;
+                    return;
+                }
+                
+                try {
+                    const data = JSON.parse(responseText);
+                    resultsDiv.innerHTML += `<p>✅ ${title}: <pre>${JSON.stringify(data, null, 2)}</pre></p>`;
+                } catch (parseError) {
+                    resultsDiv.innerHTML += `<p>❌ ${title}: Error JSON - ${parseError.message}</p>`;
+                    resultsDiv.innerHTML += `<p>Texto recibido: <pre>${responseText}</pre></p>`;
+                }
+                
+            } catch (error) {
+                resultsDiv.innerHTML += `<p>❌ ${title}: Error de red - ${error.message}</p>`;
+                console.error(`${title} Error:`, error);
+            }
+        }
+    </script>
+</body>
+</html>

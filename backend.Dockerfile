@@ -1,6 +1,7 @@
 # Imagen base con PHP y Apache
 FROM php:8.2-apache
 
+
 # Instalar extensiones de PHP necesarias
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
@@ -10,7 +11,7 @@ RUN a2enmod rewrite headers
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configurar Apache
+# Configurar Apache para permitir .htaccess
 RUN echo '<Directory /var/www/html>\n\
     Options Indexes FollowSymLinks\n\
     AllowOverride All\n\
@@ -31,6 +32,12 @@ RUN if [ -f /var/www/html/composer.json ]; then \
 
 # Exponer el puerto 80
 EXPOSE 80
+
+# Opcional: mostrar errores en desarrollo
+RUN echo "display_errors=On\nerror_reporting=E_ALL" > /usr/local/etc/php/conf.d/dev.ini
+
+# Asegúrate de que AllowOverride esté en All para que .htaccess funcione
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
 # Comando por defecto
 CMD ["apache2-foreground"]

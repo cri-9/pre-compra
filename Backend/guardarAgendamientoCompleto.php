@@ -11,13 +11,11 @@ require_once __DIR__ . '/helpers/comprobantes_actualizados.php';
 require_once __DIR__ . '/enviarCorreo.php';
 require_once __DIR__ . '/agregarEvento.php';
 
-// CORS y encabezados
-header('Access-Control-Allow-Origin: https://visualmecanica.cl');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+// Configurar cabeceras CORS automáticamente
+require_once 'helpers/corsHeaders.php';
+setCorsHeaders();
+
 header('Content-Type: application/json');
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
     exit();
 }
 
