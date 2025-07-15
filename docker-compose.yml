@@ -1,22 +1,20 @@
 
 services:
-  php:
-    build:
-      context: ./Backend
-      dockerfile: ../backend.Dockerfile
-    container_name: php-apache
-    ports:
-      - "8080:80"
-    volumes:
-      - ./Backend:/var/www/html
-    environment:
-      DB_HOST: mysql
-      DB_NAME: precompra_db
-      DB_USER: user
-      DB_PASS: pass
-    depends_on:
-      mysql:
-        condition: service_healthy
+php:
+  build:
+    context: ./Backend
+    dockerfile: ../backend.Dockerfile
+  container_name: php-apache
+  ports:
+    - "8080:80"
+  volumes:
+    - ./Backend:/var/www/html
+  env_file:
+    - ./Backend/.env.production
+  depends_on:
+    mysql:
+      condition: service_healthy
+
 
   mysql:
     image: mysql:8.0
