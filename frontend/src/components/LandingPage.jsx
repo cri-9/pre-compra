@@ -20,12 +20,18 @@ import {
   ListItemText,
   Link as MuiLink
 } from "@mui/material";
+import "slick-carousel/slick/slick.css"; //carrusel slick
+import "slick-carousel/slick/slick-theme.css";
 import CheckIcon from '@mui/icons-material/Check';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link } from "react-router-dom";
 import logo from "../assets/Logo_Superior/logo_visual1.2.webp";
-import logo_sect from "../assets/img_secction1.webp";
+import logo_sect from "../assets/Carrusel_Portada/img_secction1.webp";
+import img_sec_1 from "../assets/Carrusel_Portada/portada_01.webp"; // Imagen de la sección
+import img_sect_2 from "../assets/Carrusel_Portada/portada_02.jpg"; // Imagen de la sección
+import img_sect_3 from "../assets/Carrusel_Portada/portada_03.webp"; // Imagen de la sección
+import img_sect_4 from "../assets/Carrusel_Portada/portada_04.webp"; // Imagen de la sección
 import PrecioServicio from "./PrecioServicio";
 import Cotizacion from "../components/Cotizacion"; // Importar el nuevo componente
 import ServiceCards from "./ServiceCards.jsx"; //nuevas card de prueba
@@ -38,6 +44,7 @@ import Footer from "./Footer";
 import Confetti from 'react-confetti'; // Importar el componente de confeti
 import { useWindowSize } from '@react-hook/window-size'; // Importar el hook para obtener el tamaño de la ventana
 import BotonWhatsApp from "./BotonWhatsApp.jsx"; // Importar el botón de WhatsApp
+import Slider from "react-slick";
 
 //import CardServicio from "./ServiceCards.jsx";
 
@@ -90,6 +97,18 @@ function LandingPage() {
   // Función para manejar el menú móvil
   const handleDrawerToggle = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const images = [logo_sect, img_sec_1, img_sect_2, img_sect_3, img_sect_4]; // Imágenes del carrusel
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1, // Solo una imagen visible a la vez
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    arrows: true
   };
    
 
@@ -556,16 +575,21 @@ function LandingPage() {
               justifyContent: "center"
             }}
           >
-            <img
-              src={logo_sect}
-              alt="Servicios Automotriz"
-              style={{
-                width: "100%", // Ancho de la imagen
-                maxWidth: "500px", // Ancho máximo de la imagen
-                height: "auto", // Altura automática para mantener la proporción
-                borderRadius: "40px", // Borde redondeado
-              }}
-            />
+            <Slider {...settings} style={{ width: "100%", maxWidth: "500px" }}>
+              {images.map((img, index) => (
+                <Box key={index}>
+                  <img
+                    src={img}
+                    alt={`Imagen ${index + 1}`} 
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      borderRadius: "40px"
+                    }}
+                  />
+                </Box>
+              ))}
+            </Slider>
           </Box>
         </Box>
       </Container>
@@ -627,12 +651,12 @@ function LandingPage() {
 />
 
 {/* Opción 2: Botón dentro de una sección de contacto */}
-<Box sx={{ mt: 4 }}>        
+{/*<Box sx={{ mt: 4 }}>        
 <BotonWhatsApp
   numeroTelefono={numeroTelefono}
   mensajeInicial={mensajeInicial}
 />
-</Box>
+</Box>*/}
 {/* Footer */}
 <Footer />
       

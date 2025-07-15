@@ -78,11 +78,37 @@ function DatosCliente({ datos, onChange }) {
     setTelefono(nuevoTelefono);
     onChange({ ...datos, telefono: nuevoTelefono });
   };
+  // Formatea el RUT en vivo y restringe caracteres
+  const formatRut = (value) => {
+    // Solo permite números y K/k
+    let rut = value.replace(/[^0-9kK]/g, '').toUpperCase();
+    if (rut.length === 0) return '';
+    // Separa cuerpo y dígito verificador
+    let cuerpo = rut.slice(0, -1);
+    let dv = rut.slice(-1);
+    // Agrega puntos cada 3 dígitos desde la derecha
+    let cuerpoFormateado = '';
+    for (let i = cuerpo.length; i > 0; i -= 3) {
+      let start = Math.max(i - 3, 0);
+      let part = cuerpo.substring(start, i);
+      cuerpoFormateado = part + (cuerpoFormateado ? '.' + cuerpoFormateado : '');
+    }
+    return cuerpoFormateado + (cuerpoFormateado ? '-' : '') + dv;
+  };
+
   const handleRutChange = (e) => {
-    const newRut = e.target.value.replace(/\./g, '').replace(/-/g, '');
-    setRut(newRut);
-    onChange({ ...datos, rut: newRut });
-    if (validateRut(newRut)) {
+    let input = e.target.value;
+    // Elimina todo menos números y K/k
+    let cleanRut = input.replace(/[^0-9kK]/g, '').toUpperCase();
+    // Limita a 8 dígitos + 1 dv
+    if (cleanRut.length > 9) cleanRut = cleanRut.slice(0, 9);
+    // Formatea para mostrar
+    let formatted = formatRut(cleanRut);
+    setRut(formatted);
+    // Para validación y envío, quitar puntos y guion
+    let rutSinFormato = cleanRut;
+    onChange({ ...datos, rut: rutSinFormato });
+    if (validateRut(rutSinFormato)) {
       setRutError('');
     } else {
       setRutError('RUT inválido');
@@ -275,6 +301,7 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
           error={touched.rut && (!rut || !!rutError)}
           helperText={touched.rut && (!rut ? 'Campo obligatorio' : rutError)}
           fullWidth
+          inputProps={{ maxLength: 12, inputMode: 'text', pattern: '[0-9kK.-]*', autoComplete: 'off' }}
         />
       </FormItem>
       <FormItem>

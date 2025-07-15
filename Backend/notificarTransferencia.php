@@ -17,7 +17,7 @@ if (file_exists(__DIR__ . '/helpers/env.php')) {
     }
 }
 
-// === CONFIGURACIÓN DE MODO DEBUG GLOBAL ===culta errores de deprecated y notice
+// === CONFIGURACIÓN DE MODO DEBUG GLOBAL ===
 //error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
 error_reporting(E_ALL); // Mostrar todos los errores para depuración
 ini_set('display_errors', 1); // Mostrar errores en la respuesta para depuración
@@ -25,7 +25,7 @@ ini_set('log_errors', 1); // Asegurar que los errores se registren
 error_log("===== INICIO DE EJECUCIÓN DE notificarTransferencia.php =====");
 
 // === CONFIGURACIÓN DE MODO DEBUG GLOBAL ===
-$MODO_DEBUG = true; // Cambia a false para producción
+$MODO_DEBUG = false; // Cambia a true solo para depuración
 
 // Función para log detallado durante desarrollo
 function debug_log($mensaje, $nivel = 'INFO') {
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 header("Content-Type: application/json; charset=UTF-8");
 
-// Validación del método---
+// Validación del método
 debug_log("Verificando método y Content-Type", "DEBUG");
 debug_log("Método: " . $_SERVER['REQUEST_METHOD'], "DEBUG");
 debug_log("Content-Type: " . ($_SERVER['CONTENT_TYPE'] ?? 'no especificado'), "DEBUG");
@@ -442,7 +442,9 @@ try {
     error_log("Resultado del envío de correo al cliente ($email): " . json_encode($mailResult));
 
     // --- 2. Envío de correo a la EMPRESA ----
+    error_log("=== INICIANDO ENVÍO DE CORREO A LA EMPRESA ===");
     $correoEmpresa = 'cotizacionautomotriz09@gmail.com';
+    error_log("Correo de la empresa: " . $correoEmpresa);
 
     $mensajeHtmlEmpresa = '
         <h2>Nueva solicitud de transferencia recibida</h2>
@@ -481,10 +483,24 @@ try {
         'mensajeTexto' => $mensajeTextoEmpresa,
     ];
 
+    error_log("Datos del correo empresa preparados: " . json_encode([
+        'destinatario' => $datosCorreoEmpresa['destinatario'],
+        'asunto' => $datosCorreoEmpresa['asunto'],
+        'tiene_html' => !empty($datosCorreoEmpresa['mensajeHtml']),
+        'tiene_texto' => !empty($datosCorreoEmpresa['mensajeTexto'])
+    ]));
+
+    error_log("Llamando a enviarCorreo para la empresa con MODO_DEBUG: " . ($MODO_DEBUG ? 'true' : 'false'));
     $mailResultEmpresa = enviarCorreo($datosCorreoEmpresa, $MODO_DEBUG);
     error_log("Resultado del envío de correo A LA EMPRESA: " . json_encode($mailResultEmpresa));
+    
+    if (!$mailResultEmpresa['success']) {
+        error_log("ERROR: El correo a la empresa NO se envió correctamente");
+        error_log("Error específico: " . ($mailResultEmpresa['error'] ?? 'Error desconocido'));
+    } else {
+        error_log("ÉXITO: El correo a la empresa se envió correctamente");
+    }
 
- 
     // 2. Crear evento en Google Calendar (opcional)
     $calendarResult = [
         "success" => false,

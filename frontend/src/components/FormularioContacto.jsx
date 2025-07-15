@@ -367,48 +367,50 @@ const handleEnviarFormulario = async () => {
               />
             </Box>
 
-            {/* Información del proceso */}
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 3, width: '100%' }}>
-              <Typography variant="h4" component="h2" sx={{ 
-                mb: 3, 
+            {/* Información del proceso - NUEVO TEXTO */}
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 3, width: '100%', fontFamily: 'roboto, helvetica, arial, sans-serif' }}>
+              <Typography variant="h4" component="h2" sx={{
+                mb: 2,
                 color: 'primary.main',
                 fontWeight: 'bold',
                 textAlign: 'center',
                 fontSize: { xs: '1.5rem', md: '2rem' },
-                lineHeight: 1.4
+                lineHeight: 1.4,
+                fontFamily: 'roboto, helvetica, arial, sans-serif'
               }}>
-                Solicita tu reserva para una inspección precompra
+                Reserva tu Inspección Precompra de forma rápida y segura
               </Typography>
-              
-              <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.8, textAlign: 'justify', color: 'text.secondary' }}>
-                Llena el formulario a continuación y nuestro equipo validará la disponibilidad. 
-                Te contactaremos por correo electrónico con una cotización formal. Una vez recibas 
-                la cotización, tendrás 1 hora para realizar el pago y confirmar tu inspección.
+              <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.8, textAlign: 'justify', color: 'text.secondary', fontFamily: 'roboto, helvetica, arial, sans-serif' }}>
+                <strong>¿Estás a punto de comprar un vehículo?</strong> Asegura tu inversión con nuestra inspección técnica precompra. Reserva en minutos y recibe un diagnóstico profesional antes de cerrar el trato.
               </Typography>
 
-              <Typography variant="h5" component="h3" sx={{ 
-                mb: 3, 
+              <Typography variant="h5" component="h3" sx={{
+                mb: 2,
                 color: 'primary.main',
                 fontWeight: 'bold',
-                fontSize: { xs: '1.3rem', md: '1.5rem' }
+                fontSize: { xs: '1.2rem', md: '1.4rem' },
+                fontFamily: 'roboto, helvetica, arial, sans-serif'
               }}>
-                ¿Cómo funciona?
+                ¿Cómo solicitar tu inspección?
               </Typography>
-
-              <Box component="ol" sx={{ pl: 2, '& li': { mb: 2 } }}>
-                <Typography component="li" variant="body1" sx={{ lineHeight: 1.8 }}>
-                  <strong>Completa el formulario</strong> con tu información personal y la hora preferida para la inspección.
-                </Typography>
-                <Typography component="li" variant="body1" sx={{ lineHeight: 1.8 }}>
-                  <strong>Validación y cotización:</strong> Nuestro equipo verificará la disponibilidad y te enviará la cotización formal por correo.
-                </Typography>
-                <Typography component="li" variant="body1" sx={{ lineHeight: 1.8 }}>
-                  <strong>Confirmación de la reserva:</strong> Realiza el pago dentro de la hora siguiente a la cotización para asegurar tu inspección.
-                </Typography>
-                <Typography component="li" variant="body1" sx={{ lineHeight: 1.8 }}>
-                  <strong>Inspección confirmada:</strong> Una vez completado el pago, recibirás la confirmación final y la hora exacta de tu inspección.
-                </Typography>
-              </Box>
+              <Box component="ol" sx={{ pl: 2, mb: 3, fontFamily: 'roboto, helvetica, arial, sans-serif', '& li': { mb: 2, textAlign: 'justify', color: 'text.secondary', fontFamily: 'roboto, helvetica, arial, sans-serif' } }}>
+                <li>
+                  <strong>Completa el formulario online</strong><br/>
+                  Ingresa tus datos personales y la información del vehículo y del vendedor.
+                </li>
+                <li>
+                  <strong>Validación y contacto personalizado</strong><br/>
+                  Una vez recibido el formulario, nuestro equipo técnico verificará la disponibilidad y te contactará por correo electrónico o WhatsApp con los datos para realizar la transferencia bancaria.
+                </li>
+                <li>
+                  <strong>Confirma tu reserva con el pago</strong><br/>
+                  Realiza el pago dentro de la hora siguiente y envíanos el comprobante de transferencia. Esto garantizará tu lugar en la agenda.
+                </li>
+                <li>
+                  <strong>Recibe tu confirmación</strong><br/>
+                  Al validar el pago, recibirás un mensaje de confirmación con la fecha y hora exacta de tu inspección.
+                </li>
+              </Box>           
             </Paper>
           </Box>
         </Grid>

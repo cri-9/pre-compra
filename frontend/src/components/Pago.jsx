@@ -644,23 +644,23 @@ const Pago = ({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
             </Typography>
             <RadioGroup
               name="metodo-pago"
-              value={datos.metodo || ''}
+              value={datos.metodo === 'webpay' ? '' : datos.metodo || 'transferencia'}
               onChange={handleMetodoPagoChange}
             >
-              {/* Metodo de WebPay */}
+              {/* Metodo de WebPay (deshabilitado temporalmente) */}
               <FormControlLabel
                 value="webpay"
                 control={<Radio />}
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <PaymentIcon sx={{ fontSize: 22, color: '#7B1FA2' }} /> 
-                <Typography sx={{ fontWeight: 500 }}>
-                  WebPay (pago online)
-                  </Typography>
+                    <Typography sx={{ fontWeight: 500, color: '#aaa' }}>
+                      WebPay WebPay (pago online - pronto estará disponible)
+                    </Typography>
                   </Box>
                 }
+                disabled
               />
-             
               <FormControlLabel
                 value="transferencia"
                 control={<Radio />}

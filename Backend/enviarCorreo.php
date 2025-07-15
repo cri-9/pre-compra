@@ -56,7 +56,22 @@ function enviarCorreo($datos, $modoDebug = false) {
         // === LEER VARIABLES SMTP DE .env ===
         $smtpHost   = getenv_backend('SMTP_HOST', 'smtp.gmail.com');
         $smtpPort   = (int)getenv_backend('SMTP_PORT', 587);
-        $smtpSecure = getenv_backend('SMTP_SECURE', PHPMailer::ENCRYPTION_STARTTLS);
+        $smtpSecureConfig = getenv_backend('SMTP_SECURE', 'starttls');
+        
+        // Convertir configuración de SMTP_SECURE a constantes de PHPMailer
+        switch (strtolower($smtpSecureConfig)) {
+            case 'ssl':
+                $smtpSecure = PHPMailer::ENCRYPTION_SMTPS;
+                break;
+            case 'tls':
+            case 'starttls':
+                $smtpSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                break;
+            default:
+                $smtpSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                break;
+        }
+        
         $smtpUser   = getenv_backend('SMTP_USER');
         $smtpPass   = getenv_backend('SMTP_PASS');
         $mailFrom   = getenv_backend('MAIL_FROM', $smtpUser);
