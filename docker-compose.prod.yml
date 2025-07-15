@@ -16,25 +16,29 @@ services:
     restart: unless-stopped
 
   # Backend en producción
-  backend:
-    build:
-      context: ./Backend
-      dockerfile: Dockerfile.prod
-    container_name: visualmecanica-backend-prod
-    ports:
-      - "8080:80"
-    environment:
-      - PHP_ENV=production
-      - DB_HOST=database
-      - DB_NAME=visualmecanica_prod
-      - DB_USER=visualmecanica_user
-      - DB_PASSWORD=tu_password_seguro_aqui
-    depends_on:
-      - database
-    volumes:
-      - ./Backend:/var/www/html
-      - ./Backend/logs:/var/log/php
-    restart: unless-stopped
+backend:
+  build:
+    context: ./Backend
+    dockerfile: Dockerfile.prod
+  container_name: visualmecanica-backend-prod
+  ports:
+    - "8080:80"
+  # Quita las variables de entorno individuales
+  # environment:
+  #   - PHP_ENV=production
+  #   - DB_HOST=database
+  #   - DB_NAME=visualmecanica_prod
+  #   - DB_USER=visualmecanica_user
+  #   - DB_PASSWORD=tu_password_seguro_aqui
+  # Agrega esta línea:
+  env_file:
+    - ./Backend/.env.production
+  depends_on:
+    - database
+  volumes:
+    - ./Backend:/var/www/html
+    - ./Backend/logs:/var/log/php
+  restart: unless-stopped
 
   # Base de datos para producción
   database:
