@@ -1,4 +1,9 @@
-import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Container } from "@mui/material";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import { Container } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { motion } from "framer-motion";
 
@@ -51,7 +56,13 @@ const preguntas = [
 const PreguntasFrecuentes = () => {
   return (
     <Container id="preguntas-frecuentes" sx={{ my: 8 }}>
-      <Typography variant="h4" fontWeight="bold" textAlign="center" mb={4}>
+      <Typography 
+      variant="h4" 
+      fontWeight="bold" 
+      textAlign="center" 
+      color={"#1848B9"}
+      mb={4}    
+      >
         Preguntas Frecuentes
       </Typography>
 

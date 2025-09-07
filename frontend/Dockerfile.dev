@@ -1,0 +1,18 @@
+# Dockerfile para desarrollo
+FROM node:20
+
+WORKDIR /app
+
+# Copia solo los archivos de dependencias para instalar primero
+COPY package*.json ./
+
+# Limpiar caché de npm y instalar dependencias
+RUN npm cache clean --force
+RUN rm -rf node_modules package-lock.json
+RUN npm install
+
+# Expone el puerto que usa Vite
+EXPOSE 3001
+
+# Comando para iniciar el frontend en modo desarrollo
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

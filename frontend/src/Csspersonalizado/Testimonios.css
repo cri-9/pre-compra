@@ -1,0 +1,140 @@
+/* Contenedor principal de la sección */
+.testimonial-section {
+  background-color: #F2F0F4; /* Un fondo claro para que resalte el componente */
+  padding: 60px 15px; /* Reducido padding de 80px 20px a 60px 15px para móviles */
+  max-width: 900px; /* Mantener un ancho máximo para centrar */
+  margin: 20px auto; /* Reducido margen de 40px a 20px */
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden; /* Asegurarse de que nada sobresalga inesperadamente */
+}
+
+/* Estilo para cada slide individual */
+.testimonial-slide {
+  display: flex !important; /* Usar !important para sobreescribir estilos de slick */
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px; /* Espacio para que no se pegue a los bordes */
+}
+
+/* Tarjeta que contiene la imagen */
+.testimonial-image-card {
+  min-width: 300px;
+  max-width: 300px;
+  height: 280px;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  margin-right: -80px; /* Aumentado drásticamente de -60px a -80px para acercar mucho más el texto a la imagen */
+  z-index: 10;
+  overflow: hidden;
+}
+
+/* La imagen dentro de la tarjeta */
+.testimonial-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que la imagen cubra el espacio sin deformarse */
+}
+
+/* Contenedor del texto del testimonio */
+.testimonial-text-content {
+  background-color: #1e293b; /* Color azul oscuro/negro del ejemplo */
+  color: #F2F0F4;
+  padding: 25px 80px 25px 100px; /* Reducido padding vertical y aumentado padding derecho para más ancho */
+  border-radius: 12px;
+  max-width: 1900px; /* Aumentado ancho máximo de 1200px a 1400px para más horizontal */
+  position: relative;
+  /* --- Ajustes para el nuevo fondo azul más horizontal --- */
+  min-height: 320px; /* Reducido altura mínima a 280px para más horizontal */
+  margin-left: -160px; /* Aumentado margen negativo para extender más a la izquierda */
+  padding-left: 260px; /* Ajustado padding para compensar el mayor margen */
+  padding-top: 50px; /* Aumentado padding superior de 30px a 50px para bajar el contenido */
+  padding-bottom: 30px; /* Reducido padding vertical inferior */
+}
+
+/* Estilo para la cita, con las comillas grandes al inicio */
+.testimonial-quote {
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #cbd5e1; /* Color de texto gris claro */
+  line-height: 1.6;
+  position: relative;
+  padding-left: 20px;
+  margin-top: 15px; /* Agregado margen superior para bajar el texto */
+}
+
+.testimonial-quote::before {
+  content: '"';
+  font-family: 'Georgia', serif;
+  font-size: 80px;
+  color: #475569;
+  position: absolute;
+  top: -10px; /* Cambiado de -20px a -10px para bajar las comillas */
+  left: -20px;
+  line-height: 1;
+}
+
+/* Estilo para el nombre del autor */
+.testimonial-name {
+  font-weight: bold !important;
+  color: #ffffff;
+}
+
+/* Estilo para el cargo/empresa del autor */
+.testimonial-title {
+  color: #94a3b8; /* Un gris más suave */
+}
+
+/* Estilos para los puntos de navegación del carrusel */
+.slick-dots {
+  bottom: -40px; /* Posiciona los puntos debajo del slider */
+}
+
+.slick-dots li button:before {
+  font-size: 12px;
+  color: #475569; /* Color de los puntos inactivos */
+  opacity: 0.75;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #1e293b; /* Color del punto activo */
+  opacity: 1;
+}
+
+/* --- Media Queries para hacerlo responsivo --- */
+@media (max-width: 768px) {
+  .testimonial-slide {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .testimonial-image-card {
+    margin-right: 0;
+    margin-bottom: -80px; /* Aumentado drásticamente de -60px a -80px para mayor superposición vertical */
+    width: 180px; /* Reducido más de 200px a 180px para ahorrar más espacio */
+    height: 230px; /* Reducido más de 250px a 230px para ahorrar más espacio */
+  }
+
+  .testimonial-text-content {
+    padding: 90px 10px 15px 10px; /* Aumentado padding superior de 70px a 90px para bajar más el contenido en móviles */
+    margin-left: 0; /* Deshabilitar el margen negativo en móviles */
+    margin-top: 30px; /* Aumentado margen superior de 20px a 30px para más separación */
+    min-height: 220px; /* Reducido altura mínima para forma más horizontal */
+    max-width: 98%; /* Aumentado ancho para más horizontal */
+    width: calc(100vw - 40px); /* Reducido padding para más ancho horizontal */
+  }
+
+  .testimonial-quote {
+    font-size: 0.9rem; /* Reducido más de 1rem a 0.9rem */
+    line-height: 1.4; /* Reducido de 1.5 a 1.4 para más compacto */
+    padding-left: 10px; /* Reducido padding izquierdo de 15px a 10px */
+  }
+
+  .testimonial-quote::before {
+    top: 15px; /* Cambiado de 5px a 15px para bajar las comillas en móviles */
+    left: 0px; /* Reducido de 5px a 0px para mejor posicionamiento */
+    font-size: 50px; /* Reducido más de 60px a 50px para móviles */
+  }
+}

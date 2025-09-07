@@ -1,6 +1,17 @@
 import { FC, useState } from 'react';
 import config from '../config/environment';
-import { Box, Button, Step, StepLabel, Stepper, Typography, Paper, Container, AppBar, Toolbar, Snackbar, Alert } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Stepper from '@mui/material/Stepper';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Container from '@mui/material/Container';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import {
   FormData,
@@ -20,7 +31,7 @@ import {
 import DatosVehiculo from './DatosVehiculo';
 import DatosCliente from './DatosCliente';
 import DatosVendedor from './DatosVendedor';
-import FechaAgendamiento from './FechaAgendamiento';
+import FechaAgendamientoModerno from './FechaAgendamientoModerno';
 import SeleccionServicio from './SeleccionServicio';
 import Pago from './Pago';
 
@@ -297,7 +308,7 @@ const FormularioContacto: FC = () => {
               />
             )}
             {pasoActual === 3 && (
-              <FechaAgendamiento
+              <FechaAgendamientoModerno
                 datos={datos.agendamiento}
                 onChange={(data: AgendamientoData) => handleDatosChange('agendamiento', data)}
               />

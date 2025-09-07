@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Step, StepLabel, Stepper, Typography, Paper, Container, AppBar, Toolbar, Snackbar, Alert, Grid } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Stepper from '@mui/material/Stepper';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Container from '@mui/material/Container';
+//import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import Grid from '@mui/material/Grid';
+
+
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { useNavigate } from 'react-router-dom';
 import { API_URLS } from '../config/api';
-import logoForm from '../assets/Logo_Formulario/logo_form.webp';
+import logoForm from '../assets/Logo_Formulario/logo_formulario.webp';
 import DatosVehiculo from './DatosVehiculo';
 import DatosCliente from './DatosCliente';
 import DatosVendedor from './DatosVendedor';
-import FechaAgendamiento from './FechaAgendamiento';
+import FechaAgendamientoModerno from './FechaAgendamientoModerno';
 import SeleccionServicio from './SeleccionServicio';
 import Pago from './Pago';
 
@@ -216,6 +229,19 @@ function FormularioContacto() {
   
         // Paso 11: Redirigimos al usuario a la página de pago si todo está correcto
         if (data.success && url && token) {
+          // Evento GA4 para inicio de proceso de pago WebPay
+          if (window.gtag) {
+            window.gtag('event', 'inicio_pago_webpay', {
+              event_category: 'Agendamiento',
+              event_label: 'Inicio Pago WebPay',
+              servicio: datos.servicio.nombreServicio,
+              monto: datos.servicio.monto,
+              fecha_agendamiento: datos.agendamiento.fecha,
+              bloque: datos.agendamiento.bloque,
+              value: datos.servicio.monto
+            });
+          }
+          
           window.location.href = `${url}?token_ws=${token}`;
         } else {
           alert(data.error || 'Error en la respuesta del servidor de pagos');
@@ -273,7 +299,7 @@ const handleEnviarFormulario = async () => {
         }
       };
 
-      const response = await fetch('http://localhost:3000/agendarTransferencia', {
+      const response = await fetch('https://visualmecanica.cl/agendarTransferencia', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -289,6 +315,20 @@ const handleEnviarFormulario = async () => {
       const result = await response.json();
 
       if (result.success) {
+        // Evento GA4 para agendamiento exitoso con transferencia
+        if (window.gtag) {
+          window.gtag('event', 'agendamiento_transferencia', {
+            event_category: 'Agendamiento',
+            event_label: 'Agendamiento con Transferencia',
+            servicio: datos.servicio.nombreServicio,
+            monto: datos.servicio.monto,
+            fecha_agendamiento: datos.agendamiento.fecha,
+            bloque: datos.agendamiento.bloque,
+            metodo_pago: 'transferencia',
+            value: datos.servicio.monto
+          });
+        }
+
         setOpenExito(true);
         resetearFormulario();
         // Redirigir después de 3 segundos
@@ -339,9 +379,21 @@ const handleEnviarFormulario = async () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#f8f9f9' }}>
+    <Box
+    // Configuración de color de fondo y ancho 
+    sx={{ 
+    minHeight: '100vh',
+    width: '100%',
+    margin: 0,
+    padding: 0,
+    position: 'relative', // IMPORTANTE: necesario para que ::after funcione correctamente
+    overflow: 'hidden', // Prevenir scroll horizontal
+    backgroundColor: '#f9f9f9' // Fondo gris limpio
+  }}
+> 
+    
       {/* Contenido principal dividido en dos columnas */}
-      <Container maxWidth="xl" sx={{ py: 4 }}>
+      <Container maxWidth="xl" sx={{ py: 4, px: { xs: 2, sm: 3 }, position: 'relative', zIndex: 2 }}>
         <Grid container spacing={4} sx={{ minHeight: '100vh' }}>
 
            {/* Columna izquierda - Información */}
@@ -352,7 +404,7 @@ const handleEnviarFormulario = async () => {
             alignItems: 'center',
             height: '100%',
             px: { xs: 2, md: 3 },
-            mt: { xs: 2, md: 4 }
+            mt: { xs: 1, md: 1 } // Menor margen superior
           }}>
             {/* Logo */}
             <Box sx={{ mb: 4, textAlign: 'center' }}>
@@ -362,7 +414,7 @@ const handleEnviarFormulario = async () => {
                 style={{ 
                   maxWidth: '200px', 
                   height: 'auto',
-                  width: '100%'
+                  width: '80%'
                 }} 
               />
             </Box>
@@ -489,7 +541,7 @@ const handleEnviarFormulario = async () => {
                   {pasoActual === 0 && <DatosVehiculo datos={datos.vehiculo} onChange={(data) => handleDatosChange('vehiculo', data)} />}
                   {pasoActual === 1 && <DatosCliente datos={datos.cliente} onChange={(data) => handleDatosChange('cliente', data)} />}
                   {pasoActual === 2 && <DatosVendedor datos={datos.vendedor} onChange={(data) => handleDatosChange('vendedor', data)} />}
-                  {pasoActual === 3 && <FechaAgendamiento datos={datos.agendamiento} onChange={(data) => handleDatosChange('agendamiento', data)} />}
+                  {pasoActual === 3 && <FechaAgendamientoModerno datos={datos.agendamiento} onChange={(data) => handleDatosChange('agendamiento', data)} />}
                   {pasoActual === 4 && <SeleccionServicio datos={datos.servicio} onChange={(data) => handleDatosChange('servicio', data)} />}
                   {pasoActual === 5 && (
                     <Pago   

@@ -5,7 +5,7 @@ Write-Host "=== PRUEBA RAPIDA DE LA APLICACION ===" -ForegroundColor Cyan
 $urls = @{
     "Frontend React" = "http://localhost:3001"
     "Backend PHP" = "http://localhost:8080"
-    "Cotización API" = "http://localhost:8080/enviarCotizacion.php"
+    "Cotización API" = "https://visualmecanica.cl/enviarCotizacion.php"
     "Verificar Bloque API" = "http://localhost:8080/verificarBloque.php"
 }
 

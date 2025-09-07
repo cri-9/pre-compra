@@ -1,17 +1,26 @@
-import React from "react";
-import { Card, CardContent, Typography, Box, Grid, Button, CardMedia, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
-import valores1 from '../assets/Valores_servicios/mecanica_valor1.webp';
-import valores2 from '../assets/Valores_servicios/mecanica_valor2.webp';
-import valores3 from '../assets/Valores_servicios/mecanica_valor3.webp';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import valores1 from '../assets/Valores_Servicios/mecanica_valor1.webp';
+import valores2 from '../assets/Valores_Servicios/mecanica_valor2.webp';
+import valores3 from '../assets/Valores_Servicios/mecanica_valor3.webp';
 
 // Usar la misma información de servicios que en ValorServicio.jsx
 const servicios = [
   {
     id: 1,
-    titulo: "Servicio Básico",
-    precio: 30000,
-    descripcion: "$30.000",
+    titulo: "Inspección Visual Básica",
+    precio: 35000,
+    descripcion: "$35.000",
     imagen: valores1,
     listado: [
       { texto: "Scaner" },
@@ -19,9 +28,9 @@ const servicios = [
   },
   {
     id: 2,
-    titulo: "Servicio Semi Full",
-    precio: 45000,
-    descripcion: "$45.000",
+    titulo: "Inspección Visual Semi Full",
+    precio: 49000,
+    descripcion: "$49.000",
     imagen: valores2,
     listado: [
       { texto: "+ de 100 puntos de revisión" },
@@ -33,9 +42,9 @@ const servicios = [
   },
   {
     id: 3,
-    titulo: "Servicio Full",
-    precio: 65000,
-    descripcion: "$65.000",
+    titulo: "Inspección Visual Full",
+    precio: 69000,
+    descripcion: "$69.000",
     imagen: valores3,
     listado: [
       { texto: "Informe Legal Digital" },

@@ -1,7 +1,7 @@
 <?php
 // Simula recibir datos del frontend (deberías recibir esto vía $_POST o similar)
 $inputJson = '{
-  "pago": { "metodo": "webpay", "monto": 45000, "nombreServicio": "Servicio Semi Full", "codigoDescuento": "" }
+  "pago": { "metodo": "webpay", "monto": 49000, "nombreServicio": "Servicio Semi Full", "codigoDescuento": "" }
 }';
 $data = json_decode($inputJson, true);
 

@@ -1,25 +1,24 @@
-import React, { useState } from "react";
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CircularProgress from '@mui/material/CircularProgress';
+import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Snackbar from '@mui/material/Snackbar';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { API_URLS } from '../config/api';
-import axios from "axios";
-import { Card,
-  CardContent,
-  Typography,
-  Box,
-  TextField,
-  Button,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Divider,
-  CircularProgress,
-  Alert,
-  Snackbar } from "@mui/material";
-  import CheckIcon from '@mui/icons-material/Check';
-  import PaymentIcon from '@mui/icons-material/Payment';
-  import LocalAtmIcon from '@mui/icons-material/LocalAtm';
+
   import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import PaymentIcon from '@mui/icons-material/Payment';
 
   
 
@@ -176,9 +175,9 @@ const Pago = ({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
     
         // Validar que el monto corresponda al servicio seleccionado
         const precios_servicios = {
-          'Servicio Básico': 30000,
-          'Servicio Semi Full': 45000,
-          'Servicio Full': 65000
+          'Inspección Visual Básica': 35000,
+          'Inspección Visual Semi Full': 49000,
+          'Inspección Visual Full': 69000
         };
 
         const servicioSeleccionado = datos.nombreServicio || nombreServicio;
@@ -236,6 +235,18 @@ const Pago = ({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
 
             // Si la transferencia fue exitosa, redirigir a la landing page principal
             if (response.data.success) {
+              // Evento GA4 para transferencia exitosa
+              if (window.gtag) {
+                window.gtag('event', 'pago_transferencia_exitoso', {
+                  event_category: 'Pago',
+                  event_label: 'Transferencia Bancaria Exitosa',
+                  servicio: servicioSeleccionado,
+                  monto: total,
+                  metodo_pago: 'transferencia',
+                  value: total
+                });
+              }
+
               navigate('/gracias', { state: { metodoPago: datos.metodo } });
               return;
             }
@@ -385,9 +396,9 @@ const Pago = ({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
     
         // Validar que el monto corresponda al servicio seleccionado
         const precios_servicios = {
-          'Servicio Básico': 30000,
-          'Servicio Semi Full': 45000,
-          'Servicio Full': 65000
+          'Inspección Visual Básica': 35000,
+          'Inspección Visual Semi Full': 49000,
+          'Inspección Visual Full': 69000
         };
 
         const servicioSeleccionado = datos.nombreServicio || nombreServicio;

@@ -2,25 +2,24 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Fuerza HTTPS (opcional, recomendado)
+  # 1. Fuerza el uso de HTTPS (Recomendado)
   RewriteCond %{HTTPS} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # Excepción: NO redirigir webpayRespuesta.php a router.php
+  # 2. Excepción para Webpay (Regla específica va primero)
   RewriteCond %{REQUEST_URI} ^/pre-compra/Backend/webpayRespuesta\.php$ [NC]
   RewriteRule .* - [L]
-
-  # SI la url corresponde a /Backend/, deja que php maneje todo por router.php
+  
+  # 3. Excepción para la API en /Backend/
   RewriteCond %{REQUEST_URI} ^/Backend/ [NC]
   RewriteRule ^(.*)$ router.php [QSA,L]
 
-  # Si el archivo o directorio existe, lo servimos normalmente (js, css, imágenes)
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteRule ^ - [L]
+  # 4. Sirve los archivos y directorios que sí existen (¡LA REGLA MÁS IMPORTANTE!)
+  # Si la solicitud NO es para un archivo o directorio real, entonces aplica la siguiente regla.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
 
-  # SPA fallback: cualquier ruta no existente SERVIR index.html
-  RewriteRule ^ index.html [L]
 </IfModule>
 
 AcceptPathInfo On

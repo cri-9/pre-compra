@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Box, FormControl, InputLabel, Select, MenuItem, Typography, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
 import FormItem from './FormItem';
 
 function DatosCliente({ datos, onChange }) {
@@ -133,16 +142,16 @@ function DatosCliente({ datos, onChange }) {
   };
 
   const regiones = [   
-  { value: 'V', label: 'Región de Valparaíso' },
-  { value: 'RM', label: 'Región Metropolitana de Santiago' },
-  { value: 'VI', label: 'Región del Libertador General Bernardo O’Higgins' },
-  { value: 'VII', label: 'Región del Maule' },
-  { value: 'XVI', label: 'Región de Ñuble' },
-  { value: 'VIII', label: 'Región del Biobío' },
-  { value: 'IX', label: 'Región de La Araucanía' },
-  { value: 'XIV', label: 'Región de Los Ríos' },
-  { value: 'X', label: 'Región de Los Lagos' }, 
-];
+    { value: 'V', label: 'Región de Valparaíso' },
+    { value: 'RM', label: 'Región Metropolitana de Santiago' },
+    { value: 'VI', label: 'Región del Libertador General Bernardo OHiggins' },
+    { value: 'VII', label: 'Región del Maule' },
+    { value: 'XVI', label: 'Región de Ñuble' },
+    { value: 'VIII', label: 'Región del Biobío' },
+    { value: 'IX', label: 'Región de La Araucanía' },
+    { value: 'XIV', label: 'Región de Los Ríos' },
+    { value: 'X', label: 'Región de Los Lagos' }
+  ];
 
   const comunas = {
     IX: [
@@ -156,8 +165,8 @@ function DatosCliente({ datos, onChange }) {
       { value: "Galvarino", label: "Galvarino" },      
       { value: "Victoria", label: "Victoria" },
       { value: "Nueva Imperial", label: "Nueva Imperial" },
-      { value: "Gorbea", label: "Gorbea" },     
-    ],
+      { value: "Gorbea", label: "Gorbea" }
+    ]
   };
 
   useEffect(() => {    
@@ -167,8 +176,9 @@ function DatosCliente({ datos, onChange }) {
   const handleBlur = (field) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
-//Con Email segú extención
-const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
+
+  // Con Email según extensión
+  const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
 
   const handleChange = (e) => {
     let value = e.target.value;
@@ -206,7 +216,6 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
 
     return dv === dvCalculado;
   };
-// Fin conf Rut
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -216,7 +225,7 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
           onBlur={() => handleBlur('nombre')}
-          error={touched.nombre && !nombre} // Solo muestra error si el campo ha sido tocado y está vacío
+          error={touched.nombre && !nombre}
           helperText={touched.nombre && !nombre ? 'Campo obligatorio' : ''}
           fullWidth
         />
@@ -233,65 +242,65 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
         />
       </FormItem>
       <FormItem>
-  <TextField
-    label="Correo Electrónico *"
-    value={email}
-    onChange={(e) => {
-      const value = e.target.value;
-      setEmail(value);
+        <TextField
+          label="Correo Electrónico *"
+          value={email}
+          onChange={(e) => {
+            const value = e.target.value;
+            setEmail(value);
 
-      // Mostrar sugerencias si el usuario escribe "@"
-      if (value.includes("@")) {
-        const [localPart, domainPart] = value.split("@");
-        setSuggestions(
-          emailDomains
-            .filter((domain) => domain.startsWith(domainPart))
-            .map((domain) => `${localPart}@${domain}`)
-        );
-      } else {
-        setSuggestions([]);
-      }
-    }}
-    onBlur={() => handleBlur('email')}
-    error={touched.email && (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))} // Validación de formato
-    helperText={
-      touched.email && (!email ? 'Campo obligatorio' : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Formato inválido' : '')
-    }
-    fullWidth
-  />
-  {/* Mostrar sugerencias */}
-  {suggestions.length > 0 && (
-    <Box sx={{ border: '1px solid #ccc', borderRadius: 1, mt: 1, backgroundColor: '#fff' }}>
-      {suggestions.map((suggestion, index) => (
-        <Typography
-          key={index}
-          sx={{
-            padding: 1,
-            cursor: 'pointer',
-            '&:hover': { backgroundColor: '#f0f0f0' },
+            // Mostrar sugerencias si el usuario escribe "@"
+            if (value.includes("@")) {
+              const [localPart, domainPart] = value.split("@");
+              setSuggestions(
+                emailDomains
+                  .filter((domain) => domain.startsWith(domainPart))
+                  .map((domain) => `${localPart}@${domain}`)
+              );
+            } else {
+              setSuggestions([]);
+            }
           }}
-          onClick={() => {
-            setEmail(suggestion); // Seleccionar sugerencia
-            setSuggestions([]); // Limpiar sugerencias
-          }}
-        >
-          {suggestion}
-        </Typography>
-      ))}
-    </Box>
-  )}
-</FormItem>
+          onBlur={() => handleBlur('email')}
+          error={touched.email && (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))}
+          helperText={
+            touched.email && (!email ? 'Campo obligatorio' : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Formato inválido' : '')
+          }
+          fullWidth
+        />
+        {/* Mostrar sugerencias */}
+        {suggestions.length > 0 && (
+          <Box sx={{ border: '1px solid #ccc', borderRadius: 1, mt: 1, backgroundColor: '#fff' }}>
+            {suggestions.map((suggestion, index) => (
+              <Typography
+                key={index}
+                sx={{
+                  padding: 1,
+                  cursor: 'pointer',
+                  '&:hover': { backgroundColor: '#f0f0f0' },
+                }}
+                onClick={() => {
+                  setEmail(suggestion);
+                  setSuggestions([]);
+                }}
+              >
+                {suggestion}
+              </Typography>
+            ))}
+          </Box>
+        )}
+      </FormItem>
       <FormItem>
-      <TextField
-        label="Teléfono"
-        value={telefono}
-        onChange={handleTelefonoChange}
-        fullWidth
-        inputProps={{
-          maxLength: prefijo.length + maximoDigitos, // Limitar la longitud total en el input
-        }}
-      />
-    </FormItem>
+        <TextField
+          label="Teléfono"
+          value={telefono}
+          onChange={handleTelefonoChange}
+          fullWidth
+          inputProps={{
+            maxLength: prefijo.length + maximoDigitos,
+          }}
+        />
+      </FormItem>
       <FormItem>
         <TextField
           label="Rut *"
@@ -301,7 +310,7 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
           error={touched.rut && (!rut || !!rutError)}
           helperText={touched.rut && (!rut ? 'Campo obligatorio' : rutError)}
           fullWidth
-          inputProps={{ maxLength: 12, inputMode: 'text', pattern: '[0-9kK.-]*', autoComplete: 'off' }}
+          inputProps={{ maxLength: 12, inputMode: 'text', pattern: '[0-9kK\\.\\-]*', autoComplete: 'off' }}
         />
       </FormItem>
       <FormItem>
@@ -316,7 +325,6 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
         />
       </FormItem>
 
-     {/*Estilo Lista de Regiones*/}
       <FormItem>
         <FormControl fullWidth error={touched.region && !region}>
           <InputLabel id="region-label">Región</InputLabel>
@@ -329,20 +337,19 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
             onBlur={() => handleBlur('region')}
           >
             {regiones.map((region) => (
-          <MenuItem
-          key={region.value}
-          value={region.value}
-          sx={region.value === 'IX' ? { color: 'purple', fontWeight: 'bold' } : {}} // Cambia el color y el peso de la fuente para la región IX
-          >
-          {region.label}
-          </MenuItem>
+              <MenuItem
+                key={region.value}
+                value={region.value}
+                sx={region.value === 'IX' ? { color: 'purple', fontWeight: 'bold' } : {}}
+              >
+                {region.label}
+              </MenuItem>
             ))}
           </Select>
           {touched.region && !region && <Typography color="error" variant="caption">Campo obligatorio</Typography>}
         </FormControl>
       </FormItem>
 
-      {/*Estilo Lista de Comunas*/}
       <FormItem>
         <FormControl fullWidth error={touched.comuna && !comuna}>
           <InputLabel id="comuna-label">Comuna</InputLabel>
@@ -356,9 +363,9 @@ const emailDomains = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com"];
           >
             {comunas[region]?.map((comuna) => (
               <MenuItem 
-              key={comuna.value} 
-              value={comuna.value}
-              sx={comuna.value === 'Temuco' ? { color: 'purple', fontWeight: 'bold' } : {}} // Cambia el color y el peso de la fuente para la comuna "Temuco"
+                key={comuna.value} 
+                value={comuna.value}
+                sx={comuna.value === 'Temuco' ? { color: 'purple', fontWeight: 'bold' } : {}}
               >
                 {comuna.label}
               </MenuItem>

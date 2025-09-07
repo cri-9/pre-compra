@@ -1,0 +1,45 @@
+# Script de comandos SFTP para transferir archivos al VPS
+# Usar con: sftp -b comandos-sftp.txt usuario@vps-ip
+
+# Navegar al directorio del proyecto (ajustar según tu ruta)
+cd /var/www/html/pre-compra
+
+# Crear directorios necesarios
+mkdir nginx
+mkdir nginx/ssl
+mkdir Backend  
+mkdir -p frontend/public/.well-known
+
+# Transferir archivos principales de seguridad
+put vps-upload/security-headers.conf
+put vps-upload/security.txt
+put vps-upload/SEGURIDAD.md
+put vps-upload/INFORME_SEGURIDAD.md
+put vps-upload/setup-security.sh
+put vps-upload/generate-ssl.sh
+
+# Transferir Dockerfiles y compose
+put vps-upload/backend.Dockerfile
+put vps-upload/docker-compose.yml
+
+# Transferir configuraciones
+put vps-upload/nginx/nginx.conf nginx/
+put vps-upload/Backend/apache-prod.conf Backend/
+put vps-upload/Backend/.htaccess Backend/
+
+# Transferir certificados SSL
+put vps-upload/nginx/ssl/visualmecanica.cl.crt nginx/ssl/
+put vps-upload/nginx/ssl/visualmecanica.cl.key nginx/ssl/
+
+# Transferir archivos del frontend
+put vps-upload/frontend/public/security.txt frontend/public/
+put vps-upload/frontend/public/.well-known/security.txt frontend/public/.well-known/
+
+# Establecer permisos
+!chmod +x setup-security.sh
+!chmod +x generate-ssl.sh  
+!chmod 600 nginx/ssl/*.key
+!chmod 644 nginx/ssl/*.crt
+
+# Salir
+quit

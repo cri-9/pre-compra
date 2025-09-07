@@ -1,0 +1,154 @@
+/* From Uiverse.io by guilhermeyohan */
+.subscribe {
+	position: relative;
+	height: 150px;
+	width: 100%;
+	max-width: 240px;
+	min-width: 200px;
+	padding: 20px;
+	background-color: #FFF;
+	border-radius: 12px;
+	color: #333;
+	box-shadow: 0px 0px 60px 5px rgba(120, 134, 167, 0.4);
+	box-sizing: border-box;
+}
+
+.subscribe:after {
+	position: absolute;
+	content: "";
+	right: -10px;
+	bottom: 5px;
+	width: 0;
+	height: 0;
+	border-left: 0px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #D9D5DF;
+}
+
+.subscribe p {
+	text-align: center;
+	font-size: 1.25rem;
+	font-weight: bold;
+	letter-spacing: 2px;
+	line-height: 28px;
+	color: #424242;
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.subscribe-input {
+	position: absolute;
+	bottom: 30px;
+	border: none;
+	border-bottom: 1px solid #d4d4d4;
+	padding: 10px;
+	width: calc(100% - 40px);
+	max-width: 82%;
+	background: transparent;
+	transition: all .25s ease;
+	box-sizing: border-box;
+}
+
+.subscribe-input:focus {
+	outline: none;
+	border-bottom: 1.5px solid #D9D5DF;
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', 'sans-serif';
+}
+
+.submit-btn {
+	position: absolute;
+	border-radius: 30px;
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+	background-color: #7C6E91; /* Color principal del footer */
+	color: #FFF;
+	padding: 12px 25px;
+	display: inline-block;
+	font-size: 0.75rem;
+	font-weight: bold;
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+	letter-spacing: 2px;
+	right: -10px;
+	bottom: -5px;
+	cursor: pointer;
+	transition: all .25s ease;
+	box-shadow: -5px 6px 20px 0px rgba(26, 26, 26, 0.4);
+	border: none;
+}
+
+.submit-btn:hover {
+	background-color: #ABA2B9;
+	box-shadow: -5px 6px 20px 0px rgba(224, 216, 235, 0.569);
+}
+
+.submit-btn:disabled {
+	background-color: #ccc;
+	color: #666;
+	cursor: not-allowed;
+	opacity: 0.7;
+}
+
+.submit-btn:disabled:hover {
+	background-color: #ccc;
+	transform: none;
+	box-shadow: -5px 6px 20px 0px rgba(26, 26, 26, 0.4);
+}
+
+.subscribe-input:disabled {
+	opacity: 0.7;
+	background-color: #f5f5f5;
+}
+
+/* Media query para centrar mejor el placeholder en pantallas pequeñas */
+@media (max-width: 768px) {
+	.subscribe-input {
+		text-align: center;
+		padding-left: 10px;
+		padding-right: 10px;
+		left: 5px;
+		width: calc(100% - 50px);
+		max-width: 75%;
+	}
+	
+	.subscribe-input::placeholder {
+		text-align: center;
+		font-size: 0.85rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.subscribe-input {
+		text-align: center;
+		padding-left: 8px;
+		padding-right: 8px;
+		left: 8px;
+		width: calc(100% - 60px);
+		max-width: 70%;
+	}
+	
+	.subscribe-input::placeholder {
+		text-align: center;
+		font-size: 0.75rem;
+	}
+}
+
+@media (max-width: 414px) {
+	.subscribe {
+		min-width: 180px;
+		max-width: 200px;
+		padding: 15px;
+	}
+	
+	.subscribe-input {
+		text-align: center;
+		padding-left: 6px;
+		padding-right: 6px;
+		left: 10px;
+		width: calc(100% - 65px);
+		max-width: 65%;
+	}
+	
+	.subscribe-input::placeholder {
+		text-align: center;
+		font-size: 0.7rem;
+	}
+}

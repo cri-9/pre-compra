@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Select, MenuItem, InputLabel, FormControl, Box } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Box from '@mui/material/Box';
 import marcasModelos from './marcasModelos.json';
 import FormItem from './FormItem';
 import axios from 'axios'; // Asegúrate de instalar axios: npm install axios

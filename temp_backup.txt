@@ -1,0 +1,495 @@
+import React, { useState, useEffect } from "react";
+import { API_URLS } from '../config/api';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import Fade from '@mui/material/Fade';
+import Slide from '@mui/material/Slide';
+import Tooltip from '@mui/material/Tooltip';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Schedule,
+  CalendarToday,
+  CheckCircle,
+  AccessTime,
+  EventAvailable,
+  WatchLater,
+} from "@mui/icons-material";
+import '../Csspersonalizado/FechaAgendamientoModerno.css';
+
+const FechaAgendamientoModerno = ({ datos, onChange }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(datos?.fecha ? new Date(datos.fecha) : null);
+  const [bloquesDisponibles, setBloquesDisponibles] = useState([]);
+  const [selectedBloque, setSelectedBloque] = useState(datos?.bloque || "");
+  const [selectedHorario, setSelectedHorario] = useState(datos?.horario || "");
+  const [cargandoBloques, setCargandoBloques] = useState(false);
+  const [errorBloques, setErrorBloques] = useState(null);
+  const [showBloques, setShowBloques] = useState(false);
+  const [showHorarios, setShowHorarios] = useState(false);
+
+  const horariosPorBloque = {
+    AM: [
+      { hora: "10:00", label: "10:00 AM" },
+      { hora: "11:00", label: "11:00 AM" },
+      { hora: "14:00", label: "2:00 PM" },
+    ],
+    PM: [
+      { hora: "16:30", label: "4:30 PM" },
+      { hora: "18:00", label: "6:00 PM" },
+      { hora: "19:30", label: "7:30 PM" },
+      { hora: "20:30", label: "8:30 PM" },
+    ]
+  };
+
+  // Horarios especiales para sábado
+  const horariosSabado = [
+    { hora: "09:00", label: "9:00 AM" },
+    { hora: "10:30", label: "10:30 AM" },
+    { hora: "12:00", label: "12:00 PM" },
+    { hora: "13:30", label: "1:30 PM" },
+    { hora: "15:00", label: "3:00 PM" }
+  ];
+
+  // Función para obtener horarios según el día seleccionado
+  const getHorariosDisponibles = () => {
+    if (!selectedDate) return [];
+    
+    const dayOfWeek = selectedDate.getDay(); // 0 = Domingo, 6 = Sábado
+    
+    if (dayOfWeek === 6) { // Sábado
+      return horariosSabado;
+    } else if (selectedBloque) { // Lunes a Viernes
+      return horariosPorBloque[selectedBloque] || [];
+    }
+    
+    return [];
+  };import { API_URLS } from '../config/api';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import Fade from '@mui/material/Fade';
+import Slide from '@mui/material/Slide';
+import Tooltip from '@mui/material/Tooltip';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Schedule,
+  CalendarToday,
+  CheckCircle,
+  AccessTime,
+  EventAvailable,
+  WatchLater,
+} from "@mui/icons-material";
+import '../Csspersonalizado/FechaAgendamientoModerno.css';
+
+const FechaAgendamientoModerno = ({ datos, onChange }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(datos?.fecha ? new Date(datos.fecha) : null);
+  const [bloquesDisponibles, setBloquesDisponibles] = useState([]);
+  const [selectedBloque, setSelectedBloque] = useState(datos?.bloque || "");
+  const [selectedHorario, setSelectedHorario] = useState(datos?.horario || "");
+  const [cargandoBloques, setCargandoBloques] = useState(false);
+  const [errorBloques, setErrorBloques] = useState(null);
+  const [showBloques, setShowBloques] = useState(false);
+  const [showHorarios, setShowHorarios] = useState(false);
+
+  const horariosPorBloque = {
+    AM: [
+      { hora: "10:00", label: "10:00 AM" },
+      { hora: "11:00", label: "11:00 AM" },
+      { hora: "14:00", label: "2:00 PM" },
+    ],
+    PM: [
+      { hora: "16:30", label: "4:30 PM" },
+      { hora: "18:00", label: "6:00 PM" },
+      { hora: "19:30", label: "7:30 PM" },
+      { hora: "20:30", label: "8:30 PM" },
+    ],
+  };
+
+  const meses = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ];
+
+  const diasSemana = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+  // Generar días del calendario
+  const generateCalendarDays = () => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startDate = new Date(firstDay);
+    startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+    const days = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    for (let i = 0; i < 42; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      
+      const isCurrentMonth = date.getMonth() === month;
+      const isToday = date.getTime() === today.getTime();
+      const isPast = date < today;
+      const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
+
+      days.push({
+        date,
+        day: date.getDate(),
+        isCurrentMonth,
+        isToday,
+        isPast,
+        isSelected,
+        isDisabled: isPast || !isCurrentMonth,
+      });
+    }
+
+    return days;
+  };
+
+  const fetchBloquesDisponibles = async (fechaISO) => {
+    try {
+      setCargandoBloques(true);
+      setErrorBloques(null);
+
+      const response = await fetch(API_URLS.VERIFICAR_BLOQUE, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fecha: fechaISO })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.success && Array.isArray(data.disponibles)) {
+        setBloquesDisponibles(data.disponibles);
+        setShowBloques(true);
+      } else {
+        setBloquesDisponibles([]);
+        setErrorBloques("No hay bloques disponibles para esta fecha");
+      }
+      
+    } catch (error) {
+      console.error('Error al cargar bloques:', error);
+      setErrorBloques("Error al cargar disponibilidad");
+      setBloquesDisponibles([]);
+    } finally {
+      setCargandoBloques(false);
+    }
+  };
+
+  const handleDateSelect = (day) => {
+    if (day.isDisabled) return;
+
+    const fechaISO = day.date.toISOString().split("T")[0];
+    setSelectedDate(day.date);
+    setSelectedBloque("");
+    setSelectedHorario("");
+    setShowBloques(false);
+    setShowHorarios(false);
+
+    // Actualizar datos del padre
+    onChange({ 
+      ...datos, 
+      fecha: fechaISO, 
+      bloque: "", 
+      horario: "",
+      hora_inicio: "",
+      hora_fin: ""
+    });
+
+    // Cargar bloques disponibles
+    fetchBloquesDisponibles(fechaISO);
+  };
+
+  const handleBloqueSelect = (bloque) => {
+    setSelectedBloque(bloque);
+    setSelectedHorario("");
+    setShowHorarios(true);
+
+    // Actualizar datos del padre
+    onChange({ 
+      ...datos, 
+      bloque, 
+      horario: "",
+      hora_inicio: "",
+      hora_fin: ""
+    });
+  };
+
+  const handleHorarioSelect = (hora) => {
+    setSelectedHorario(hora);
+
+    // Calcular hora fin (1 hora después)
+    const [h, m] = hora.split(':').map(Number);
+    const date = new Date();
+    date.setHours(h, m);
+    date.setMinutes(date.getMinutes() + 60);
+    const horaFin = date.toTimeString().slice(0, 5);
+
+    // Actualizar datos del padre
+    onChange({
+      ...datos,
+      horario: hora,
+      hora_inicio: hora,
+      hora_fin: horaFin
+    });
+  };
+
+  const navigateMonth = (direction) => {
+    const newDate = new Date(currentDate);
+    newDate.setMonth(currentDate.getMonth() + direction);
+    setCurrentDate(newDate);
+  };
+
+  const calendarDays = generateCalendarDays();
+
+  return (
+    <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
+      {/* Header */}
+      <Card elevation={3} sx={{ mb: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+        <CardContent>
+          <Box display="flex" alignItems="center" gap={2}>
+            <CalendarToday sx={{ color: 'white', fontSize: 32 }} />
+            <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold' }}>
+              Selecciona tu fecha de agendamiento
+            </Typography>
+          </Box>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', mt: 1 }}>
+            Elige la fecha, bloque horario y hora específica para tu inspección
+          </Typography>
+        </CardContent>
+      </Card>
+
+      {/* Calendario */}
+      <Card elevation={2} sx={{ mb: 3 }}>
+        <CardContent>
+          {/* Header del calendario */}
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+            <IconButton onClick={() => navigateMonth(-1)} sx={{ color: '#667eea' }}>
+              <ChevronLeft />
+            </IconButton>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333' }}>
+              {meses[currentDate.getMonth()]} {currentDate.getFullYear()}
+            </Typography>
+            <IconButton onClick={() => navigateMonth(1)} sx={{ color: '#667eea' }}>
+              <ChevronRight />
+            </IconButton>
+          </Box>
+
+          {/* Días de la semana */}
+          <Grid container spacing={1} mb={1}>
+            {diasSemana.map((dia) => (
+              <Grid item xs key={dia}>
+                <Typography 
+                  variant="body2" 
+                  align="center" 
+                  sx={{ 
+                    fontWeight: 'bold', 
+                    color: '#666',
+                    py: 1
+                  }}
+                >
+                  {dia}
+                </Typography>
+              </Grid>
+            ))}
+          </Grid>
+
+          {/* Días del calendario */}
+          <Grid container spacing={1}>
+            {calendarDays.map((day, index) => (
+              <Grid item xs key={index}>
+                <Button
+                  fullWidth
+                  variant={day.isSelected ? "contained" : "text"}
+                  onClick={() => handleDateSelect(day)}
+                  disabled={day.isDisabled}
+                  sx={{
+                    minHeight: 48,
+                    borderRadius: 2,
+                    color: day.isDisabled 
+                      ? '#ccc' 
+                      : day.isSelected 
+                        ? 'white' 
+                        : day.isToday 
+                          ? '#667eea' 
+                          : '#333',
+                    backgroundColor: day.isSelected 
+                      ? '#667eea' 
+                      : day.isToday 
+                        ? 'rgba(102, 126, 234, 0.1)' 
+                        : 'transparent',
+                    fontWeight: day.isToday || day.isSelected ? 'bold' : 'normal',
+                    border: day.isToday ? '2px solid #667eea' : 'none',
+                    '&:hover': {
+                      backgroundColor: day.isDisabled 
+                        ? 'transparent' 
+                        : day.isSelected 
+                          ? '#667eea' 
+                          : 'rgba(102, 126, 234, 0.1)',
+                    },
+                  }}
+                >
+                  {day.day}
+                </Button>
+              </Grid>
+            ))}
+          </Grid>
+        </CardContent>
+      </Card>
+
+      {/* Selección de Bloques */}
+      {selectedDate && (
+        <Fade in={showBloques}>
+          <Card elevation={2} sx={{ mb: 3 }}>
+            <CardContent>
+              <Box display="flex" alignItems="center" gap={2} mb={2}>
+                <Schedule sx={{ color: '#667eea' }} />
+                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                  Bloques disponibles para {selectedDate.toLocaleDateString('es-ES')}
+                </Typography>
+              </Box>
+
+              {cargandoBloques ? (
+                <Box display="flex" justifyContent="center" py={3}>
+                  <CircularProgress />
+                </Box>
+              ) : errorBloques ? (
+                <Alert severity="warning" sx={{ mb: 2 }}>
+                  {errorBloques}
+                </Alert>
+              ) : bloquesDisponibles.length === 0 ? (
+                <Alert severity="info">
+                  No hay bloques disponibles para esta fecha
+                </Alert>
+              ) : (
+                <Grid container spacing={2}>
+                  {bloquesDisponibles.map((bloque) => (
+                    <Grid item xs={12} sm={6} key={bloque}>
+                      <Paper
+                        elevation={selectedBloque === bloque ? 4 : 1}
+                        sx={{
+                          p: 2,
+                          cursor: 'pointer',
+                          border: selectedBloque === bloque ? '2px solid #667eea' : '1px solid #e0e0e0',
+                          backgroundColor: selectedBloque === bloque ? 'rgba(102, 126, 234, 0.1)' : 'white',
+                          transition: 'all 0.3s ease',
+                          '&:hover': {
+                            elevation: 3,
+                            backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                          },
+                        }}
+                        onClick={() => handleBloqueSelect(bloque)}
+                      >
+                        <Box display="flex" alignItems="center" justifyContent="space-between">
+                          <Box>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333' }}>
+                              {bloque === 'AM' ? 'Mañana' : 'Tarde'}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {bloque === 'AM' ? '10:00 - 14:00' : '16:30 - 20:30'}
+                            </Typography>
+                          </Box>
+                          {selectedBloque === bloque && (
+                            <CheckCircle sx={{ color: '#667eea' }} />
+                          )}
+                        </Box>
+                      </Paper>
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+            </CardContent>
+          </Card>
+        </Fade>
+      )}
+
+      {/* Selección de Horarios */}
+      {selectedBloque && showHorarios && (
+        <Slide direction="up" in={showHorarios}>
+          <Card elevation={2}>
+            <CardContent>
+              <Box display="flex" alignItems="center" gap={2} mb={2}>
+                <AccessTime sx={{ color: '#667eea' }} />
+                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                  Horarios disponibles - {selectedBloque === 'AM' ? 'Mañana' : 'Tarde'}
+                </Typography>
+              </Box>
+
+              <Grid container spacing={2}>
+                {horariosPorBloque[selectedBloque]?.map((horario) => (
+                  <Grid item xs={6} sm={4} md={3} key={horario.hora}>
+                    <Chip
+                      label={horario.label}
+                      variant={selectedHorario === horario.hora ? "filled" : "outlined"}
+                      color={selectedHorario === horario.hora ? "primary" : "default"}
+                      onClick={() => handleHorarioSelect(horario.hora)}
+                      sx={{
+                        width: '100%',
+                        height: 48,
+                        fontSize: '1rem',
+                        fontWeight: selectedHorario === horario.hora ? 'bold' : 'normal',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          backgroundColor: selectedHorario === horario.hora 
+                            ? '#667eea' 
+                            : 'rgba(102, 126, 234, 0.1)',
+                        },
+                      }}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+
+              {selectedHorario && (
+                <Alert severity="success" sx={{ mt: 2 }}>
+                  <Typography variant="body1">
+                    <strong>Agendamiento confirmado:</strong><br />
+                    📅 {selectedDate.toLocaleDateString('es-ES')}<br />
+                    🕐 {selectedHorario} - {(() => {
+                      const [h, m] = selectedHorario.split(':').map(Number);
+                      const date = new Date();
+                      date.setHours(h, m);
+                      date.setMinutes(date.getMinutes() + 60);
+                      return date.toTimeString().slice(0, 5);
+                    })()}
+                  </Typography>
+                </Alert>
+              )}
+            </CardContent>
+          </Card>
+        </Slide>
+      )}
+    </Box>
+  );
+};
+
+export default FechaAgendamientoModerno;

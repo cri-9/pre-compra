@@ -1,6 +1,13 @@
 import { FC, useState, useEffect } from "react";
 import '../Csspersonalizado/landingpage.css';
-import { AppBar, Toolbar, Typography, Button, Box, Container, SxProps, Theme } from "@mui/material";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import { SxProps } from '@mui/system';
+import { Theme } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useWindowSize } from '@react-hook/window-size';
 import Confetti from 'react-confetti';
@@ -16,8 +23,40 @@ import Footer from "./Footer";
 import BotonWhatsApp from "./BotonWhatsApp";
 
 // Assets
-import logo from "../assets/logo_visual1.2.png";
-import logo_sect from "../assets/img_secction1.webp";
+import logo from "../assets/Logo_Superior/logo_visual1.2.png";
+import logo_sect from "../assets/img_secction2.jpg";
+import headerBg from "../assets/img_atras_header/header_atras.webp";
+
+// Estilo para el fondo del header con imagen
+const headerBackgroundStyle = {
+  width: "100vw",
+  // Altura tipo hero para asemejar el diseño del ejemplo
+  minHeight: { xs: "240px", sm: "320px", md: "420px" },
+  // Overlay sutil para mejorar contraste + imagen de fondo
+  backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.2) 100%), url(${headerBg})`,
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "flex-end",
+  position: "relative",
+  zIndex: 0,
+  overflow: "hidden",
+  marginBottom: { xs: 2, sm: 4 }
+};
+
+// Estilo para el AppBar flotante
+const floatingAppBarStyle: SxProps<Theme> = {
+  width: { xs: "95vw", sm: "80vw", md: "70vw" },
+  borderRadius: "24px",
+  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.15)",
+  position: "absolute",
+  left: "50%",
+  transform: "translateX(-50%) translateY(40%)",
+  zIndex: 2,
+  overflow: "hidden"
+};
 
 // Styles
 const styles: Record<string, SxProps<Theme>> = {
@@ -34,8 +73,9 @@ const styles: Record<string, SxProps<Theme>> = {
     justifyContent: "center",
   },
   appBar: {
-    backgroundColor: "#fff",
-    boxShadow: "none"
+    backgroundColor: "rgba(255, 255, 255, 0.9)", // Fondo semi-transparente
+    boxShadow: "none",
+    backdropFilter: "blur(8px)" // Efecto de desenfoque para mejor legibilidad
   },
   toolbar: {
     flexDirection: { xs: "column", sm: "row" },
@@ -120,23 +160,28 @@ const LandingPage: FC = () => {
         </Typography>
       </Box>
 
-      <AppBar position="static" sx={styles.appBar}>
-        <Toolbar sx={styles.toolbar}>
-          <Typography variant="h6" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: { xs: "center", sm: "flex-start" }, paddingBottom: { xs: 1, sm: "15px" } }}>
-            <img src={logo} alt="Logo" style={logoStyle} />
-          </Typography>
+      {/* Fondo con imagen y header flotante */}
+      <Box sx={headerBackgroundStyle}>
+  <AppBar position="static" sx={{ ...styles.appBar, ...floatingAppBarStyle } as SxProps<Theme>}>
+          <Toolbar sx={styles.toolbar}>
+            <Typography variant="h6" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: { xs: "center", sm: "flex-start" }, paddingBottom: { xs: 1, sm: "15px" } }}>
+              <img src={logo} alt="Logo" style={logoStyle} />
+            </Typography>
 
-          <Box sx={styles.navButtons}>
-            <Button sx={{ color: "#7C70A1" }} component={Link} to="/">Inicio</Button>
-            <Button sx={{ color: "#7C70A1" }} href="#nuestro-servicio">Nuestro Servicio</Button>
-            <Button sx={{ color: "#7C70A1" }} href="#nuestras-herramientas">Nuestras Herramientas</Button>
-            <Button sx={{ color: "#7C70A1" }} href="#valor-servicios">Valores</Button>
-            <Button component={Link} to="/agendar" sx={styles.agendarButton}>
-              Agendar
-            </Button>
-          </Box>
-        </Toolbar>
-      </AppBar>
+            <Box sx={styles.navButtons}>
+              <Button sx={{ color: "#4A4A4A", fontWeight: "bold" }} component={Link} to="/">Inicio</Button>
+              <Button sx={{ color: "#4A4A4A", fontWeight: "bold" }} href="#nuestro-servicio">Nuestro Servicio</Button>
+              <Button sx={{ color: "#4A4A4A", fontWeight: "bold" }} href="#nuestras-herramientas">Nuestras Herramientas</Button>
+              <Button sx={{ color: "#4A4A4A", fontWeight: "bold" }} href="#valor-servicios">Valores</Button>
+              <Button component={Link} to="/agendar" sx={styles.agendarButton}>
+                Agendar
+              </Button>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        {/* Espacio para que el header no tape el contenido siguiente */}
+        <Box sx={{ height: { xs: "90px", sm: "120px" } }} />
+      </Box>
 
       <Container sx={{
         display: "flex",
@@ -236,15 +281,8 @@ const LandingPage: FC = () => {
       <BotonWhatsApp
         numeroTelefono={numeroTelefono}
         mensajeInicial={mensajeInicial}
+        onOpenCotizacion={() => setOpenCotizacion(true)}
       />
-
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h6">Contáctanos por WhatsApp:</Typography>
-        <BotonWhatsApp
-          numeroTelefono={numeroTelefono}
-          mensajeInicial={mensajeInicial}
-        />
-      </Box>
 
       <Footer />
     </div>

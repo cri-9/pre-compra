@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { API_URLS } from '../config/api';
-import {
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  Typography,
-  Box,
-  CircularProgress,
-  Alert,
-} from "@mui/material";
+import Select from "@mui/material/Select";
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel'
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from "react-datepicker";
@@ -55,8 +54,34 @@ function FechaAgendamiento({ datos, onChange }) {
 
 
   const horariosPorBloque = {
-    AM: ["10:00", "11:00", "13:00"],
-    PM: ["16:30", "17:30", "18:30", "19:30"],
+    AM: ["10:00", "11:00", "14:00"],
+    PM: ["16:30", "17:30", "18:30", "20:30"],
+  };
+
+  // Horarios especiales para sábado
+  const horariosSabado = ["09:00", "10:30", "12:00", "13:30", "15:00"];
+
+  // Función para obtener horarios según el día seleccionado
+  const getHorariosDisponibles = () => {
+    if (!datos?.fecha) return [];
+    
+    const fechaSeleccionada = new Date(datos.fecha);
+    const dayOfWeek = fechaSeleccionada.getDay(); // 0 = Domingo, 6 = Sábado
+    
+    if (dayOfWeek === 6) { // Sábado
+      return horariosSabado;
+    } else if (datos?.bloque) { // Lunes a Viernes
+      return horariosPorBloque[datos.bloque] || [];
+    }
+    
+    return [];
+  };
+
+  // Función para verificar si es sábado
+  const esSabado = () => {
+    if (!datos?.fecha) return false;
+    const fechaSeleccionada = new Date(datos.fecha);
+    return fechaSeleccionada.getDay() === 6;
   };
 
   // --- Calendario de selección de fecha ---
@@ -250,27 +275,37 @@ function FechaAgendamiento({ datos, onChange }) {
           </Alert>
         ) : (
           <>
-            <FormControl fullWidth variant="outlined" size="small" sx={{ mb: 2 }}>
-              <InputLabel id="bloque-label">Bloque horario</InputLabel>
-              <Select
-                labelId="bloque-label"
-                value={datos.bloque || ""}
-                onChange={handleBloqueChange}
-                label="Bloque horario"
-              >
-                <MenuItem value="">
-                  <em>Selecciona un bloque</em>
-                </MenuItem>
-                {bloquesDisponibles.map((b) => (
-                  <MenuItem key={b} value={b}>
-                    {b === "AM" ? "AM (10:00 - 13:00)" : b === "PM" ? "PM (16:30 - 19:30)" : b}
+            {/* Solo mostrar selector de bloques si NO es sábado */}
+            {!esSabado() && (
+              <FormControl fullWidth variant="outlined" size="small" sx={{ mb: 2 }}>
+                <InputLabel id="bloque-label">Bloque horario</InputLabel>
+                <Select
+                  labelId="bloque-label"
+                  value={datos.bloque || ""}
+                  onChange={handleBloqueChange}
+                  label="Bloque horario"
+                >
+                  <MenuItem value="">
+                    <em>Selecciona un bloque</em>
                   </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                  {bloquesDisponibles.map((b) => (
+                    <MenuItem key={b} value={b}>
+                      {b === "AM" ? "AM (10:00 - 14:00)" : b === "PM" ? "PM (16:30 - 20:30)" : b}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
 
-            {/* Selector de hora exacta dentro del bloque */}
-            {datos?.bloque && horariosPorBloque[datos.bloque] && (
+            {/* Mostrar mensaje especial para sábados */}
+            {esSabado() && (
+              <Alert severity="info" sx={{ mb: 2, fontWeight: 'bold' }}>
+                📅 Horarios especiales para sábado disponibles
+              </Alert>
+            )}
+
+            {/* Selector de hora exacta dentro del bloque - o para sábado */}
+            {(datos?.bloque && horariosPorBloque[datos.bloque]) || esSabado() ? (
               <FormControl fullWidth margin="normal" variant="outlined" size="small">
                 <InputLabel id="hora-label">Hora exacta</InputLabel>
                 <Select
@@ -282,14 +317,14 @@ function FechaAgendamiento({ datos, onChange }) {
                   <MenuItem value="">
                     <em>Selecciona una hora</em>
                   </MenuItem>
-                  {horariosPorBloque[datos.bloque].map((hora) => (
+                  {getHorariosDisponibles().map((hora) => (
                     <MenuItem key={hora} value={hora}>
                       {hora}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-            )}
+            ) : null}
           </>
         )}
       </FormItem>      

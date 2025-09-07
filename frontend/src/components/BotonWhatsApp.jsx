@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { 
-  Fab, 
-  Dialog, 
-  DialogContent, 
-  DialogTitle, 
-  Button, 
-  Typography, 
-  Box, 
-  IconButton,
-  Paper,
-  Slide
-} from '@mui/material';
+import Fab from '@mui/material/Fab';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import Slide from '@mui/material/Slide';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import CloseIcon from '@mui/icons-material/Close';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -22,7 +20,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function BotonWhatsApp({ numeroTelefono, mensajeInicial, onOpenCotizacion }) {
+function BotonWhatsApp({ numeroTelefono, mensajeInicial, onOpenCotizacion, sx = {} }) {
   const [openChatbot, setOpenChatbot] = useState(false);
 
   const handleOpenChatbot = () => {
@@ -55,10 +53,10 @@ function BotonWhatsApp({ numeroTelefono, mensajeInicial, onOpenCotizacion }) {
       <Fab
         onClick={handleOpenChatbot}
         color="success"
-        sx={{ 
-          position: 'fixed', 
-          bottom: 16, 
-          right: 16, 
+        sx={{
+          position: 'fixed',
+          bottom: { xs: 8, sm: 16, md: 24 },
+          right: { xs: 8, sm: 16, md: 24 },
           backgroundColor: "#25D366",
           '&:hover': {
             backgroundColor: "#1ebc59",
@@ -67,6 +65,7 @@ function BotonWhatsApp({ numeroTelefono, mensajeInicial, onOpenCotizacion }) {
           transition: 'all 0.3s ease',
           zIndex: 1000,
           boxShadow: '0 4px 20px rgba(37, 211, 102, 0.4)',
+          ...sx,
         }}
       >
         <WhatsAppIcon />

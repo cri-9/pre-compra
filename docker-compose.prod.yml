@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Frontend en producción
   frontend:
     build:
       context: ./frontend
@@ -9,67 +8,43 @@ services:
     container_name: visualmecanica-frontend-prod
     ports:
       - "3000:80"
-    environment:
-      - NODE_ENV=production
     depends_on:
       - backend
-    restart: unless-stopped
+    restart: always
 
-  # Backend en producción
-backend:
-  build:
-    context: ./Backend
-    dockerfile: Dockerfile.prod
-  container_name: visualmecanica-backend-prod
-  ports:
-    - "8080:80"
-  # Quita las variables de entorno individuales
-  # environment:
-  #   - PHP_ENV=production
-  #   - DB_HOST=database
-  #   - DB_NAME=visualmecanica_prod
-  #   - DB_USER=visualmecanica_user
-  #   - DB_PASSWORD=tu_password_seguro_aqui
-  # Agrega esta línea:
-  env_file:
-    - ./Backend/.env.production
-  depends_on:
-    - database
-  volumes:
-    - ./Backend:/var/www/html
-    - ./Backend/logs:/var/log/php
-  restart: unless-stopped
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile.prod
+    container_name: visualmecanica-backend-prod
+    ports:
+      - "8080:80"
+    env_file:
+      - ./Backend/.env.production
+    depends_on:
+      - database
+    volumes:
+      - ./Backend:/var/www/html
+      - ./Backend/logs:/var/log/php
+    restart: always
 
-  # Base de datos para producción
   database:
     image: mysql:8.0
-    container_name: visualmecanica-db-prod
+    container_name: visualmecanica-database-prod
+    restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=tu_root_password_aqui
-      - MYSQL_DATABASE=visualmecanica_prod
-      - MYSQL_USER=visualmecanica_user
-      - MYSQL_PASSWORD=tu_password_seguro_aqui
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_RANDOM_ROOT_PASSWORD: "no"
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
-      - mysql_data_prod:/var/lib/mysql
-      - ./database_setup.sql:/docker-entrypoint-initdb.d/setup.sql
-    restart: unless-stopped
-
-  # Nginx como reverse proxy
-  nginx:
-    image: nginx:alpine
-    container_name: visualmecanica-nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/ssl:/etc/nginx/ssl
-    depends_on:
-      - frontend
-      - backend
-    restart: unless-stopped
+      - mysql_data:/var/lib/mysql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    command: --default-authentication-plugin=mysql_native_password
 
 volumes:
-  mysql_data_prod:
+  mysql_data:

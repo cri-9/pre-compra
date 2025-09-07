@@ -1,0 +1,26 @@
+# COMANDOS PARA EJECUTAR COMO ROOT EN EL VPS
+# Ejecutar estos comandos uno por uno después de subir los archivos
+
+# 1. Navegar al directorio del proyecto
+cd ~/pre-compra/
+
+# 2. Verificar que el archivo docker-compose existe
+ls -la docker-compose.prod-final.yml
+
+# 3. Detener contenedores actuales
+docker-compose -f docker-compose.prod-final.yml down
+
+# 4. Limpiar imágenes anteriores del frontend (opcional pero recomendado)
+docker rmi $(docker images | grep frontend-prod-new | awk '{print $3}') 2>/dev/null || true
+
+# 5. Reconstruir SOLO el contenedor frontend (más rápido)
+docker-compose -f docker-compose.prod-final.yml build --no-cache frontend
+
+# 6. Iniciar todos los servicios
+docker-compose -f docker-compose.prod-final.yml up -d
+
+# 7. Verificar que todo esté funcionando
+docker-compose -f docker-compose.prod-final.yml ps
+
+# 8. Ver logs del frontend para verificar que no hay errores
+docker-compose -f docker-compose.prod-final.yml logs frontend --tail=20

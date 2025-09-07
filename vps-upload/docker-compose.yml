@@ -1,0 +1,87 @@
+version: '3.8'
+services:
+  php:
+    build:
+      context: ./Backend
+      dockerfile: ../backend.Dockerfile
+      args:
+        ENVIRONMENT: development
+    container_name: php-apache
+    ports:
+      - "8080:80"
+    volumes:
+      - ./Backend:/var/www/html:ro
+      - ./security.txt:/var/www/html/.well-known/security.txt:ro
+    env_file:
+      - ./Backend/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    tmpfs:
+      - /tmp
+      - /var/log/apache2
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: precompra_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/precompra_db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: root
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: vite-frontend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./frontend:/app:ro
+      - /app/node_modules
+    working_dir: /app
+    command: npm run dev -- --host 0.0.0.0
+    security_opt:
+      - no-new-privileges:true
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./security-headers.conf:/etc/nginx/security-headers.conf:ro
+      - ./security.txt:/usr/share/nginx/html/security.txt:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - php
+      - frontend
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  mysql-data:

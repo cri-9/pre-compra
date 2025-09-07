@@ -1,155 +1,246 @@
-import React from 'react';
-import { Container, Grid, Typography, Link, Box, Divider } from '@mui/material';
-import { FaFacebookF, FaTwitter, FaGoogle, FaInstagram, FaLinkedinIn, FaGithub, FaHome, FaEnvelope, FaPhone, FaPrint } from 'react-icons/fa';
-import logo from '../assets/logo_pre.png';
+import React, { useState } from 'react';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import { FaFacebookF, FaTiktok, FaGoogle, FaInstagram, FaGithub, FaHome, FaEnvelope, FaPhone, FaWhatsapp, FaYoutube } from 'react-icons/fa';
+import logo from '../assets/Logo_Footer/logo_form_ico (1).png';
+import { API_CONFIG } from '../config/api';
 
+// Footer component css submit
+import "../Csspersonalizado/subcri_footer.css"
 function Footer() {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!email || !email.includes('@')) {
+      setSnackbar({ open: true, message: 'Por favor ingresa un email válido', severity: 'error' });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/api/suscripcion.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email.trim() })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSnackbar({ open: true, message: data.message || '¡Gracias por suscribirte!', severity: 'success' });
+        setEmail(''); // Limpiar el formulario
+      } else {
+        setSnackbar({ open: true, message: data.error || 'Error al procesar la suscripción', severity: 'error' });
+      }
+    } catch (error) {
+      console.error('Error al enviar suscripción:', error);
+      setSnackbar({ open: true, message: 'Error de conexión. Intenta nuevamente.', severity: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
+  };
   return (
-    <Box>
-      {/* Sección del Logo en el Footer */}
-      <Box 
-        sx={{ 
-          backgroundColor: '#DDE4F4', 
-          color: 'white', 
-          py: 5, 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-        }}
-      > 
-        <img 
-          src={logo} // Asegúrate de que 'logo' esté definido e importado
-          alt="Logo" 
-          style={{ 
-            height: "100px",
-            margin: "10px",
-            imageRendering: "crisp-edges", 
-            border: 'none',
-          }}
-        />         
-      </Box>
-
-      {/* Contenedor principal del pie de página (Grid de columnas) */}
-      <Container sx={{ py: 6 }}>
-        {/*
-        Redistribución de anchos MD:
-        Visual&Mecanica (md=3) + Productos (md=2.5) + Blog (md=3) + Síguenos (md=3.5) = 12
-        Esto le da más espacio a Síguenos y equilibra las demás.
-        También usar (3 + 2 + 4 + 3) si prefieres números enteros, dando más a Blog.
-        Aquí usaremos: 3 + 2.5 + 3 + 3.5 = 12
-        */}
-        <Grid container spacing={6}> 
-
-          {/* Columna: Visual&Mecanica */}
-          <Grid 
-            item 
-            xs={12} 
-            md={3} // Mantiene 3
-          >
-            <Typography variant="h6" gutterBottom>
-              Visual&Mecanica
-            </Typography>
-            <Typography align="justify" variant="body2" color="text.secondary">
-              Uno de los pocos servicios a domicilio en la Novena Región, brindando confianza y calidad a nuestros clientes. No pierdas dinero y asegura tu inversión.
-            </Typography>
-          </Grid>
-
-          {/* Columna: Productos */}
-          <Grid item xs={12} md={2.5}> {/* Reducimos a 2.5 para dar espacio */}
-            <Typography variant="h6" gutterBottom>
-              Productos
-            </Typography>
-            <Typography variant="body2">
-              <Link href="#" color="text.secondary" underline="hover">
-                Inicio
-              </Link>
-            </Typography>
-            <Typography variant="body2">
-              <Link href="#" color="text.secondary" underline="hover">
-                Acerca de
-              </Link>
-            </Typography>
-            <Typography variant="body2">
-              <Link href="#" color="text.secondary" underline="hover">
-                Nuestro Servicio
-              </Link>
-            </Typography>
-            <Typography variant="body2">
-              <Link href="#" color="text.secondary" underline="hover">
-                Nuestras Herramientas
-              </Link>
-            </Typography>
-            <Typography variant="body2">
-              <Link href="#" color="text.secondary" underline="hover">
-                Testimonios
-              </Link>
-            </Typography>
-          </Grid>
-
-          {/* Columna: Blog */}
-          <Grid item xs={12} md={3}> {/* Mantiene 3, o podrías darle 3.5 si quieres más espacio aquí */}
-            <Typography variant="h6" gutterBottom>
-              Blog
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
-              <FaHome style={{ marginRight: '8px' }} /> Ramon Freire 195, Temuco.
-            </Typography>
-            {/* Aplica whiteSpace: 'nowrap' al Typography del correo electrónico */}
-            <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>
-              <FaEnvelope style={{ marginRight: '8px' }} /> cotizacionautomotriz09@gmail.com
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
-              <FaPhone style={{ marginRight: '8px' }} /> + 56-97541042
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
-              <FaPrint style={{ marginRight: '8px' }} /> + 56-997541042
-            </Typography>
-          </Grid>
-
-          {/* Columna: Síguenos (Ahora con más espacio y línea vertical) */}
-          <Grid 
-            item 
-            xs={12} 
-            md={3.5} // ¡Incrementamos a 3.5 para darle más espacio!
-            sx={{
-              borderLeft: { md: '1px solid #444746' }, 
-              pl: { md: 4 } 
-            }}
-          >
-            <Typography variant="h6" gutterBottom>
-              Síguenos
-            </Typography>
-            <Box sx={{ display: 'flex', mt: 1 }}>
-              <Link href="#" sx={{ mr: 1, color: '#1976D2' }}><FaFacebookF /></Link>         
-              <Link href="#" sx={{ mr: 1, color: '#EC4034' }}><FaGoogle /></Link>
-              <Link href="#" sx={{ mr: 1, color: '#AC3083' }}><FaInstagram /></Link>
-              <Link href="#" sx={{ mr: 1, color: '#0184CA' }}><FaLinkedinIn /></Link>
-              <Link href="#" sx={{ mr: 1, color: '#000000' }}><FaGithub /></Link>
-            </Box>
-          </Grid>
-
-        </Grid> {/* Fin del Grid container principal */}
-      </Container> {/* Fin del Container principal de las columnas */}
-
-      {/* --- Línea divisoria horizontal antes del Copyright --- */}
-      <Divider sx={{ my: 4, rgba:(52, 73, 94) }} />
-
-      {/* Sección de Copyright */}
-      <Box 
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-start', 
-          pr: 6, 
-          pb: 2 
-        }}
+    <Box sx={{ 
+      width: '100%', 
+      backgroundColor: '#DBD6E1', 
+      overflow: 'hidden',
+      boxSizing: 'border-box'
+    }}>
+      <Grid container direction="column" alignItems="center" spacing={2} sx={{ width: '100%', margin: 0 }}>
+        {/* Logo */}
+  <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', pt: { xs: 3, sm: 4, md: 5 } }}>
+          <img
+            src={logo}
+            alt="Logo"
+            style={{ height: '100px', margin: '5px', imageRendering: 'crisp-edges', border: 'none' }}
+          />
+        </Grid>
+        {/* Contenido principal (las columnas) */}
+        <Grid item xs={12} sx={{ width: '100%' }}>
+          <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 4 }, width: '100%', boxSizing: 'border-box' }}>
+            <Grid container spacing={{ xs: 3, sm: 4, md: 6 }} sx={{ width: '100%', margin: 0 }}>
+              {/* Visual&Mecanica */}
+              <Grid item xs={12} sm={6} md={3} sx={{ textAlign: { xs: 'center', md: 'left', lg: 'left' }, mb: { xs: 2, md: 0 } }}>
+                <Typography variant="h6" fontWeight="bold" gutterBottom color="#424242" sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.5rem' } }}>
+                  Visual&Mecanica
+                </Typography>
+                <Typography align="justify" variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' }, lineHeight: { xs: 1.4, sm: 1.5 } }}>
+                  El primer servicio pre-compra automotriz a domicilio en la Novena Región, brindando confianza y calidad a nuestros clientes. No pierdas dinero y asegura tu inversión.
+                </Typography>
+              </Grid>
+              {/* Productos */}
+              <Grid item xs={12} sm={6} md={3} sx={{ textAlign: { xs: 'center', md: 'left', lg: 'left' }, mb: { xs: 2, md: 0 }, pl: { xs: 0, md: 2 } }}>
+                <Typography variant="h6" fontWeight="bold" gutterBottom color="#424242" sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.5rem' } }}>
+                  Productos
+                </Typography>
+                <Box sx={{ '& > *': { mb: 0.5 } }}>
+                  <Typography variant="body2" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><Link href="#" color="text.secondary" underline="hover">Inicio</Link></Typography>
+                  <Typography variant="body2" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><Link href="#about" color="text.secondary" underline="hover">Quienes Somos</Link></Typography>
+                  <Typography variant="body2" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><Link href="#nuestro-servicio" color="text.secondary" underline="hover">Nuestro Servicio</Link></Typography>
+                  <Typography variant="body2" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><Link href="#nuestras-herramientas" color="text.secondary" underline="hover">Nuestras Herramientas</Link></Typography>
+                  <Typography variant="body2" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><Link href="#valor-servicios" color="text.secondary" underline="hover">Valores</Link></Typography>
+                </Box>
+              </Grid>
+              {/* Contacto */}
+              <Grid item xs={12} sm={6} md={3} sx={{ textAlign: { xs: 'center', md: 'left', lg: 'left' }, mb: { xs: 2, md: 0 } }}>
+                <Typography variant="h6" fontWeight="bold" gutterBottom color="#424242" sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.5rem' } }}>
+                  Contacto
+                </Typography>
+                <Box sx={{ '& > *': { mb: 1 } }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' }, flexWrap: 'wrap' }}><FaHome style={{ marginRight: '8px', flexShrink: 0 }} /> Ramon Freire, Temuco.</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.7rem', sm: '0.8rem' }, flexWrap: 'wrap', wordBreak: 'break-all' }}><FaEnvelope style={{ marginRight: '8px', flexShrink: 0 }} /> contacto@visualmecanica.cl</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.7rem', sm: '0.8rem' }, flexWrap: 'wrap', wordBreak: 'break-all' }}><FaEnvelope style={{ marginRight: '8px', flexShrink: 0 }} /> cotizacion@visualmecanica.cl</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><FaPhone style={{ marginRight: '8px', flexShrink: 0 }} /> + 56-97541042</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><FaWhatsapp style={{ marginRight: '8px', flexShrink: 0 }} /> + 56-997541042</Typography>
+                </Box>
+              </Grid>
+              {/* Síguenos y suscripción */}
+              <Grid item xs={12} sm={6} md={3} sx={{ 
+                textAlign: { xs: 'center', md: 'left' }, 
+                mb: { xs: 2, md: 0 }, 
+                position: 'relative', 
+                pl: { xs: 0, sm: 4, md: 2 }, 
+                mt: { xs: 6, sm: 0, md: -1 }, 
+                maxWidth: '100%',
+                overflow: 'hidden',
+                '&::before': { 
+                  content: '""', 
+                  position: 'absolute', 
+                  left: '8px', 
+                  top: '25px', 
+                  bottom: '20px', 
+                  width: '1px', 
+                  backgroundColor: '#444746', 
+                  opacity: 0.5, 
+                  display: { xs: 'none', md: 'block' } 
+                } 
+              }}>
+                <Typography variant="h6" fontWeight="bold" gutterBottom color="#424242" sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.5rem' } }}>
+                  Síguenos
+                </Typography>
+                <Box sx={{ display: 'flex', mt: 1, justifyContent: { xs: 'center', sm: 'flex-start' }, flexWrap: 'wrap', gap: 1 }}>
+                  <Link href="https://www.facebook.com/profile.php?id=61579055617312" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: '#1976D2', fontSize: { xs: '1.2rem', sm: '1rem' } }}>
+                    <FaFacebookF />
+                  </Link>
+                  <Link 
+                  href="https://www.instagram.com/precompravisualmecanica/"
+                  target="_blank"
+                  rel="noopener noreferrer" 
+                  sx={{ color: '#AC3083', fontSize: { xs: '1.2rem', sm: '1rem' } }}>
+                    <FaInstagram />
+                    </Link>
+                  <Link
+                  href="https://www.tiktok.com/@visualmecanica"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: '#000000', fontSize: { xs: '1.2rem', sm: '1rem' } }}
+                >
+                <FaTiktok />
+                </Link>
+                 <Link
+                  href="https://wa.me/56997541042"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: '#25D366', fontSize: { xs: '1.2rem', sm: '1rem' } }}
+                  >
+                  <FaWhatsapp />
+                </Link>
+                <Link
+                  href="https://www.youtube.com/@VisualMecánica"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: '#d92226', fontSize: { xs: '1.2rem', sm: '1rem' } }}
+                >
+                <FaYoutube />
+                </Link>                 
+                </Box>
+                {/* Formulario de suscripción debajo de Síguenos */}
+                <Box sx={{ 
+                  marginTop: 2.5, 
+                  display: 'flex', 
+                  justifyContent: 'center',
+                  maxWidth: '100%',
+                  overflow: 'hidden',                  
+                }}>
+                  <form className="subscribe" onSubmit={handleSubmit}>
+                    <p>SUBSCRIBETE</p>
+                    <input 
+                      placeholder="Tu correo electrónico" 
+                      className="subscribe-input" 
+                      name="email" 
+                      type="email" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required 
+                      disabled={loading}
+                    />
+                    <br />
+                    <button 
+                      type="submit" 
+                      className="submit-btn"
+                      disabled={loading}
+                    >
+                      {loading ? 'ENVIANDO...' : 'ENVIAR'}
+                    </button>
+                  </form>
+                </Box>
+              </Grid>
+            </Grid>
+          </Container>
+        </Grid>
+        {/* Divider */}
+        <Grid item xs={12} sx={{ width: '100%' }}>
+          <Divider sx={{ my: 4 }} />
+        </Grid>
+        {/* Copyright */}
+        <Grid item xs={12} sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', pb: { xs: 3, sm: 2 } }}>
+          <Typography variant="body2" fontWeight="bold" gutterBottom color="#424242" sx={{ fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }, textAlign: 'center' }}>
+            © 2025 Copyright: <Link href="https://visualmecanica.cl/" color="inherit" underline="hover">Visual Mecánica</Link>
+          </Typography>
+        </Grid>
+      </Grid>
+      
+      {/* Snackbar para notificaciones */}
+      <Snackbar 
+        open={snackbar.open} 
+        autoHideDuration={6000} 
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Typography variant="body2" color="text.secondary">
-          © 2025 Copyright: <Link href="https://visualmecanica.cl/" color="inherit" underline="hover">Visual Mecánica</Link>
-        </Typography>
-      </Box>
-
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity} 
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
 
 export default Footer;
+

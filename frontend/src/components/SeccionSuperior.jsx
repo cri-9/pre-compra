@@ -1,14 +1,13 @@
 import React from "react";
-import {
-  Box,
-  Grid,
-  Typography,
-  Button,
-  Container,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
-import logo_sect from "../assets/img_secction1.jpg"; // Asegúrate de tener esta imagen o ajusta la ruta
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import useTheme from '@mui/material/useTheme';
+import useMediaQuery from '@mui/material/useMediaQuery';
+
+import logo_sect from "../assets/img_secction2.jpg"; // Asegúrate de tener esta imagen o ajusta la ruta
 
 const SeccionSuperior = ({ setOpenCotizacion }) => {
   const theme = useTheme();
@@ -58,8 +57,8 @@ const SeccionSuperior = ({ setOpenCotizacion }) => {
               <Button
                 variant="contained"
                 sx={{
-                  backgroundColor: "#6a6191",
-                  "&:hover": { backgroundColor: "#7B1FA2" },
+                  backgroundColor: "#7B1FA2", 
+                  "&:hover": { backgroundColor: "#6a6191" },
                   fontSize: "1.2rem",
                   px: 4,
                   py: 1.5,

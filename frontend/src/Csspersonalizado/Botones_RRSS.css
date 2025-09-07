@@ -1,0 +1,72 @@
+/* From Uiverse.io by CYBWEBALI */ 
+/* Estilos Botón Agendar Valores Servicio */ 
+.btn_git {
+  transition: all 0.3s ease-in-out;
+  font-family: "sans-serif", sans-serif;
+}
+
+.btn_git {
+  width: 200px;
+  height: 50px;
+  border-radius: 50px;
+  background-image: linear-gradient(135deg, #C476E5 0%, #7B1FA2 100%);
+  box-shadow: 0 15px 20px -3px rgba(237, 221, 237, 0.5), 0 10px 10px -5px rgba(237, 221, 237, 0.5);
+  outline: none;
+  cursor: pointer;
+  border: none;
+  font-size: 20px;
+  color: white;
+  display: flex;               /* ✅ centra icono + texto */
+  align-items: center;         /* centra vertical */
+  justify-content: center;     /* centra horizontal */
+  gap: 10px;                   /* espacio entre icono y texto */
+  text-decoration: none;       /* ✅ quita línea bajo el texto */
+}
+
+.btn_git:hover {
+  transform: translateY(3px);
+  box-shadow: none;
+}
+
+.btn_git:active {
+  opacity: 0.5;
+}
+
+/* Estilos Botón WhatsApp Valores Servicio */ 
+.btn_whatsapp {
+  transition: all 0.3s ease-in-out;
+  font-family: "sans-serif", sans-serif;
+}
+
+.btn_whatsapp {
+  width: 250px;
+  height: 50px;
+  border-radius: 50px;
+  background-image: linear-gradient(135deg, #FFCE8A 0%, #FFA82E 100%);
+  box-shadow: 0 15px 20px -3px rgba(237, 221, 237, 0.5), 0 10px 10px -5px rgba(237, 221, 237, 0.5);
+  outline: none;
+  cursor: pointer;
+  border: none;
+  font-size: 20px;
+  color: white;
+  display: flex;               /* ✅ centra icono + texto */
+  align-items: center;         /* centra vertical */
+  justify-content: center;     /* centra horizontal */
+  gap: 10px;                   /* espacio entre icono y texto */
+  text-decoration: none;       /* ✅ quita línea bajo el texto */
+}
+
+.btn_whatsapp:hover {
+  transform: translateY(3px);
+  box-shadow: none;
+}
+
+.btn_whatsapp:active {
+  opacity: 0.5;
+}
+
+/* --- Mejora UX: separación entre botones WhatsApp y Agendar en ValorServicio --- */
+.separador-botones-valorservicio {
+  margin-top: 18px; /* Puedes ajustar el valor según el espacio deseado */
+}
+/* --- IGNORE --- */

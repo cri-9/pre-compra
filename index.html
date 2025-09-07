@@ -1,12 +1,159 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
+    
+    <!-- Favicons optimizados -->
+    <link rel="icon" type="image/x-icon" href="/icon.ico">
+    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Visual Mecanica</title>
+    <title>Visual-Mecánica Servicio Inspección Automotriz en Temuco</title>
+    <meta name="description" content="Inspección automotriz pre-compra en Temuco, Región de la Araucanía. Agenda tu revisión técnica, diagnóstico y otros servicios para autos usados. Servicio profesional y confiable." />
+    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="inspección automotriz, pre compra, Temuco, Región de la Araucanía, revisión técnica, autos usados, mecánica, diagnóstico, servicio automotriz" />
+    <meta name="author" content="Visual Mecánica" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Visual-Mecánica Servicio Inspección Automotriz en Temuco" />
+    <meta property="og:description" content="Inspección automotriz pre-compra en Temuco, Región de la Araucanía. Agenda tu revisión técnica, diagnóstico y otros servicios para autos usados." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://visualmecanica.cl/" />
+    <meta property="og:image" content="https://visualmecanica.cl/icon.ico" />
+    <meta property="og:locale" content="es_CL" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Visual-Mecánica Servicio Inspección Automotriz en Temuco" />
+    <meta name="twitter:description" content="Inspección automotriz pre-compra en Temuco, Región de la Araucanía. Agenda tu revisión técnica, diagnóstico y otros servicios para autos usados." />
+    <meta name="twitter:image" content="https://visualmecanica.cl/icon.ico" />
+
+    <!-- Datos de negocio local -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "AutoRepair",
+        "name": "Visual Mecánica",
+        "image": "https://visualmecanica.cl/icon.ico",
+        "@id": "https://visualmecanica.cl/",
+        "url": "https://visualmecanica.cl/",
+        "telephone": "+56997541042",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Dirección de tu taller",
+          "addressLocality": "Temuco",
+          "addressRegion": "Región de la Araucanía",
+          "postalCode": "0000000",
+          "addressCountry": "CL"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "-38.7359",
+          "longitude": "-72.5904"
+        },
+        "openingHours": "Mo-Sa 09:00-19:00",
+        "priceRange": "$"
+      }
+    </script>
+     <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CT6E84H79W"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CT6E84H79W');
+
+      // Detección de clics en WhatsApp y Contacto
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.addEventListener("click", function (e) {
+          let target = e.target;
+
+          // Si clic en enlace o botón, revisa atributos
+          if (target.tagName === "A" || target.tagName === "BUTTON") {
+            let text = target.innerText.toLowerCase();
+            let href = target.getAttribute("href") || "";
+
+            // Evento para WhatsApp
+            if (href.includes("wa.me") || href.includes("whatsapp")) {
+              gtag('event', 'click_whatsapp', {
+                event_category: 'Interacción',
+                event_label: href
+              });
+            }
+
+            // Evento para Contacto
+            if (text.includes("contacto") || text.includes("contactar")) {
+              gtag('event', 'click_contacto', {
+                event_category: 'Interacción',
+                event_label: text
+              });
+            }
+          }
+        });
+      });
+    </script>
+    <script type="module" crossorigin src="/assets/index-CXSudGNM.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-DE7v_pfa.js">
+    <link rel="modulepreload" crossorigin href="/assets/mui-vendor-B4_rdjQS.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-BdUhUNr0.css">
   </head>
   <body>
+    <!-- Script para deshabilitar Vite HMR en producción -->
+    <script>
+      // Deshabilitar Vite HMR en producción
+      (function() {
+        'use strict';
+        
+        // Sobrescribir WebSocket para evitar conexiones HMR
+        if (typeof WebSocket !== 'undefined') {
+          const OriginalWebSocket = WebSocket;
+          window.WebSocket = function(url, protocols) {
+            // Bloquear conexiones WebSocket de Vite/HMR
+            if (typeof url === 'string' && (
+                url.includes('localhost:3001') || 
+                url.includes('@vite/client') ||
+                url.includes('__vite_ping') ||
+                (url.includes('ws://') && url.includes(':3001'))
+            )) {
+              console.warn('Vite HMR WebSocket bloqueado en producción:', url);
+              // Crear un WebSocket falso que no se conecte
+              const fakeSocket = {
+                readyState: WebSocket.CLOSED,
+                close: function() {},
+                send: function() {},
+                addEventListener: function() {},
+                removeEventListener: function() {},
+                dispatchEvent: function() { return false; }
+              };
+              return fakeSocket;
+            }
+            // Permitir otras conexiones WebSocket normales
+            return new OriginalWebSocket(url, protocols);
+          };
+          // Copiar propiedades estáticas
+          Object.setPrototypeOf(window.WebSocket, OriginalWebSocket);
+          Object.defineProperty(window.WebSocket, 'CONNECTING', { value: 0 });
+          Object.defineProperty(window.WebSocket, 'OPEN', { value: 1 });
+          Object.defineProperty(window.WebSocket, 'CLOSING', { value: 2 });
+          Object.defineProperty(window.WebSocket, 'CLOSED', { value: 3 });
+        }
+        
+        // Sobrescribir console para filtrar advertencias de Vite
+        const originalWarn = console.warn;
+        console.warn = function() {
+          const args = Array.prototype.slice.call(arguments);
+          const message = args.join(' ');
+          if (message.includes('vite') || 
+              message.includes('websocket') || 
+              message.includes('HMR') ||
+              message.includes('localhost:3001') ||
+              message.includes('failed to connect to websocket')) {
+            return; // Silenciar advertencias de Vite en producción
+          }
+          return originalWarn.apply(console, args);
+        };
+      })();
+    </script>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

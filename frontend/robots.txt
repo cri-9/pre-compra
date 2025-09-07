@@ -1,0 +1,46 @@
+# robots.txt para visualmecanica.cl
+# Generado el 24 de agosto de 2025
+
+# Permitir a todos los bots de búsqueda acceder a todo el sitio
+User-agent: *
+Allow: /
+
+# Bloquear acceso a directorios sensibles/administrativos
+Disallow: /admin/
+Disallow: /api/
+Disallow: /backend/
+Disallow: /config/
+Disallow: /logs/
+Disallow: /temp/
+Disallow: /cache/
+Disallow: /private/
+Disallow: /.env
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: /build/
+Disallow: /dist/
+
+# Bloquear archivos específicos que no deben ser indexados
+Disallow: /*.log
+Disallow: /*.json
+Disallow: /*.config.js
+Disallow: /package.json
+Disallow: /composer.json
+
+# Permitir específicamente archivos importantes
+Allow: /sitemap.xml
+Allow: /robots.txt
+Allow: /favicon.ico
+
+# Ubicación del sitemap
+Sitemap: https://visualmecanica.cl/sitemap.xml
+
+# Tiempo de crawl delay (opcional - solo si tienes problemas de rendimiento)
+# Crawl-delay: 1
+
+# Configuraciones específicas para diferentes bots (opcional)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /

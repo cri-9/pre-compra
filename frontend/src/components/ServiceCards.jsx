@@ -1,7 +1,13 @@
-import React from "react";
-import { Card, CardContent, Typography, Grid, Box } from "@mui/material";
-import { Search, Home, Person, Lock } from "@mui/icons-material";
-import ChecklistSection from './ChecklistSection';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+
+import { Home, Person, Search } from "@mui/icons-material";
+
+// Neuvo estiloo css de las card
+
 
 const options = [
   { 
@@ -9,27 +15,38 @@ const options = [
     title: "Inspección Visual", 
     icon: <Search fontSize="large" />, 
     color: "#1976D2",
-    description: "Realizamos una revisión visual completa para detectar posibles daños."
+    description: "Realizamos una revisión externa y detallada del vehículo para identificar posibles daños en la carrocería, chasis, neumáticos, vidrios, focos y otros componentes visibles."
   },
   { 
     number: "02", 
     title: "Revisión con escaner", 
     icon: <Home fontSize="large" />, 
-    color: "#4A8",
-    description: "Analizamos el estado mecánico del vehículo con nuestros expertos."
+    color: "#ffb64d",
+    description: " Este procedimiento nos permite acceder a la información de las diferentes unidades de control (ECU), detectar posibles fallas, códigos de error o anomalías ocultas y evaluar el estado real de los sistemas electrónicos."
   },
   { 
     number: "03", 
     title: "Revisión Documental", 
     icon: <Person fontSize="large" />, 
     color: "#9C27B0",
-    description: "Verificamos los documentos legales para asegurar una compra segura."
+    description: "Analizamos y verificamos en detalle los documentos legales y administrativos relacionados con la transacción. Este proceso asegura transparencia y confianza, brindándote la tranquilidad de realizar una compra segura y sin riesgos."
   }
 ];
 
 const OptionCard = ({ number, title, icon, color, description }) => {
   return (
-    <Card sx={{ maxWidth: 300, p: 2, borderRadius: 3, boxShadow: 3, position: "relative", overflow: "visible" }}>
+  <Card
+  sx={{
+    maxWidth: 300,
+    p: 2,
+    borderRadius: 10,
+    position: "relative",
+    overflow: "visible",
+    background: "#F2F2F2", // ✅ background como string
+    boxShadow: "15px 15px 30px #bebebe, -15px -15px 30px #ffffff" // ✅ múltiple sombra como string
+    
+  }}
+>
       <Box
         sx={{
           backgroundColor: color,
@@ -69,15 +86,13 @@ const OptionCard = ({ number, title, icon, color, description }) => {
 const ServiceCards = () => {
   return (
     <Box>
-    <Grid container spacing={3} justifyContent="center" sx={{ p: 3 }}>
-      {options.map((option, index) => (
-        <Grid item key={index}>
-          <OptionCard {...option} />
-        </Grid>
-      ))}
-    </Grid>
-    {/* checklist animado */}
-      <ChecklistSection />
+      <Grid container spacing={3} justifyContent="center" sx={{ p: 3 }}>
+        {options.map((option, index) => (
+          <Grid item key={index}>
+            <OptionCard {...option} />
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 };

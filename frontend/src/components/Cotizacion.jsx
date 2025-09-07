@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import { API_URLS } from '../config/api';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Button,
-  TextField,
-  Grid,
-  MenuItem,
-  Typography,
-  InputAdornment,
-  Box,
-  CircularProgress,
-  Alert,
-} from "@mui/material";
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import InputAdornment from '@mui/material/InputAdornment';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+
 import axios from "axios";
 
 const Cotizacion = ({ open, handleClose }) => {
@@ -29,9 +28,9 @@ const Cotizacion = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
 
   const servicios = [
-    { value: "basico", label: "Servicio Escaner - $30.000" },
-    { value: "completo", label: "Inspección Completa - $45.000" },
-    { value: "premium", label: "Inspección Premium - $65.000" },
+    { value: "basico", label: "Servicio Escaner - $35.000" },
+    { value: "completo", label: "Inspección Completa - $49.000" },
+    { value: "premium", label: "Inspección Premium - $69.000" },
   ];
 
   const handleChange = (e) => {
@@ -80,6 +79,7 @@ const Cotizacion = ({ open, handleClose }) => {
     );
 
     const datosParaEnviar = {
+      ruta: "enviarCotizacion",
       ...formData,
       telefono: "+56" + formData.telefono,
       servicio: servicioSeleccionado
@@ -91,11 +91,34 @@ const Cotizacion = ({ open, handleClose }) => {
     setMensajeEnviado(null);
 
     try {
+      // Enviar como FormData para máxima compatibilidad con PHP
+      const form = new FormData();
+      Object.entries(datosParaEnviar).forEach(([key, value]) => {
+        form.append(key, value);
+      });
+
       const response = await axios.post(
         API_URLS.ENVIAR_COTIZACION,
-        datosParaEnviar
+        form,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
       );
+      console.log(response); // Para depuración
+
       if (response.data.success) {
+        // Evento GA4 para envío de cotización exitoso
+        if (window.gtag) {
+          window.gtag('event', 'envio_cotizacion', {
+            event_category: 'Formulario',
+            event_label: 'Formulario de Cotización',
+            servicio_seleccionado: formData.servicio,
+            value: 1
+          });
+        }
+
         setMensajeEnviado({
           tipo: "success",
           texto: response.data.message || "Cotización enviada con éxito.",
@@ -108,7 +131,6 @@ const Cotizacion = ({ open, handleClose }) => {
           mensaje: "",
         });
         setErrores({});
-        // Opcional: cerrar el diálogo tras unos segundos
         setTimeout(() => {
           handleClose();
           setMensajeEnviado(null);
@@ -120,6 +142,7 @@ const Cotizacion = ({ open, handleClose }) => {
         });
       }
     } catch (error) {
+      console.log(error); // Para depuración
       setMensajeEnviado({
         tipo: "error",
         texto: "Error en la conexión con el servidor.",
@@ -244,11 +267,14 @@ const Cotizacion = ({ open, handleClose }) => {
                   px: 5,
                   py: 1.5,
                   fontSize: "1rem",
+                  "&:hover": {
+                    backgroundColor: "#ffb64d", // <--- Aquí defines el color de hover
+                  },
                 }}
                 disabled={loading}
               >
                 Enviar Cotización
-              </Button>
+              </Button>             
             </Grid>
           </Grid>
         </form>
@@ -258,8 +284,3 @@ const Cotizacion = ({ open, handleClose }) => {
 };
 
 export default Cotizacion;
-
-
-
-
-

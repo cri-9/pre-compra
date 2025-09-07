@@ -1,0 +1,28 @@
+/* Estilos globales para prevenir overflow horizontal */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* Prevenir scroll horizontal */
+}
+
+#root {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Asegurar que los contenedores principales no causen overflow */
+.MuiContainer-root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Permitir que ciertos elementos se extiendan fuera de contenedores sin causar scroll */
+body {
+  position: relative;
+}
