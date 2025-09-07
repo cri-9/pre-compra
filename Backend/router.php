@@ -118,6 +118,9 @@ switch ($ruta) {
     case 'webpayRespuesta':
         require 'webpayRespuesta.php';
         break;
+    case 'suscripcion':
+        require 'suscripcion.php';
+        break;
     case 'test':
         require 'test_router_cors.php';
         break;

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Service Names</title>
+</head>
+<body>
+    <h1>Test de Nombres de Servicios</h1>
+    <div id="result"></div>
+
+    <script>
+        // Simular lo que envía el frontend
+        const frontendServices = [
+            'Inspección Visual Básica',
+            'Inspección Visual Semi Full', 
+            'Inspección Visual Full'
+        ];
+
+        // Lo que espera el backend (según nuestro arreglo)
+        const backendServices = [
+            'Inspección Visual Básica',
+            'Inspección Visual Semi Full',
+            'Inspección Visual Full'
+        ];
+
+        let result = document.getElementById('result');
+        result.innerHTML = '<h2>Frontend envía:</h2>';
+        frontendServices.forEach(service => {
+            result.innerHTML += `<p>- ${service}</p>`;
+        });
+
+        result.innerHTML += '<h2>Backend espera:</h2>';
+        backendServices.forEach(service => {
+            result.innerHTML += `<p>- ${service}</p>`;
+        });
+
+        // Verificar coincidencias
+        result.innerHTML += '<h2>Verificación:</h2>';
+        let allMatch = true;
+        frontendServices.forEach((service, index) => {
+            const matches = service === backendServices[index];
+            result.innerHTML += `<p style="color: ${matches ? 'green' : 'red'}">
+                ${service} ${matches ? '✓' : '✗'}
+            </p>`;
+            if (!matches) allMatch = false;
+        });
+
+        result.innerHTML += `<h2 style="color: ${allMatch ? 'green' : 'red'}">
+            ${allMatch ? '✓ TODOS LOS NOMBRES COINCIDEN' : '✗ HAY NOMBRES QUE NO COINCIDEN'}
+        </h2>`;
+    </script>
+</body>
+</html>

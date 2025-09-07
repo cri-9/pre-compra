@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
 import Snackbar from '@mui/material/Snackbar';
-import { FaFacebookF, FaTiktok, FaGoogle, FaInstagram, FaGithub, FaHome, FaEnvelope, FaPhone, FaWhatsapp, FaYoutube } from 'react-icons/fa';
+import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+import { FaEnvelope, FaFacebookF, FaHome, FaInstagram, FaPhone, FaTiktok, FaWhatsapp, FaYoutube } from 'react-icons/fa';
 import logo from '../assets/Logo_Footer/logo_form_ico (1).png';
 import { API_CONFIG } from '../config/api';
 
 // Footer component css submit
-import "../Csspersonalizado/subcri_footer.css"
+import "../Csspersonalizado/subcri_footer.css";
 function Footer() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ function Footer() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/api/suscripcion.php`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/api/router.php?ruta=suscripcion`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
