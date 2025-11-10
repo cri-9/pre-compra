@@ -12,9 +12,9 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Menu,
-  MenuItem,
   Link as MuiLink,
+  Paper,
+  Popper,
   Stack,
   Toolbar,
   useTheme
@@ -126,7 +126,7 @@ function Navbar() {
           </MuiLink>
         ))}
 
-        <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center', zIndex: 100 }} className="servicios-container">
+        <Box sx={{ display: 'inline-flex', alignItems: 'center', zIndex: 100 }} className="servicios-container">
           <Button
             id="servicios-button"
             disableRipple
@@ -167,94 +167,98 @@ function Navbar() {
             Servicios
           </Button>
 
-          <Menu
+          {/* Popper personalizado en lugar de Menu para mejor control del posicionamiento */}
+          <Popper
             id="servicios-menu"
-            anchorEl={anchorElServicios}
             open={isServiciosOpen}
-            onClose={handleServiciosClose}
-            MenuListProps={{ 
-              'aria-labelledby': 'servicios-button',
-              onMouseLeave: handleServiciosClose 
-            }}
-            container={menuContainer}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-            disableScrollLock
-            disableEnforceFocus
-            disableAutoFocus
-            disableRestoreFocus
-            slotProps={{
-              paper: {
-                elevation: 3,
-                sx: {
-                  backgroundColor: '#f9f6fc',
-                  boxShadow: '0 12px 30px rgba(0, 0, 0, 0.18)',
-                  borderRadius: '12px',
-                  overflow: 'visible',
-                  border: '1px solid rgba(123, 31, 162, 0.12)',
-                  minWidth: 220,
-                  mt: 1.5,
-                  py: 1,
-                  zIndex: 10000,
-                }
-              }
-            }}
+            anchorEl={anchorElServicios}
+            placement="bottom-center"
+            disablePortal={false}
+            modifiers={[
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, 12], // 12px de separación vertical
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  padding: 8,
+                },
+              },
+              {
+                name: 'flip',
+                enabled: true,
+              },
+            ]}
             sx={{
               zIndex: 10000,
-              '& .MuiPopover-paper': {
-                zIndex: 10000,
-              }
+              pointerEvents: 'auto',
             }}
+            onMouseLeave={handleServiciosClose}
           >
-            {servicios.map((servicio) => (
-              <MenuItem
-                key={servicio.name}
-                component={Link}
-                to={servicio.href}
-                onClick={handleServiciosClose}
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  py: 2,
-                  px: 3,
-                  gap: 1,
-                  backgroundColor: 'transparent',
-                  '&:hover': {
-                    backgroundColor: '#EDE7F6',
-                  }
-                }}
-              >
-                {servicio.icon && (
-                  <img
-                    src={servicio.icon}
-                    alt={servicio.name}
-                    style={{
-                      width: '50px',
-                      height: '50px',
-                      objectFit: 'contain'
-                    }}
-                  />
-                )}
-                <span
-                  style={{
-                    color: '#7B1FA2',
-                    fontWeight: 500,
-                    fontSize: '0.9rem',
-                    textAlign: 'center'
+            <Paper
+              elevation={3}
+              sx={{
+                backgroundColor: '#f9f6fc',
+                boxShadow: '0 12px 30px rgba(0, 0, 0, 0.18)',
+                borderRadius: '12px',
+                overflow: 'visible',
+                border: '1px solid rgba(123, 31, 162, 0.12)',
+                minWidth: 220,
+                py: 1,
+                zIndex: 10000,
+              }}
+            >
+              {servicios.map((servicio) => (
+                <Box
+                  key={servicio.name}
+                  component={Link}
+                  to={servicio.href}
+                  onClick={handleServiciosClose}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    py: 2,
+                    px: 3,
+                    gap: 1,
+                    backgroundColor: 'transparent',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    color: 'inherit',
+                    transition: 'backgroundColor 0.2s ease',
+                    '&:hover': {
+                      backgroundColor: '#EDE7F6',
+                    }
                   }}
                 >
-                  {servicio.name}
-                </span>
-              </MenuItem>
-            ))}
-          </Menu>
+                  {servicio.icon && (
+                    <img
+                      src={servicio.icon}
+                      alt={servicio.name}
+                      style={{
+                        width: '50px',
+                        height: '50px',
+                        objectFit: 'contain'
+                      }}
+                    />
+                  )}
+                  <span
+                    style={{
+                      color: '#7B1FA2',
+                      fontWeight: 500,
+                      fontSize: '0.9rem',
+                      textAlign: 'center'
+                    }}
+                  >
+                    {servicio.name}
+                  </span>
+                </Box>
+              ))}
+            </Paper>
+          </Popper>
         </Box>
 
         {navLinksAfter.map((link) => (
