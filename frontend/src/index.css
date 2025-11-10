@@ -13,6 +13,7 @@ html, body {
 #root {
   width: 100%;
   overflow-x: hidden;
+  position: relative;
 }
 
 /* Asegurar que los contenedores principales no causen overflow */
@@ -25,4 +26,28 @@ html, body {
 /* Permitir que ciertos elementos se extiendan fuera de contenedores sin causar scroll */
 body {
   position: relative;
+}
+
+/* Permite que los Popper y Menu de MUI se creen en body sin restricciones */
+.MuiPopover-root,
+.MuiPopper-root,
+.MuiModal-root {
+  pointer-events: none;
+}
+
+.MuiPopover-root > .MuiBackdrop-root,
+.MuiPopper-root > .MuiBackdrop-root,
+.MuiModal-root > .MuiBackdrop-root {
+  pointer-events: auto;
+}
+
+.MuiPopover-root,
+.MuiPopper-root > div,
+.MuiModal-root > div {
+  pointer-events: auto;
+}
+
+/* Asegurar que el menu container no tenga restricciones de overflow */
+.MuiMenu-paper {
+  pointer-events: auto;
 }
