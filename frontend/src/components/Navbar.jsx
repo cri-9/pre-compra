@@ -126,7 +126,7 @@ function Navbar() {
           </MuiLink>
         ))}
 
-        <Box sx={{ display: 'inline-flex', alignItems: 'center', zIndex: 100 }} className="servicios-container">
+        <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center', zIndex: 100 }} className="servicios-container">
           <Button
             id="servicios-button"
             disableRipple
@@ -172,7 +172,7 @@ function Navbar() {
             id="servicios-menu"
             open={isServiciosOpen}
             anchorEl={anchorElServicios}
-            placement="bottom-center"
+            placement="bottom"
             disablePortal={false}
             modifiers={[
               {
@@ -182,21 +182,33 @@ function Navbar() {
                 },
               },
               {
+                name: 'flip',
+                options: {
+                  fallbackPlacements: ['top', 'bottom'],
+                },
+              },
+              {
                 name: 'preventOverflow',
                 options: {
                   padding: 8,
                 },
               },
               {
-                name: 'flip',
-                enabled: true,
+                name: 'computeStyles',
+                options: {
+                  adaptive: false, // Previene ajustes automáticos
+                  gpuAcceleration: false,
+                },
               },
             ]}
             sx={{
               zIndex: 10000,
               pointerEvents: 'auto',
+              '& .MuiPaper-root': {
+                transformOrigin: 'center top',
+                marginLeft: '-55px', // Ajuste manual para centrar
+              }
             }}
-            onMouseLeave={handleServiciosClose}
           >
             <Paper
               elevation={3}
@@ -210,13 +222,11 @@ function Navbar() {
                 py: 1,
                 zIndex: 10000,
               }}
+              onMouseLeave={handleServiciosClose}
             >
               {servicios.map((servicio) => (
                 <Box
                   key={servicio.name}
-                  component={Link}
-                  to={servicio.href}
-                  onClick={handleServiciosClose}
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -232,6 +242,10 @@ function Navbar() {
                     '&:hover': {
                       backgroundColor: '#EDE7F6',
                     }
+                  }}
+                  onClick={() => {
+                    handleServiciosClose();
+                    window.location.href = servicio.href;
                   }}
                 >
                   {servicio.icon && (
@@ -287,7 +301,7 @@ function Navbar() {
         my: -6,
         top: 0,
         maxWidth: { xs: '95%', sm: '95%', md: '85%', lg: '95%' },
-        zIndex: (theme) => theme.zIndex.appBar + 50,
+        zIndex: 9999,
       }}
     >
       <Toolbar sx={{

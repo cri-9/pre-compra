@@ -1,6 +1,7 @@
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+﻿import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as MuiLink, useTheme } from "@mui/material";
 import AppBar from '@mui/material/AppBar';
@@ -27,7 +28,9 @@ import img_sec_1 from "../assets/Carrusel_Portada/portada_01.webp"; // Imagen de
 import img_sect_2 from "../assets/Carrusel_Portada/portada_02.webp"; // Imagen de la sección
 import img_sect_3 from "../assets/Carrusel_Portada/portada_03.webp"; // Imagen de la sección
 import img_sect_4 from "../assets/Carrusel_Portada/portada_04.webp"; // Imagen de la sección
+import iconDpf from "../assets/img_prin_dpf/ico_dpf_nabv.png";
 import logo from "../assets/Logo_Superior/logo_superior_menu2.webp";
+import iconTpms from "../assets/servicios/icon_tpms_menu.png";
 import '../Csspersonalizado/landingpage.css'; //Css personalizado para varios estilos
 
 // DOCUMENTACIÓN: Hook personalizado para rastrear la posición del mouse
@@ -282,22 +285,22 @@ import fondoMenuHamburguesa from "../assets/fondo_menu_hambur/img_fondo_hambur.w
 
 // Componente principal de la página de destino
 function LandingPage() {
-  const [openCotizacion, setOpenCotizacion] = useState(false); // Estado para abrir/cerrar la ventana emergente de cotización
-  const [width, height] = useWindowSize(); // Obtener el tamaño de la ventana
-  const [openExito, setOpenExito] = useState(false); // Estado para el confeti
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para el menú móvil
-  const location = useLocation(); // Obtener la ubicación actual
-  const theme = useTheme(); // Accede al tema de MUI para los breakpoints
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detecta si es pantalla móvil
-  
-  useEffect(() => {
-    const params = new URLSearchParams(location.search); // Obtener los parámetros de la URL
-    if (params.get("mensaje") === "exito") {
-      alert("!Su proceso de pago y agendamineto se realizón con éxito!"); // Mostrar alerta de éxito
-    }
-  }, [location]); // Ejecutar el efecto solo cuando la ubicación cambie
+  const [openCotizacion, setOpenCotizacion] = useState(false); // Estado para abrir/cerrar la ventana emergente de cotización
+  const [width, height] = useWindowSize(); // Obtener el tamaño de la ventana
+  const [openExito, setOpenExito] = useState(false); // Estado para el confeti
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para el menú móvil
+  const [openServiciosLP, setOpenServiciosLP] = useState(false); // Estado para el menú de servicios en LP
+  const serviciosLpRef = React.useRef(null); // Ref para cerrar al hacer clic fuera
+  const location = useLocation(); // Obtener la ubicación actual
+  const theme = useTheme(); // Accede al tema de MUI para los breakpoints
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detecta si es pantalla móvil
 
-  {/*Navegación dentro de la misma pagina*/}
+  useEffect(() => {
+    const params = new URLSearchParams(location.search); // Obtener los parámetros de la URL
+    if (params.get("mensaje") === "exito") {
+      alert("!Su proceso de pago y agendamineto se realizón con éxito!"); // Mostrar alerta de éxito
+    }
+  }, [location]); // Ejecutar el efecto solo cuando la ubicación cambie  {/*Navegación dentro de la misma pagina*/}
   useEffect(() => {
     const links = document.querySelectorAll('nav a');
 
@@ -325,54 +328,175 @@ function LandingPage() {
     { name: 'Quienes Somos', href: '#about' },
     { name: 'Nuestro Servicio', href: '#nuestro-servicio' },
     { name: 'Nuestras Herramientas', href: '#nuestras-herramientas' },
+    { name: 'Servicios' }, // Sin href porque abrirá un menú
     { name: 'Valores', href: '#valor-servicios' },
    // { name: 'Blog', href: '/blog' },
-  ];  // Componente Navigation con subrayado animado
-  // Componente Navigation usando MuiLink para evitar conflictos de imports
-  // Componente Navigation con tipografía original y separación a la izquierda
-  const Navigation = () => (
-    <Stack direction="row" spacing={3} sx={{ mr: 6, ml: 2 }}>
-      {navLinks.map((link) => (
-        <MuiLink
-          key={link.name}
-          href={link.href}
-          underline="none"
-          sx={{
-            position: 'relative',
-            padding: '5px 0',
-            color: '#7B1FA2', // Color original
-            fontFamily: 'Roboto, Arial, sans-serif', // Tipografía Roboto
-            fontWeight: 500, // Un poco más gruesa
-            fontSize: '0.9rem', // Tamaño original
-            letterSpacing: 0.2, // Espaciado de letras
-            textTransform: 'none', // Sin transformación de texto
-            transition: 'color 0.3s ease-out', // Transición suave para el color
-            '&:hover': {
-              color: '#D49CEC' // Color al pasar el mouse
-            },
-            '&::after': {
-              content: '""', // Pseudo-element para la línea inferior
-              position: 'absolute', // Posición absoluta para la línea
-              width: '100%', // Ancho completo
-              height: '2px', // Altura de la línea
-              backgroundColor: '#B34FDE', // Color de la línea
-              bottom: 0, // Posición inferior de la línea
-              left: 0, // Posición izquierda de la línea
-              transform: 'scaleX(0)', // Escala inicial de la línea
-              transformOrigin: 'center', // Origen de transformación en el centro
-              transition: 'transform 0.3s ease-out', // Transición suave para la transformación
-            },
-            '&:hover::after': {
-              transform: 'scaleX(1)', // Escala final de la línea
-            },
-          }}
-        >
-          {link.name}
-        </MuiLink>
-      ))}
-    </Stack>
-  );
+  ];
 
+  // SubmenÃº de Servicios
+  const servicios = [
+    { name: 'Servicio TPMS', href: '/tpms', icon: iconTpms },
+    { name: 'Regeneración DPF', href: '/dpf', icon: iconDpf },
+  ];
+
+  // Handlers para el menÃº de servicios
+  // Handlers anteriores removidos - dropdown local usa setOpenServiciosLP
+
+  
+  // Componente Navigation con dropdown local para Servicios
+  const Navigation = () => (
+    <Stack direction="row" spacing={3} sx={{ mr: 6, ml: 2, alignItems: 'center' }}>
+      {navLinks.map((link) => {
+        // Si el link es "Servicios", renderiza con dropdown local
+        if (link.name === 'Servicios') {
+          return (
+            <Box key={link.name} ref={serviciosLpRef} sx={{ position: 'relative' }}>
+              <Button
+                disableRipple
+                onClick={() => setOpenServiciosLP(!openServiciosLP)}
+                endIcon={
+                  <ExpandMoreIcon
+                    sx={{
+                      fontSize: '1.1rem',
+                      transition: 'transform 0.3s ease',
+                      transform: openServiciosLP ? 'rotate(180deg)' : 'rotate(0deg)',
+                    }}
+                  />
+                }
+                sx={{
+                  color: '#7B1FA2',
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  fontSize: '0.9rem',
+                  fontFamily: 'Roboto, Arial, sans-serif',
+                  letterSpacing: 0.2,
+                  '&:hover': { color: '#D49CEC', background: 'transparent' },
+                }}
+              >
+                {link.name}
+              </Button>
+
+              {/* Dropdown local con posicionamiento absoluto */}
+              <Box
+                role="menu"
+                sx={{
+                  position: 'absolute',
+                  top: 'calc(100% + 6px)',
+                  left: '50%',
+                  transform: openServiciosLP
+                    ? 'translateX(-50%) translateY(0)'
+                    : 'translateX(-50%) translateY(-8px)',
+                  opacity: openServiciosLP ? 1 : 0,
+                  pointerEvents: openServiciosLP ? 'auto' : 'none',
+                  transition: 'opacity 180ms ease, transform 180ms ease',
+                  backgroundColor: '#f9f6fc',
+                  boxShadow: '0 12px 30px rgba(0, 0, 0, 0.18)',
+                  border: '1px solid rgba(123, 31, 162, 0.12)',
+                  borderRadius: '12px',
+                  overflow: 'visible',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  zIndex: (theme) => theme.zIndex.modal + 2000,
+                }}
+              >
+                {servicios.map((servicio, idx, arr) => (
+                  <Box
+                    key={servicio.name}
+                    component={Link}
+                    to={servicio.href}
+                    onClick={() => setOpenServiciosLP(false)}
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flex: 1,
+                      py: 2,
+                      px: 3,
+                      gap: 1,
+                      minWidth: '120px',
+                      backgroundColor: 'transparent',
+                      borderRadius: '8px',
+                      borderRight:
+                        idx === arr.length - 1
+                          ? 'none'
+                          : '1px solid rgba(123, 31, 162, 0.12)',
+                      transition: 'background-color 0.2s ease',
+                      '&:hover': { backgroundColor: '#EDE7F6' },
+                      textDecoration: 'none',
+                      color: 'inherit',
+                    }}
+                  >
+                    {servicio.icon && (
+                      <img
+                        src={servicio.icon}
+                        alt={servicio.name}
+                        style={{
+                          width: '45px',
+                          height: '45px',
+                          objectFit: 'contain',
+                        }}
+                      />
+                    )}
+                    <span
+                      style={{
+                        color: '#7B1FA2',
+                        fontWeight: 500,
+                        fontSize: '0.9rem',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {servicio.name}
+                    </span>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          );
+        }
+
+        // Enlaces normales
+        return (
+          <MuiLink
+            key={link.name}
+            href={link.href}
+            underline="none"
+            sx={{
+              position: 'relative',
+              padding: '5px 0',
+              color: '#7B1FA2',
+              fontFamily: 'Roboto, Arial, sans-serif',
+              fontWeight: 500,
+              fontSize: '0.9rem',
+              letterSpacing: 0.2,
+              textTransform: 'none',
+              transition: 'color 0.3s ease-out',
+              '&:hover': {
+                color: '#D49CEC',
+              },
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                width: '100%',
+                height: '2px',
+                backgroundColor: '#B34FDE',
+                bottom: 0,
+                left: 0,
+                transform: 'scaleX(0)',
+                transformOrigin: 'center',
+                transition: 'transform 0.3s ease-out',
+              },
+              '&:hover::after': {
+                transform: 'scaleX(1)',
+              },
+            }}
+          >
+            {link.name}
+          </MuiLink>
+        );
+      })}
+    </Stack>
+  );
   // Función para manejar el menú móvil
   const handleDrawerToggle = () => {
     setIsMenuOpen(!isMenuOpen);
