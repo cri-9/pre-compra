@@ -1,5 +1,5 @@
 # robots.txt para visualmecanica.cl
-# Generado el 24 de agosto de 2025
+# Generado el 21 de febrero de 2026
 
 # Permitir a todos los bots de búsqueda acceder a todo el sitio
 User-agent: *
@@ -35,6 +35,15 @@ Allow: /favicon.ico
 # Ubicación del sitemap
 Sitemap: https://visualmecanica.cl/sitemap.xml
 
+# Páginas públicas permitidas
+Allow: /
+Allow: /agendar
+Allow: /dpf
+Allow: /tpms
+Allow: /resultado-pago
+Allow: /gracias
+Allow: /service-cards
+Allow: /assets/
 # Tiempo de crawl delay (opcional - solo si tienes problemas de rendimiento)
 # Crawl-delay: 1
 
