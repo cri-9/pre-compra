@@ -63,23 +63,40 @@
 
 #### PASO 1: Preparar upload de componentes
 
-**Vía Bitvise SFTP:**
+**Paso 1A: Hacer backups en VPS (TERMINAL SSH - NO SFTP)**
+
+```bash
+# Abre terminal/PuTTY y conecta como root:
+ssh root@[IP_VPS]
+
+# Luego ejecuta estos comandos:
+cd /home/visualmecanica/frontend/src/components
+mkdir backup_21feb2026
+cp *.jsx backup_21feb2026/
+cp *.tsx backup_21feb2026/
+
+# Salir de la terminal (escribe exit o ciérrala)
+exit
+```
+
+**Paso 1B: Subir nuevos componentes (VÍA BITVISE SFTP)**
 
 ```
-1. Conectar a VPS
+1. Abre Bitvise SFTP (cliente SFTP gráfico)
    
-2. Crear backups actuales (EN VPS):
-   cd /home/visualmecanica/frontend/src/components
-   mkdir backup_21feb2026
-   cp *.jsx backup_21feb2026/
-   cp *.tsx backup_21feb2026/
+2. Conectar a VPS:
+   Host: [IP_VPS]
+   Usuario: visualmecanica
    
-3. Limpiar carpeta de componentes:
-   rm *.jsx  (Excepto los que no cambion)
+3. Limpiar carpeta de componentes en VPS:
+   Navega a: /home/visualmecanica/frontend/src/components/
+   Elimina todos los *.jsx (click derecho → Delete)
+   Elimina todos los *.tsx (click derecho → Delete)
    
 4. Subir nuevos componentes (38 archivos):
    Fuente: c:\Users\Users\desarrollo_aplicaciones\pre-compra\frontend\src\components\
-   Destino: /home/visualmecanica/frontend/src/components/
+   Destino: /home/visualmecanica/frontend/src/components/ (en Bitvise)
+   Método: Drag & drop todos los archivos
    
    Archivos principales a subir:
    - DPFPage.jsx ⭐ NUEVO
@@ -95,17 +112,28 @@
 
 #### PASO 2: Subir CSS actualizado
 
+**Paso 2A: Hacer backup de CSS (TERMINAL SSH)**
+
+```bash
+# En terminal SSH del VPS (como root):
+cd /home/visualmecanica/frontend/src/Csspersonalizado/
+mkdir backup_css_21feb2026
+cp *.css backup_css_21feb2026/
 ```
-1. Navegar en SFTP a:
+
+**Paso 2B: Subir CSS (VÍA BITVISE SFTP)**
+
+```
+1. En Bitvise SFTP, navegar a:
    /home/visualmecanica/frontend/src/Csspersonalizado/
 
-2. Respaldar CSS actual:
-   mkdir backup_css_21feb2026
-   cp *.css backup_css_21feb2026/
+2. Eliminar CSS antiguos:
+   Click derecho en cada *.css → Delete
 
-3. Subir 8 archivos CSS:
+3. Subir 8 archivos CSS nuevos:
    Fuente: c:\Users\Users\desarrollo_aplicaciones\pre-compra\frontend\src\Csspersonalizado\
-   Destino: /home/visualmecanica/frontend/src/Csspersonalizado/
+   Destino: /home/visualmecanica/frontend/src/Csspersonalizado/ (en Bitvise)
+   Método: Drag & drop
 
 4. Archivos a subir:
    - Botones_RRSS.css
@@ -120,14 +148,16 @@
 
 #### PASO 3: Subir imágenes actualizadas
 
+**Solo VÍA BITVISE SFTP (no necesita comandos SSH)**
+
 ```
-1. Navegar en SFTP a:
+1. En Bitvise SFTP, navegar a:
    /home/visualmecanica/frontend/src/assets/
 
 2. IMÁGENES CRÍTICAS (subir primero):
    
    a) Carpeta: img_prin_dpf/
-      Subir 8 imágenes (8 archivos, ~1 MB)
+      Subir 8 imágenes (Drag & drop):
       - img_dpf_pro_1.png
       - img_dpf_pro_2.jpg
       - img_dpf_pro_3.jpg
@@ -136,33 +166,46 @@
       - img_dpf_pro_6.png
       - img_dpf_pro_7.jpg
       - img_dpf_pro_8.jpg
+      (Tamaño: ~1 MB, Tiempo: ~2 min)
    
    b) Carpeta: img_tpms/
-      Subir 4 archivos (~14.5 MB) ⚠️ LENTO
-      - img_cuerpo.mp4 (9.6 MB) - ⭐ CRÍTICO
-      - img_tpms_que_es.png (2.3 MB)
-      - img_tpms_que_es_3.png (2.5 MB)
-      - tpms_presion_llanta.png (71 kB)
+      Subir 4 archivos en este orden:
+      - tpms_presion_llanta.png (71 kB) - rápido
+      - img_tpms_que_es.png (2.3 MB) - esperar
+      - img_tpms_que_es_3.png (2.5 MB) - esperar
+      - img_cuerpo.mp4 (9.6 MB) - ESPERAR MÁS (crítico)
+      ⚠️ Total: ~14.5 MB, Tiempo: ~10-15 min
    
    c) Carpeta: img_menu_superior_tpms/
-      Subir 1 archivo (799 kB)
-      - img_banner_menu.webp
+      Subir 1 archivo:
+      - img_banner_menu.webp (799 kB)
+      Tiempo: ~2 min
 
 3. IMÁGENES GENERALES (resto de carpetas):
-   Subir todas las demás carpetas de imágenes (19 carpetas total)
+   Subir carpeta por carpeta el resto de imágenes
+   (19 carpetas total, Tiempo: ~10 min)
 ```
 
 #### PASO 4: Subir archivos SEO
 
+**Solo VÍA BITVISE SFTP**
+
 ```
-1. En SFTP, navegar a:
+1. En Bitvise SFTP, navegar a:
    /home/visualmecanica/frontend/
 
-2. Subir archivos:
+2. Subir 2 archivos:
+   Fuente: c:\Users\Users\desarrollo_aplicaciones\pre-compra\frontend\
+   Destino: /home/visualmecanica/frontend/ (en Bitvise)
+   
+   Archivos a subir:
    - sitemap.xml ⭐ ACTUALIZADO
    - robots.txt ⭐ ACTUALIZADO
+   
+   Método: Drag & drop
+   Tiempo: ~1 minuto
 
-3. Verificar en navegador:
+3. Verificar en navegador (después de hacer build):
    https://visualmecanica.cl/sitemap.xml
    https://visualmecanica.cl/robots.txt
 ```
