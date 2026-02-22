@@ -1,67 +1,18 @@
 /* Estilos específicos para Navbar y su Menu de Servicios */
 
-/* Asegurar que el Menu se renderiza por encima de todo */
-.MuiMenu-root {
-  z-index: 10000 !important;
-}
-
-.MuiPopover-root {
-  z-index: 10000 !important;
-}
-
-#servicios-menu {
-  z-index: 10000 !important;
-}
-
-/* Asegurar que el paper del Menu está por encima */
-.MuiMenu-paper {
-  z-index: 10000 !important;
-}
-
-.MuiPopover-paper {
-  z-index: 10000 !important;
-}
-
-/* Asegurar que la lista del menu está por encima */
-.MuiMenuList-root {
-  z-index: 10000 !important;
-}
-
-/* Menu Items */
-.MuiMenuItem-root {
-  z-index: 10000 !important;
-}
-
-/* Backdrop del menu (si existe) */
-.MuiBackdrop-root {
-  z-index: 9999 !important;
-}
-
-/* Asegurar que el contenedor del NavBar tiene el z-index correcto */
-.MuiAppBar-root {
-  z-index: 1100 !important;
-}
-
-/* Evitar que el overflow del AppBar corte el menú */
+/* Evitar que el overflow del AppBar/Toolbar corte el menú */
 .MuiToolbar-root {
   overflow: visible !important;
 }
 
-/* Asegurar que el Box contenedor del botón/menu no tiene restricciones */
+/* Contenedor del botón Servicios como referencia visual sin forzar z-index excesivo */
 .servicios-container {
   position: relative;
   display: inline-flex;
   align-items: center;
-  z-index: 100;
   overflow: visible !important;
 }
 
-/* Permitir que el Menu se desborde sin problemas */
-.MuiPopper-root {
-  z-index: 10000 !important;
-}
-
-/* Garantizar que el popper no sea restringido por overflow */
-body .MuiPopper-root {
-  z-index: 10000 !important;
-}
+/* No forzar z-index globales en Popper/Menu; dejar que MUI controle el stacking */
+/* Si en algún layout aparece oculto, se puede elevar solo el paper del menú ligeramente: */
+/* .MuiMenu-paper { z-index: 1400; } */

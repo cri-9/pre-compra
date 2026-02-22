@@ -1,15 +1,17 @@
-import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
-import Snackbar from '@mui/material/Snackbar';
-import Typography from '@mui/material/Typography';
+import {
+  Alert,
+  Box,
+  Container,
+  Divider,
+  Grid,
+  Link,
+  Snackbar,
+  Typography
+} from '@mui/material';
 import { useState } from 'react';
 import { FaEnvelope, FaFacebookF, FaHome, FaInstagram, FaPhone, FaTiktok, FaWhatsapp, FaYoutube } from 'react-icons/fa';
 import logo from '../assets/Logo_Footer/logo_form_ico (1).png';
-import { API_CONFIG } from '../config/api';
+import { API_URLS } from '../config/api';
 
 // Footer component css submit
 import "../Csspersonalizado/subcri_footer.css";
@@ -29,7 +31,7 @@ function Footer() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/api/router.php?ruta=suscripcion`, {
+      const response = await fetch(API_URLS.SUSCRIPCION, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -110,8 +112,8 @@ function Footer() {
                   <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' }, flexWrap: 'wrap' }}><FaHome style={{ marginRight: '8px', flexShrink: 0 }} /> Ramon Freire, Temuco.</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.7rem', sm: '0.8rem' }, flexWrap: 'wrap', wordBreak: 'break-all' }}><FaEnvelope style={{ marginRight: '8px', flexShrink: 0 }} /> contacto@visualmecanica.cl</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.7rem', sm: '0.8rem' }, flexWrap: 'wrap', wordBreak: 'break-all' }}><FaEnvelope style={{ marginRight: '8px', flexShrink: 0 }} /> cotizacion@visualmecanica.cl</Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><FaPhone style={{ marginRight: '8px', flexShrink: 0 }} /> + 56-97541042</Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><FaWhatsapp style={{ marginRight: '8px', flexShrink: 0 }} /> + 56-997541042</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><FaPhone style={{ marginRight: '8px', flexShrink: 0 }} /> + 56-949685530</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><FaWhatsapp style={{ marginRight: '8px', flexShrink: 0 }} /> + 56-949685530</Typography>
                 </Box>
               </Grid>
               {/* Síguenos y suscripción */}
@@ -161,7 +163,7 @@ function Footer() {
                 <FaTiktok />
                 </Link>
                  <Link
-                  href="https://wa.me/56997541042"
+                  href="https://wa.me/56949685530"
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{ color: '#25D366', fontSize: { xs: '1.2rem', sm: '1rem' } }}

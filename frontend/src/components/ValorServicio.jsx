@@ -14,25 +14,27 @@ import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom";
 
 import CheckIcon from '@mui/icons-material/Check';
+import valores4 from '../assets/Valores_Servicios/dpf_valor4.webp';
 import valores1 from '../assets/Valores_Servicios/mecanica_valor1.webp';
 import valores2 from '../assets/Valores_Servicios/mecanica_valor2.webp';
-import valores3 from '../assets/Valores_Servicios/mecanica_valor3.webp';
+import valores3 from '../assets/Valores_Servicios/tmps_valor3.webp';
 
 //Nuevo estilo botones 
 import "../Csspersonalizado/Botones_RRSS.css";
 
   const precios = {
     'Inspección Visual Básica': 35000,
-    'Inspección Visual Semi Full': 49000,
-    'Inspección Visual Full': 69000,
+    'Inspección Full': 62500,
+    'Servicio TPMS': 75000,
+    'Servicio DPF': 60000,
   };
 
 const valores = [
   {
     id: 1,
-    titulo: "Inspección Visual Básica",
+    titulo: "Diagnóstico Electrónico",
     precio: 35000,
-    descripcion: "$35.000",
+    descripcion: "$35.000 c/iva",
     imagen: valores1,
     listado: [
       { texto: "Scanner" },
@@ -43,9 +45,9 @@ const valores = [
   },
   {
     id: 2,
-    titulo: "Inspección Visual Semi Full",
-    precio: 49000,
-    descripcion: "$49.000",
+    titulo: "Inspección pre-compra Full",
+    precio: 62500,
+    descripcion: "$62.500 c/iva",
     imagen: valores2,
     listado: [
       { texto: "Todo lo de Inspección Básica" },
@@ -61,18 +63,29 @@ const valores = [
   },
   {
     id: 3,
-    titulo: "Inspección Visual Full",
-    precio: 69000,
-    descripcion: "$69.000",
+    titulo: "Mantenimiento Sensores TPMS",
+    precio: 75000,
+    descripcion: "$75.000 c/iva",
     imagen: valores3,
     listado: [
-      { texto: "Todo lo de Inspección Básica y Semi Full +" },
-      { texto: "Informe Autofac" },
-      { texto: "Certificado de Multas" },                   
-      { texto: "Certificado de Anotaciones Vigentes" },  
-      { texto: "Revisión Documental Prohibición de Venta" },
-      { texto: "Checklist Vehiculo denunciado por robo o clonación" }, 
-      
+      { texto: "Diagnóstico con escáner" },
+      { texto: "Instalación sensor" },
+      { texto: "Activación sensor" },                   
+      { texto: "Programación sensor" },  
+      { texto: "Garantía un año" },
+    ],
+  },
+  {
+    id: 4,
+    titulo: "Regeneración Electrónica DPF",
+    precio: 60000,
+    descripcion: "$60.000 c/iva",
+    imagen: valores4,
+    listado: [
+      { texto: "Diagnóstico con escáner" },
+      { texto: "Regeneración electrónica" },
+      { texto: "Reset de error" },
+      { texto: "Prueba" },
     ],
   },
 ];
@@ -93,7 +106,7 @@ const ValorServicio = () => {
         gutterBottom 
         color={"#1848B9"} 
         >
-        Valores Inspección Visual Pre-Compra
+        Valores de todos Nuestros Servicios
       </Typography>
       <Typography variant="body1" textAlign="center" gutterBottom
         sx={{ 
@@ -166,19 +179,29 @@ const ValorServicio = () => {
                     </Typography>
                     </Box>
                 </Box>
-                <Typography variant="h3" sx={{ 
-                  mt: 2, 
-                  color: '#7B1FA2', 
-                  fontWeight: 'bold',
-                  fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } // Precio más grande: aumentado de h4 a h3 con tamaños responsivos
-                }}>
-                  {valor.descripcion}
-                </Typography>
+                <Box sx={{ mt: 2, textAlign: 'center' }}>
+                  <Typography variant="h3" sx={{ 
+                    color: '#7B1FA2', 
+                    fontWeight: 'bold',
+                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                    lineHeight: 1
+                  }}>
+                    ${valor.precio.toLocaleString('es-CL')}
+                  </Typography>
+                  <Typography variant="caption" sx={{ 
+                    color: '#757575',
+                    fontSize: '0.9rem',
+                    display: 'block',
+                    mt: 0.5
+                  }}>
+                    c/iva
+                  </Typography>
+                </Box>
                 {valor.listado && (
                   <List>
                     {valor.listado.map((item, index) => {
                       // Primer elemento de Semi Full y Full con color especial solo para el ícono
-                      const isSpecialItem = (valor.id === 2 || valor.id === 3) && index === 0;
+                      const isSpecialItem = (valor.id === 1 || valor.id === 2 || valor.id === 3 || valor.id === 4) && index === 0;
                       const checkColor = isSpecialItem ? '#3A3243' : '#DBD6E1';
                       
                       return (
@@ -205,11 +228,11 @@ const ValorServicio = () => {
             </ListItemIcon>
                           <ListItemText 
                             primary={
-                              (valor.id === 2 && index === 0) || (valor.id === 3 && index === 0)
+                              (valor.id === 1 && index === 0) || (valor.id === 2 && index === 0) || (valor.id === 3 && index === 0) || (valor.id === 4 && index === 0)
                                 ? <span style={{ fontWeight: 'bold', color: '#303030' }}>{item.texto}</span>
                                 : <span style={{ color: '#696969' }}>{item.texto}</span>
                             }
-                            secondary={item.puntos}
+                            secondary={item.puntos} 
                           />
                         </ListItem>
                       );
@@ -249,7 +272,7 @@ const ValorServicio = () => {
                     },
                   }}                 
                   component="a"
-                  href="https://wa.me/56997541042"
+                  href="https://wa.me/56949685530"
                   target="_blank"
                   rel="noopener"
                 >
@@ -284,9 +307,13 @@ const ValorServicio = () => {
                       opacity: 0.5,
                     },
                   }}               
-                  component={Link} to="/agendar"                
+                  component={valor.id === 3 || valor.id === 4 ? 'a' : Link}
+                  to={valor.id === 3 || valor.id === 4 ? undefined : '/agendar'}
+                  href={valor.id === 3 || valor.id === 4 ? `https://wa.me/56949685530?text=Hola%2C%20me%20interesa%20el%20servicio%20de%20${encodeURIComponent(valor.titulo)}` : undefined}
+                  target={valor.id === 3 || valor.id === 4 ? '_blank' : undefined}
+                  rel={valor.id === 3 || valor.id === 4 ? 'noopener' : undefined}
                 >                
-                  Agendar
+                  {valor.id === 3 || valor.id === 4 ? 'Cotización' : 'Agendar'}
                 </Button>
               </Box>
               <Typography variant="body2" sx={{ mb: 1, p: 2 }}>

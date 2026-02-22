@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { API_URLS, buildApiUrl } from '../config/api';
+import { API_URLS } from '../config/api';
 
 const RetornoPago = () => {
   const navigate = useNavigate();
@@ -47,6 +47,16 @@ const RetornoPago = () => {
             setEstado('exito');
             setMensaje(data.message || '¡Pago exitoso!');
             setDetalle(data);
+            
+            // Evento Meta Pixel para compra completada
+            if (window.fbq && data.monto) {
+              window.fbq('track', 'Purchase', {
+                value: data.monto,
+                currency: 'CLP',
+                content_name: data.servicio || 'Inspección Automotriz',
+                content_type: 'product'
+              });
+            }
           } else {
             console.error('Error en la respuesta:', data);
             setEstado('error');

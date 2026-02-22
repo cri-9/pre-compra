@@ -12,48 +12,39 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Menu,
+  MenuItem,
   Link as MuiLink,
-  Paper,
-  Popper,
   Stack,
   Toolbar,
   useTheme
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import fondoMenuHamburguesa from "../assets/fondo_menu_hambur/img_fondo_hambur.webp";
 import iconDpf from "../assets/img_prin_dpf/ico_dpf_nabv.png";
 import logo from "../assets/Logo_Superior/logo_superior_menu2.webp";
 import iconTpms from "../assets/servicios/icon_tpms_menu.png";
-import '../Csspersonalizado/Navbar.css';
 import Cotizacion from "./Cotizacion";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [anchorElServicios, setAnchorElServicios] = useState(null);
+  const [openServicios, setOpenServicios] = useState(false);
+  const serviciosRef = useRef(null);
   const [openServiciosMobile, setOpenServiciosMobile] = useState(false);
   const [openCotizacion, setOpenCotizacion] = useState(false);
-  const [menuContainer, setMenuContainer] = useState(undefined);
   const theme = useTheme();
   const numeroTelefono = "56949685530";
 
-  // Asegurar que el container está disponible después del montaje
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      setMenuContainer(document.body);
-    }
-  }, []);
-
   const handleServiciosClick = (event) => {
-    if (anchorElServicios) {
-      setAnchorElServicios(null);
-    } else {
-      setAnchorElServicios(event.currentTarget);
-    }
+    setAnchorElServicios(event.currentTarget);
+    setOpenServicios((prev) => !prev);
   };
 
   const handleServiciosClose = () => {
     setAnchorElServicios(null);
+    setOpenServicios(false);
   };
 
   const handleServiciosMobileToggle = () => {
@@ -80,7 +71,7 @@ function Navbar() {
     { name: 'Regeneración DPF', href: '/dpf', icon: iconDpf },
   ];
 
-  const isServiciosOpen = Boolean(anchorElServicios);
+  const isServiciosOpen = openServicios;
 
   const linkStyles = {
     position: 'relative',
@@ -126,7 +117,7 @@ function Navbar() {
           </MuiLink>
         ))}
 
-        <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center', zIndex: 100 }} className="servicios-container">
+        <Box ref={serviciosRef} sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center', zIndex: 100 }} className="servicios-container">
           <Button
             id="servicios-button"
             disableRipple
@@ -167,112 +158,78 @@ function Navbar() {
             Servicios
           </Button>
 
-          {/* Popper personalizado en lugar de Menu para mejor control del posicionamiento */}
-          <Popper
-            id="servicios-menu"
-            open={isServiciosOpen}
-            anchorEl={anchorElServicios}
-            placement="bottom"
-            disablePortal={false}
-            modifiers={[
-              {
-                name: 'offset',
-                options: {
-                  offset: [0, 12], // 12px de separación vertical
-                },
-              },
-              {
-                name: 'flip',
-                options: {
-                  fallbackPlacements: ['top', 'bottom'],
-                },
-              },
-              {
-                name: 'preventOverflow',
-                options: {
-                  padding: 8,
-                },
-              },
-              {
-                name: 'computeStyles',
-                options: {
-                  adaptive: false, // Previene ajustes automáticos
-                  gpuAcceleration: false,
-                },
-              },
-            ]}
+          {/* Dropdown personalizado de Servicios */}
+          <Box
+            role="menu"
+            aria-labelledby="servicios-button"
             sx={{
-              zIndex: 10000,
-              pointerEvents: 'auto',
-              '& .MuiPaper-root': {
-                transformOrigin: 'center top',
-                marginLeft: '-55px', // Ajuste manual para centrar
-              }
+              position: 'absolute',
+              top: 'calc(100% + 6px)',
+              left: '50%',
+              transform: isServiciosOpen ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(-8px)',
+              opacity: isServiciosOpen ? 1 : 0,
+              pointerEvents: isServiciosOpen ? 'auto' : 'none',
+              transition: 'opacity 180ms ease, transform 180ms ease',
+              backgroundColor: '#f9f6fc',
+              boxShadow: '0 12px 30px rgba(0, 0, 0, 0.18)',
+              borderRadius: '12px',
+              border: '1px solid rgba(123, 31, 162, 0.12)',
+              minWidth: 360,
+              zIndex: (theme) => theme.zIndex.appBar + 200,
+              py: 1,
+              px: 1,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'stretch'
             }}
           >
-            <Paper
-              elevation={3}
-              sx={{
-                backgroundColor: '#f9f6fc',
-                boxShadow: '0 12px 30px rgba(0, 0, 0, 0.18)',
-                borderRadius: '12px',
-                overflow: 'visible',
-                border: '1px solid rgba(123, 31, 162, 0.12)',
-                minWidth: 220,
-                py: 1,
-                zIndex: 10000,
-              }}
-              onMouseLeave={handleServiciosClose}
-            >
-              {servicios.map((servicio) => (
-                <Box
-                  key={servicio.name}
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    py: 2,
-                    px: 3,
-                    gap: 1,
-                    backgroundColor: 'transparent',
-                    cursor: 'pointer',
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    transition: 'backgroundColor 0.2s ease',
-                    '&:hover': {
-                      backgroundColor: '#EDE7F6',
-                    }
-                  }}
-                  onClick={() => {
-                    handleServiciosClose();
-                    window.location.href = servicio.href;
+            {servicios.map((servicio, idx) => (
+              <Box
+                key={servicio.name}
+                component={Link}
+                to={servicio.href}
+                onClick={handleServiciosClose}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  py: 2,
+                  px: 3,
+                  gap: 1,
+                  textDecoration: 'none',
+                  backgroundColor: 'transparent',
+                  flex: 1,
+                  borderRight: idx === servicios.length - 1 ? 'none' : '1px solid rgba(123, 31, 162, 0.12)',
+                  '&:hover': {
+                    backgroundColor: '#EDE7F6',
+                  }
+                }}
+              >
+                {servicio.icon && (
+                  <img
+                    src={servicio.icon}
+                    alt={servicio.name}
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      objectFit: 'contain'
+                    }}
+                  />
+                )}
+                <span
+                  style={{
+                    color: '#7B1FA2',
+                    fontWeight: 500,
+                    fontSize: '0.9rem',
+                    textAlign: 'center'
                   }}
                 >
-                  {servicio.icon && (
-                    <img
-                      src={servicio.icon}
-                      alt={servicio.name}
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        objectFit: 'contain'
-                      }}
-                    />
-                  )}
-                  <span
-                    style={{
-                      color: '#7B1FA2',
-                      fontWeight: 500,
-                      fontSize: '0.9rem',
-                      textAlign: 'center'
-                    }}
-                  >
-                    {servicio.name}
-                  </span>
-                </Box>
-              ))}
-            </Paper>
-          </Popper>
+                  {servicio.name}
+                </span>
+              </Box>
+            ))}
+          </Box>
         </Box>
 
         {navLinksAfter.map((link) => (
@@ -289,6 +246,18 @@ function Navbar() {
     </>
   );
 
+  // Cerrar al hacer click fuera del dropdown
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!serviciosRef.current) return;
+      if (!serviciosRef.current.contains(e.target)) {
+        setOpenServicios(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <>
     <AppBar position="sticky"
@@ -301,7 +270,7 @@ function Navbar() {
         my: -6,
         top: 0,
         maxWidth: { xs: '95%', sm: '95%', md: '85%', lg: '95%' },
-        zIndex: 9999,
+        zIndex: (theme) => theme.zIndex.appBar + 50,
       }}
     >
       <Toolbar sx={{

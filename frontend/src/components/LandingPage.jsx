@@ -20,7 +20,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom"; // Importar useLocation para obtener la ubicación actual
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Importar useLocation para obtener la ubicación actual
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css"; //carrusel slick
 import logo_sect from "../assets/Carrusel_Portada/img_secction1.webp";
@@ -272,6 +272,7 @@ import ChecklistSection from "./ChecklistSection.jsx";
 import ComoFunciona from './ComoFunciona.jsx';
 import Footer from "./Footer";
 import HerramientasSection from "./HerramientasSection.jsx";
+import PortadaTrabajos from './PortadaTrabajos';
 import PrecioServicio from "./PrecioServicio";
 import PreguntasFrecuentes from './PreguntasFrecuentes.jsx';
 import ServiceCards from "./ServiceCards.jsx"; //nuevas card de prueba
@@ -292,6 +293,7 @@ function LandingPage() {
   const [openServiciosLP, setOpenServiciosLP] = useState(false); // Estado para el menú de servicios en LP
   const serviciosLpRef = React.useRef(null); // Ref para cerrar al hacer clic fuera
   const location = useLocation(); // Obtener la ubicación actual
+  const navigate = useNavigate(); // Hook para navegación programática
   const theme = useTheme(); // Accede al tema de MUI para los breakpoints
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detecta si es pantalla móvil
 
@@ -345,12 +347,12 @@ function LandingPage() {
   
   // Componente Navigation con dropdown local para Servicios
   const Navigation = () => (
-    <Stack direction="row" spacing={3} sx={{ mr: 6, ml: 2, alignItems: 'center' }}>
+    <Stack direction="row" spacing={1.5} sx={{ mr: 2, ml: 1, alignItems: 'center', flexWrap: 'nowrap' }}>
       {navLinks.map((link) => {
         // Si el link es "Servicios", renderiza con dropdown local
         if (link.name === 'Servicios') {
           return (
-            <Box key={link.name} ref={serviciosLpRef} sx={{ position: 'relative' }}>
+            <Box key={link.name} ref={serviciosLpRef} sx={{ position: 'relative', zIndex: 1000 }}>
               <Button
                 disableRipple
                 onClick={() => setOpenServiciosLP(!openServiciosLP)}
@@ -367,16 +369,17 @@ function LandingPage() {
                   color: '#7B1FA2',
                   fontWeight: 500,
                   textTransform: 'none',
-                  fontSize: '0.9rem',
+                  fontSize: '0.85rem',
                   fontFamily: 'Roboto, Arial, sans-serif',
                   letterSpacing: 0.2,
+                  whiteSpace: 'nowrap',
                   '&:hover': { color: '#D49CEC', background: 'transparent' },
                 }}
               >
                 {link.name}
               </Button>
 
-              {/* Dropdown local con posicionamiento absoluto */}
+              {/* Dropdown local con posicionamiento absoluto y transparencia */}
               <Box
                 role="menu"
                 sx={{
@@ -389,66 +392,62 @@ function LandingPage() {
                   opacity: openServiciosLP ? 1 : 0,
                   pointerEvents: openServiciosLP ? 'auto' : 'none',
                   transition: 'opacity 180ms ease, transform 180ms ease',
-                  backgroundColor: '#f9f6fc',
+                  backgroundColor: 'rgba(249, 246, 252, 0.75)',
                   boxShadow: '0 12px 30px rgba(0, 0, 0, 0.18)',
                   border: '1px solid rgba(123, 31, 162, 0.12)',
                   borderRadius: '12px',
                   overflow: 'visible',
                   display: 'flex',
                   flexDirection: 'row',
-                  zIndex: (theme) => theme.zIndex.modal + 2000,
+                  backdropFilter: 'blur(10px)',
+                  zIndex: 9999,
                 }}
               >
                 {servicios.map((servicio, idx, arr) => (
-                  <Box
+                  <div
                     key={servicio.name}
-                    component={Link}
-                    to={servicio.href}
-                    onClick={() => setOpenServiciosLP(false)}
-                    sx={{
+                    onClick={() => {
+                      setOpenServiciosLP(false);
+                      navigate(servicio.href);
+                    }}
+                    style={{
                       display: 'flex',
-                      flexDirection: 'column',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flex: 1,
-                      py: 2,
-                      px: 3,
-                      gap: 1,
-                      minWidth: '120px',
+                      padding: '12px 16px',
+                      minWidth: 'auto',
                       backgroundColor: 'transparent',
                       borderRadius: '8px',
                       borderRight:
                         idx === arr.length - 1
                           ? 'none'
                           : '1px solid rgba(123, 31, 162, 0.12)',
-                      transition: 'background-color 0.2s ease',
-                      '&:hover': { backgroundColor: '#EDE7F6' },
                       textDecoration: 'none',
                       color: 'inherit',
+                      transition: 'background-color 0.2s ease',
+                      cursor: 'pointer',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#EDE7F6';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
-                    {servicio.icon && (
-                      <img
-                        src={servicio.icon}
-                        alt={servicio.name}
-                        style={{
-                          width: '45px',
-                          height: '45px',
-                          objectFit: 'contain',
-                        }}
-                      />
-                    )}
                     <span
                       style={{
                         color: '#7B1FA2',
                         fontWeight: 500,
                         fontSize: '0.9rem',
                         textAlign: 'center',
+                        fontFamily: 'Roboto, Arial, sans-serif',
+                        letterSpacing: 0.2,
                       }}
                     >
                       {servicio.name}
                     </span>
-                  </Box>
+                  </div>
                 ))}
               </Box>
             </Box>
@@ -467,10 +466,11 @@ function LandingPage() {
               color: '#7B1FA2',
               fontFamily: 'Roboto, Arial, sans-serif',
               fontWeight: 500,
-              fontSize: '0.9rem',
+              fontSize: '0.85rem',
               letterSpacing: 0.2,
               textTransform: 'none',
               transition: 'color 0.3s ease-out',
+              whiteSpace: 'nowrap',
               '&:hover': {
                 color: '#D49CEC',
               },
@@ -1330,6 +1330,9 @@ function LandingPage() {
     }}>
     <ValorServicio />
     </div>
+
+    {/*PortadaTrabajos - Muestra de trabajos realizados*/}
+    <PortadaTrabajos />
 
     {/*Testimonios*/}
     <TestimoniosSection />

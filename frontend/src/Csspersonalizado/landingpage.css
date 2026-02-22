@@ -1,3 +1,8 @@
+/* Fix para el doble scroll causado por animaciones de Framer Motion */
+html, body {
+  overflow-x: hidden;
+}
+
 .onda-fondo-svg {
   background-image: url('../assets/ondas/ondas2.webp'); /* Inserta tu SVG aquí */
   background-size: cover;

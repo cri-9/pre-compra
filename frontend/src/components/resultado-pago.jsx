@@ -1,10 +1,12 @@
 // src/components/resultado-pago.jsx
-import React, { useEffect } from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Alert from '@mui/material/Alert';
-import CircularProgress from '@mui/material/CircularProgress';
-import Paper from '@mui/material/Paper';
+import {
+    Alert,
+    Box,
+    CircularProgress,
+    Paper,
+    Typography
+} from '@mui/material';
+import { useEffect } from 'react';
 
 export default function ResultadoPago() {
   const query = new URLSearchParams(window.location.search);

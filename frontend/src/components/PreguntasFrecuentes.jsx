@@ -1,10 +1,9 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import { Container } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Container } from "@mui/material";
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Typography from '@mui/material/Typography';
 import { motion } from "framer-motion";
 
 const preguntas = [
@@ -50,6 +49,27 @@ const preguntas = [
   {
     pregunta: "¿Qué pasa si el vehículo no aprueba la inspección?",
     respuesta: "Nuestro deber es informarte objetivamente. Tú decides si continúas con la compra o buscas otra alternativa."
+  },
+  {
+    pregunta: "¿Valor del servicio TMPS?",
+    respuesta: "El valor del servicio TMPS es de $75.000 c/iva por cada sensor."
+  
+  },
+  {
+    pregunta: "¿Cuánto demora el servicio TMPS en cada rueda?",
+    respuesta: "al rededor de 20 minutos."
+  },
+  {
+    pregunta: "¿Cual es el periodo de garantía de cada uno de los sensores TMPS?",
+    respuesta: "Tienen un año de garantía."
+  },
+  {
+    pregunta: "¿Que cubre la garantía de los sensores TMPS?",
+    respuesta: "Perdida de comunicación."
+  },
+  {
+    pregunta: "¿En que casos NO cubre la garantía de los sensores TMPS?",
+    respuesta: "Golpe en llanta, rotura por cambio de neumáticos, rotura al momento de reparación del neumático."
   }
 ];
 

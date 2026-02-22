@@ -7,11 +7,10 @@ import aceite from '../assets/Nuestras_Herramientas/aceite1.webp';
 import endoscopica from '../assets/Nuestras_Herramientas/endoscopica.webp';
 import escaner from '../assets/Nuestras_Herramientas/escaner1.webp';
 import estetos from '../assets/Nuestras_Herramientas/estetos1.webp';
-import informelegal from '../assets/Nuestras_Herramientas/informelegal.webp';
 import medidoneumaticos from '../assets/Nuestras_Herramientas/medidor_neumatico.webp';
-import pintura from '../assets/Nuestras_Herramientas/medidor_pintura.webp';
+import pintura from '../assets/Nuestras_Herramientas/medidor_pintura1.webp';
 import multimetro1 from '../assets/Nuestras_Herramientas/multimetro1.webp';
-
+import escanertpms from '../assets/Nuestras_Herramientas/tpms.webp';
 
 
 function HerramientasSection() {
@@ -23,13 +22,12 @@ function HerramientasSection() {
     { titulo: 'Medidor de neumáticos', descripcion: 'Es una herramienta de seguridad esencial. Permite medir la profundidad de los surcos para asegurar que el neumático tenga el agarre adecuado en la carretera, lo cual es crucial para evitar el deslizamiento, especialmente en condiciones húmedas.', imagen: medidoneumaticos },
     { titulo: 'Medidor de pintura', descripcion: 'El medidor de pintura automotriz es una herramienta esencial para inspeccionar un vehículo. Mide el espesor de la capa de pintura, permitiendo detectar reparaciones o repintados que no han sido reportados, como resultado de un accidente..', imagen: pintura },
     { titulo: 'Cámara Endoscopica', descripcion: 'Es una herramienta versátil que permite una inspección visual detallada de zonas que son inaccesibles a simple vista. Es fundamental para diagnosticar problemas sin desmontar, como fallas en el motor o daños en la carrocería.', imagen: endoscopica },
-    { titulo: 'Informe Legal', descripcion: 'El informe certifica la situación legal del automóvil. Contiene información crucial sobre su estado, historial de propiedad y si tiene multas, gravámenes o embargos pendientes, brindando total transparencia al comprador.', imagen: informelegal },
+    { titulo: 'Escaner Sensor', descripcion: 'Es una herramienta de diagnóstico y programación para el sistema de monitoreo de presión de neumáticos, que permite activar, leer datos (presión, temperatura, batería), programar y aprender nuevos sensores TPMS en vehículos modernos', imagen: escanertpms },
     
   ];
 
   return (
     <Box
-      id="nuestras-herramientas"
       sx={{
         py: 8,
         backgroundColor: '#ffffff',

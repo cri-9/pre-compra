@@ -1,39 +1,40 @@
-import { FC, useState } from 'react';
-import config from '../config/environment';
+import Alert from '@mui/material/Alert';
+import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
+import Snackbar from '@mui/material/Snackbar';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Container from '@mui/material/Container';
-import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import Typography from '@mui/material/Typography';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import config from '../config/environment';
 import {
-  FormData,
-  Styles,
-  FormStep,
-  ValidationResult,
-  AgendarRequest,
-  WebPayResponse,
-  AgendarResponse,
-  VehiculoData,
-  ClienteData,
-  VendedorData,
   AgendamientoData,
+  AgendarRequest,
+  AgendarResponse,
+  ClienteData,
+  FormData,
+  FormStep,
+  PagoData,
   ServicioData,
-  PagoData
+  Styles,
+  ValidationResult,
+  VehiculoData,
+  VendedorData,
+  WebPayResponse
 } from '../types';
-import DatosVehiculo from './DatosVehiculo';
 import DatosCliente from './DatosCliente';
+import DatosVehiculo from './DatosVehiculo';
 import DatosVendedor from './DatosVendedor';
 import FechaAgendamientoModerno from './FechaAgendamientoModerno';
-import SeleccionServicio from './SeleccionServicio';
 import Pago from './Pago';
+import SeleccionServicio from './SeleccionServicio';
+import SEO from './SEO'; // Componente para SEO y canonical URLs
 
 const pasos: FormStep[] = [
   { label: "Datos del Vehiculo", fields: ["marca", "modelo", "año", "patente"] },
@@ -271,6 +272,14 @@ const FormularioContacto: FC = () => {
 
   return (
     <Container sx={styles.container}>
+      {/* SEO y Canonical URL */}
+      <SEO 
+        title="Agendar Inspección - Visual Mecánica Temuco"
+        description="Agenda tu inspección automotriz pre-compra en Temuco. Formulario de agendamiento online con pago seguro. Servicio a domicilio en la Región de la Araucanía."
+        canonical="https://visualmecanica.cl/agendar"
+        keywords="agendar inspección, reservar revisión técnica, agendamiento online, Temuco, inspección a domicilio"
+      />
+      
       <AppBar position="static" sx={styles.appBar}>
         <Toolbar sx={styles.toolbar}>
           <Typography variant="h5" sx={styles.title}>

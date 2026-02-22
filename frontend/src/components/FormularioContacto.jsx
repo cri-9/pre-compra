@@ -1,29 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Stepper from '@mui/material/Stepper';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Container from '@mui/material/Container';
-//import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import Grid from '@mui/material/Grid';
-
-
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import {
+    Alert,
+    Box,
+    Button,
+    Container,
+    Grid,
+    Paper,
+    Snackbar,
+    Step,
+    StepLabel,
+    Stepper,
+    Typography
+} from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API_URLS } from '../config/api';
 import logoForm from '../assets/Logo_Formulario/logo_formulario.webp';
-import DatosVehiculo from './DatosVehiculo';
+import { API_URLS } from '../config/api';
 import DatosCliente from './DatosCliente';
+import DatosVehiculo from './DatosVehiculo';
 import DatosVendedor from './DatosVendedor';
 import FechaAgendamientoModerno from './FechaAgendamientoModerno';
-import SeleccionServicio from './SeleccionServicio';
 import Pago from './Pago';
+import SeleccionServicio from './SeleccionServicio';
 
 const pasos = ["Datos del Vehiculo", "Datos del Cliente", "Datos del Vendedor", "Fecha de Agendamiento", "Seleccion de Servicio", "Pago"];
 
@@ -83,6 +81,16 @@ function FormularioContacto() {
   const [openExito, setOpenExito] = useState(false);
   const [loading, setLoading] = useState(false);
   const [autoDateMsg, setAutoDateMsg] = useState('');
+
+  // Evento Meta Pixel cuando se carga el formulario de agendamiento
+  useEffect(() => {
+    if (window.fbq) {
+      window.fbq('track', 'ViewContent', {
+        content_name: 'Formulario de Agendamiento',
+        content_category: 'Booking Form'
+      });
+    }
+  }, []);
 
   const handleDatosChange = (seccion, nuevosDatos) => {
     setDatos((prevDatos) => {
@@ -242,6 +250,16 @@ function FormularioContacto() {
             });
           }
           
+          // Evento Meta Pixel para inicio de checkout
+          if (window.fbq) {
+            window.fbq('track', 'InitiateCheckout', {
+              content_name: datos.servicio.nombreServicio,
+              content_category: 'Inspection Service',
+              value: datos.servicio.monto,
+              currency: 'CLP'
+            });
+          }
+          
           window.location.href = `${url}?token_ws=${token}`;
         } else {
           alert(data.error || 'Error en la respuesta del servidor de pagos');
@@ -264,7 +282,8 @@ const handleEnviarFormulario = async () => {
   if (validarFormulario(pasoActual)) {
     setLoading(true);
     try {
-      // Preparar todos los datos necesarios para la transferencia
+      console.log('🔍 DEBUG - datos.vendedor:', datos.vendedor);
+      // Preparar todos los datos necesarios para la transferencia - VERSION 2.0 con vendedor
       const datosEnvio = {
         vehiculo: {
           marca: datos.vehiculo.marca,
@@ -282,6 +301,14 @@ const handleEnviarFormulario = async () => {
           region: datos.cliente.region,
           comuna: datos.cliente.comuna
         },
+        vendedor: {
+          tipo: datos.vendedor.tipovendedor,
+          nombre: datos.vendedor.nombre,
+          telefono: datos.vendedor.telefono,
+          direccion: datos.vendedor.direccion,
+          region: datos.vendedor.region,
+          comuna: datos.vendedor.comuna
+        },
         agendamiento: {
           fecha: datos.agendamiento.fecha || '',
           bloque: datos.agendamiento.bloque || '',
@@ -290,23 +317,26 @@ const handleEnviarFormulario = async () => {
         },
         servicio: {
           nombre: datos.servicio.nombreServicio,
-          monto: datos.servicio.monto,
-          bloque: datos.agendamiento.bloque // <-- Incluye bloque también aquí si el backend lo espera en servicio
+          //monto: datos.servicio.monto,
+          //bloque: datos.agendamiento.bloque // <-- Incluye bloque también aquí si el backend lo espera en servicio
         },
         pago: {
           metodo: datos.pago.metodo,
+          monto: datos.servicio.monto, // <-- AGREGA monto aquí
           codigoDescuento: datos.pago.codigoDescuento
         }
       };
 
-      const response = await fetch('https://visualmecanica.cl/agendarTransferencia', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('token') // Si usas autenticación
-        },
-        body: JSON.stringify(datosEnvio),
-      });
+      console.log('📤 DEBUG - datosEnvio completo:', JSON.stringify(datosEnvio, null, 2));
+      
+      const response = await fetch('https://visualmecanica.cl/router.php?ruta=notificarTransferencia', {
+  method: 'POST',
+  headers: { 
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + localStorage.getItem('token')
+  },
+  body: JSON.stringify(datosEnvio),
+});
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -326,6 +356,16 @@ const handleEnviarFormulario = async () => {
             bloque: datos.agendamiento.bloque,
             metodo_pago: 'transferencia',
             value: datos.servicio.monto
+          });
+        }
+        
+        // Evento Meta Pixel para agendamiento/conversión
+        if (window.fbq) {
+          window.fbq('track', 'Schedule', {
+            content_name: datos.servicio.nombreServicio,
+            content_category: 'Bank Transfer',
+            value: datos.servicio.monto,
+            currency: 'CLP'
           });
         }
 

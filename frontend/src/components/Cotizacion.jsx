@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { API_URLS } from '../config/api';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
-import InputAdornment from '@mui/material/InputAdornment';
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { useState } from "react";
+import { API_URLS } from '../config/api';
 
 import axios from "axios";
 
@@ -28,9 +28,10 @@ const Cotizacion = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
 
   const servicios = [
-    { value: "basico", label: "Servicio Escaner - $35.000" },
-    { value: "completo", label: "Inspección Completa - $49.000" },
-    { value: "premium", label: "Inspección Premium - $69.000" },
+    { value: "basico", label: "Servicio Escaner - $35.000 c/iva" },
+    { value: "completo", label: "Inspección Completa - $62.500 c/iva" },
+    { value: "tpms", label: "Servicio TPMS - $75.000 c/iva" },
+    { value: "dpf", label: "Servicio DPF - $60.000 c/iva" },
   ];
 
   const handleChange = (e) => {
@@ -116,6 +117,14 @@ const Cotizacion = ({ open, handleClose }) => {
             event_label: 'Formulario de Cotización',
             servicio_seleccionado: formData.servicio,
             value: 1
+          });
+        }
+        
+        // Evento Meta Pixel para lead/cotización enviada
+        if (window.fbq) {
+          window.fbq('track', 'Lead', {
+            content_name: 'Cotización Enviada',
+            content_category: servicioSeleccionado ? servicioSeleccionado.label : 'Unknown Service'
           });
         }
 

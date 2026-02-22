@@ -17,12 +17,10 @@ import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { API_URLS } from '../config/api';
 
-  import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PaymentIcon from '@mui/icons-material/Payment';
 
-  
-
-const Pago = ({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCliente = {}, onGoToAgendamiento }) => {
+function Pago({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCliente = {}, onGoToAgendamiento }) {
     const navigate = useNavigate();
     
     // --- Recargo por comuna en Región IX ---
@@ -172,12 +170,13 @@ const Pago = ({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
         
         // Formatear el teléfono para asegurar formato correcto
         const telefonoFormateado = formatearTelefono(datos.telefono);
-    
+
         // Validar que el monto corresponda al servicio seleccionado
         const precios_servicios = {
           'Inspección Visual Básica': 35000,
-          'Inspección Visual Semi Full': 49000,
-          'Inspección Visual Full': 69000
+          'Inspección Full': 62500,
+          'Servicio TPMS': 75000,
+          'Servicio DPF': 60000
         };
 
         const servicioSeleccionado = datos.nombreServicio || nombreServicio;
@@ -193,132 +192,108 @@ const Pago = ({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
         const montoBase = montoBaseServicio;
         const total = montoBase + valorRecargo - valorDescuento;
 
-        const datosTransferencia = {
-          email: datos.email,
-          nombre: datos.nombre,
-          telefono: telefonoFormateado,
-          direccion: datosCliente?.direccion || '',
-          region: datosCliente?.region || '',
-          comuna: datosCliente?.comuna || '',
-          metodoPago: 'Transferencia',
-          servicio: servicioSeleccionado,
-          monto: montoBase, // solo el monto base del servicio
-          montoBase: montoBase, // <-- Agregado para el backend
-          recargo: valorRecargo,
-          descuento: valorDescuento,
-          total: total,
-          codigoDescuento: datos.codigoDescuento || ''
+        // Estructura anidada y completa para el backend
+        const datosEnvio = {
+          cliente: {
+            nombre: datosCliente?.nombre || datos.nombre || '',
+            apellido: datosCliente?.apellido || '',
+            email: datosCliente?.email || datos.email || '',
+            telefono: telefonoFormateado,
+            rut: datosCliente?.rut || '',
+            direccion: datosCliente?.direccion || '',
+            region: datosCliente?.region || '',
+            comuna: datosCliente?.comuna || ''
+          },
+          agendamiento: {
+            fecha: datos.fecha || '',
+            bloque: datos.bloque || '',
+            hora_inicio: datos.hora_inicio || '',
+            hora_fin: datos.hora_fin || ''
+          },
+          servicio: {
+            nombre: servicioSeleccionado,
+            monto: total
+          },
+          pago: {
+            metodo: 'Transferencia',
+            monto: total,
+            codigoDescuento: datos.codigoDescuento || ''
+          }
         };
 
-        console.log('Datos de dirección:', {
-          direccion: datosCliente?.direccion,
-          region: datosCliente?.region,
-          comuna: datosCliente?.comuna
-        });
-    
-        console.log('Enviando datos al servidor:', datosTransferencia);          try {
-            console.log('URL del endpoint:', API_URLS.NOTIFICAR_TRANSFERENCIA);
-            console.log('Datos enviados (formato JSON):', JSON.stringify(datosTransferencia, null, 2));
-            
-            const response = await axios.post(
-              API_URLS.NOTIFICAR_TRANSFERENCIA,
-              datosTransferencia,
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                timeout: 30000 // 30 segundos de timeout (aumentado)
-              }
-            );
-
-            console.log('Respuesta del servidor:', response.data);
-
-            // Si la transferencia fue exitosa, redirigir a la landing page principal
-            if (response.data.success) {
-              // Evento GA4 para transferencia exitosa
-              if (window.gtag) {
-                window.gtag('event', 'pago_transferencia_exitoso', {
-                  event_category: 'Pago',
-                  event_label: 'Transferencia Bancaria Exitosa',
-                  servicio: servicioSeleccionado,
-                  monto: total,
-                  metodo_pago: 'transferencia',
-                  value: total
-                });
-              }
-
-              navigate('/gracias', { state: { metodoPago: datos.metodo } });
-              return;
-            }
-
-            // Si hay un error general del backend
-            if (response.data.error) {
-              throw new Error(`Error del servidor: ${response.data.error} - Detalles: ${response.data.details || 'No hay detalles disponibles'}`);
-            }
-
-            // Si llegamos aquí, algo inesperado ocurrió
-            throw new Error("Error inesperado al procesar la solicitud. La respuesta del servidor no tiene el formato esperado.");
-
-          } catch (axiosError) {
-            // Manejo de errores de red y otros
-            console.error("Error en la petición axios:", axiosError);
-            
-            // Información detallada en console para depuración
-            let errorMsg = "Error desconocido. Por favor, inténtelo más tarde.";
-            let errorDetails = "";
-            
-            if (axiosError.code === 'ECONNABORTED') {
-              errorMsg = "La conexión con el servidor ha tardado demasiado. Por favor intente nuevamente.";
-              errorDetails = "Timeout de la conexión";
-            } else if (axiosError.response) {
-              // Error con respuesta del servidor
-              console.error("Respuesta de error:", {
-                status: axiosError.response.status,
-                statusText: axiosError.response.statusText,
-                headers: axiosError.response.headers,
-                data: axiosError.response.data
-              });
-              
-              // Mostrar mensaje de error del backend si existe
-              errorMsg = "Error del servidor: ";
-              
-              // Intentar extraer información útil de la respuesta
-              if (typeof axiosError.response.data === 'object') {
-                errorMsg += axiosError.response.data.error || "Error desconocido";
-                errorDetails = axiosError.response.data.details || "";
-              } else if (typeof axiosError.response.data === 'string') {
-                // Intentar parsear respuesta HTML/texto para buscar mensajes de error de PHP
-                const errorMatch = axiosError.response.data.match(/<b>.*?Error<\/b>:.*?<br/i);
-                if (errorMatch) {
-                  errorDetails = errorMatch[0].replace(/<[^>]*>/g, ' ').trim();
-                } else {
-                  errorDetails = "Respuesta no procesable del servidor";
-                }
-                console.log("Respuesta en texto plano:", axiosError.response.data);
-              }
-            } else if (axiosError.request) {
-              // No se recibió respuesta
-              errorMsg = "No se recibió respuesta del servidor";
-              errorDetails = "Verifique su conexión a internet";
-            } else {
-              // Error de configuración
-              errorMsg = "Error al configurar la solicitud";
-              errorDetails = axiosError.message;
-            }
-            
-            // Mostrar un alert con información más detallada
-            alert(`${errorMsg}\n\nDetalles: ${errorDetails}`);
-          } finally {
-            setProcesando(false);
+        console.log('Enviando datos al servidor:', datosEnvio);
+        console.log('Datos enviados (formato JSON):', JSON.stringify(datosEnvio, null, 2));
+        const response = await axios.post(
+          API_URLS.NOTIFICAR_TRANSFERENCIA,
+          datosEnvio,
+          {
+            headers: { 'Content-Type': 'application/json' },
+            timeout: 30000
           }
-      } catch (error) {
-        // Mostrar detalles del error en consola para debug
-        console.error("Error completo:", error);
-        console.error("Mensaje de error:", error.message);
-        if (error.response) {
-          console.error("Datos de la respuesta de error:", error.response.data);
+        );
+
+        console.log('Respuesta del servidor:', response.data);
+
+        // Si la transferencia fue exitosa, redirigir a la landing page principal
+        if (response.data.success) {
+          // Evento GA4 para transferencia exitosa
+          if (window.gtag) {
+            window.gtag('event', 'pago_transferencia_exitoso', {
+              event_category: 'Pago',
+              event_label: 'Transferencia Bancaria Exitosa',
+              servicio: servicioSeleccionado,
+              monto: total,
+              metodo_pago: 'transferencia',
+              value: total
+            });
+          }
+
+          navigate('/gracias', { state: { metodoPago: datos.metodo } });
+          return;
         }
-        alert(error.message);
+
+        // Si hay un error general del backend
+        if (response.data.error) {
+          throw new Error(`Error del servidor: ${response.data.error} - Detalles: ${response.data.details || 'No hay detalles disponibles'}`);
+        }
+
+        // Si llegamos aquí, algo inesperado ocurrió
+        throw new Error("Error inesperado al procesar la solicitud. La respuesta del servidor no tiene el formato esperado.");
+
+      } catch (error) {
+        console.error("Error completo:", error);
+        
+        // Manejo específico de errores de axios
+        if (error.response) {
+          // Error con respuesta del servidor
+          console.error("Respuesta de error:", {
+            status: error.response.status,
+            statusText: error.response.statusText,
+            data: error.response.data
+          });
+          
+          let errorMsg = "Error del servidor: ";
+          if (typeof error.response.data === 'object') {
+            errorMsg += error.response.data.error || "Error desconocido";
+          } else if (typeof error.response.data === 'string') {
+            const errorMatch = error.response.data.match(/<b>.*?Error<\/b>:.*?<br/i);
+            if (errorMatch) {
+              errorMsg += errorMatch[0].replace(/<[^>]*>/g, ' ').trim();
+            } else {
+              errorMsg += "Respuesta no procesable del servidor";
+            }
+          }
+          alert(errorMsg);
+        } else if (error.request) {
+          // No se recibió respuesta
+          alert("No se recibió respuesta del servidor. Verifique su conexión a internet.");
+        } else if (error.code === 'ECONNABORTED') {
+          // Timeout
+          alert("La conexión con el servidor ha tardado demasiado. Por favor intente nuevamente.");
+        } else {
+          // Otros errores
+          alert(error.message || "Error al procesar la transferencia");
+        }
       } finally {
         setProcesando(false);
       }
@@ -393,12 +368,13 @@ const Pago = ({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
         
         // Formatear el teléfono para asegurar formato correcto
         const telefonoFormateado = formatearTelefono(datos.telefono);
-    
+
         // Validar que el monto corresponda al servicio seleccionado
         const precios_servicios = {
           'Inspección Visual Básica': 35000,
-          'Inspección Visual Semi Full': 49000,
-          'Inspección Visual Full': 69000
+          'Inspección Full': 62500,
+          'Servicio TPMS': 75000,
+          'Servicio DPF': 60000
         };
 
         const servicioSeleccionado = datos.nombreServicio || nombreServicio;
@@ -785,9 +761,9 @@ const Pago = ({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
         </CardContent>
       </Card>
       </>
-    );
-  };
-  
-  export default Pago;
+  );
+}
+
+export default Pago;
 
 

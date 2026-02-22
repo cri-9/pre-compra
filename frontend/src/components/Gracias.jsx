@@ -1,10 +1,11 @@
-import React from 'react';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import { useNavigate, useLocation } from 'react-router-dom';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import {
+    Box,
+    Button,
+    Container,
+    Typography
+} from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Gracias = () => {
   const navigate = useNavigate();

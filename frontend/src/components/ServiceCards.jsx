@@ -1,10 +1,11 @@
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-
 import { Home, Person, Search } from "@mui/icons-material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  Typography
+} from '@mui/material';
 
 // Neuvo estiloo css de las card
 
@@ -26,10 +27,17 @@ const options = [
   },
   { 
     number: "03", 
-    title: "Revisión Documental", 
+    title: "Mantenimiento TPMS", 
     icon: <Person fontSize="large" />, 
     color: "#9C27B0",
-    description: "Analizamos y verificamos en detalle los documentos legales y administrativos relacionados con la transacción. Este proceso asegura transparencia y confianza, brindándote la tranquilidad de realizar una compra segura y sin riesgos."
+    description: "Realizamos un pre chequeo para saber el estado de cada uno, en el caso que no se tenga comunicación con no o más se procede al reemplazo del sensores TPMS para asegurar su correcto funcionamiento y la seguridad de tu vehículo, proceso 100% a domicilio."
+  },
+  { 
+    number: "04", 
+    title: "Mantenimiento DPF", 
+    icon: <Person fontSize="large" />, 
+    color: "#b02727ff",
+    description: "Realizamos la regeneración electrónica del filtro de partículas diésel (DPF) utilizando equipos especializados que permiten eliminar las partículas acumuladas en el filtro sin necesidad de desmontarlo, restaurando su eficiencia y funcionalidad.  "
   }
 ];
 
@@ -86,11 +94,25 @@ const OptionCard = ({ number, title, icon, color, description }) => {
 const ServiceCards = () => {
   return (
     <Box>
-      <Grid container spacing={3} justifyContent="center" sx={{ p: 3 }}>
+      <Grid 
+        container 
+        spacing={3} 
+        justifyContent="center" 
+        sx={{ 
+          p: 3,
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(4, 1fr)'
+          },
+          gap: 3
+        }}
+      >
         {options.map((option, index) => (
-          <Grid item key={index}>
+          <Box key={index}>
             <OptionCard {...option} />
-          </Grid>
+          </Box>
         ))}
       </Grid>
     </Box>

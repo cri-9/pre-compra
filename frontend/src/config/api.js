@@ -4,16 +4,19 @@ const isDevelopment = window.location.hostname === 'localhost' ||
 
 // Configuración de URLs de la API
 const API_CONFIG = {
-  // URL base según entorno
-  BASE_URL: isDevelopment ? '' : 'https://visualmecanica.cl/api',
+  // URL base siempre vacía - usa rutas relativas
+  // En desarrollo: el proxy de Vite redirecciona /api a https://visualmecanica.cl/api
+  // En producción: las rutas relativas se resuelven naturalmente al mismo dominio
+  BASE_URL: '',
   
-  // Endpoints
+  // Endpoints siempre usan /api/router.php
   ENDPOINTS: {
     ENVIAR_COTIZACION: '/api/router.php',
     VERIFICAR_BLOQUE: '/api/router.php',
     WEBPAY: '/api/router.php',
     WEBPAY_RESPUESTA: '/api/router.php',
-    NOTIFICAR_TRANSFERENCIA: '/api/router.php'
+    NOTIFICAR_TRANSFERENCIA: '/api/router.php',
+    SUSCRIPCION: '/api/router.php'
   }
 };
 
@@ -41,8 +44,10 @@ export const API_URLS = {
   VERIFICAR_BLOQUE: buildApiUrl(API_CONFIG.ENDPOINTS.VERIFICAR_BLOQUE, { ruta: 'verificarBloque' }),
   WEBPAY: buildApiUrl(API_CONFIG.ENDPOINTS.WEBPAY, { ruta: 'webpay' }),
   WEBPAY_RESPUESTA: buildApiUrl(API_CONFIG.ENDPOINTS.WEBPAY_RESPUESTA, { ruta: 'webpayRespuesta' }),
-  NOTIFICAR_TRANSFERENCIA: buildApiUrl(API_CONFIG.ENDPOINTS.NOTIFICAR_TRANSFERENCIA, { ruta: 'notificarTransferencia' })
+  NOTIFICAR_TRANSFERENCIA: buildApiUrl(API_CONFIG.ENDPOINTS.NOTIFICAR_TRANSFERENCIA, { ruta: 'notificarTransferencia' }),
+  SUSCRIPCION: buildApiUrl(API_CONFIG.ENDPOINTS.SUSCRIPCION, { ruta: 'suscripcion' })
 };
 
 export default API_CONFIG;
 export { API_CONFIG };
+

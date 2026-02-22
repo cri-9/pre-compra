@@ -3,12 +3,13 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 // IMPORTAR PÁGINA DE MANTENIMIENTO
 //import MantenimientoPage from './components/MantenimientoPage';
 // LandingPage comentado mientras está en mantenimiento
-// Blog import removido temporalmente para producción
+import DPFPage from './components/DPFPage';
 import FormularioContacto from './components/FormularioContacto';
 import Gracias from './components/Gracias';
 import LandingPage from './components/LandingPage';
-import ServiceCards from "./components/ServiceCards";
 import ResultadoPago from './components/resultado-pago';
+import ServiceCards from "./components/ServiceCards";
+import TPMSPage from './components/TPMSPage';
 
 
 
@@ -26,9 +27,10 @@ const App: FC = () => {
           <Route path="/service-cards" element={<ServiceCards />} /> 
           <Route path="/agendar" element={<FormularioContacto />} />
           <Route path="/agenda" element={<FormularioContacto />} />
-          {/*<Route path="/blog" element={<Blog />} />*/}
           <Route path="/resultado-pago" element={<ResultadoPago />} />
           <Route path="/gracias" element={<Gracias />} />
+          <Route path="/tpms" element={<TPMSPage />} />
+          <Route path="/dpf" element={<DPFPage />} />
         </Routes>
       </Router>
     </div>

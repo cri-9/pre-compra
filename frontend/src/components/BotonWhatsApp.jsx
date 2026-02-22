@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import Fab from '@mui/material/Fab';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import ChatIcon from '@mui/icons-material/Chat';
+import CloseIcon from '@mui/icons-material/Close';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import CloseIcon from '@mui/icons-material/Close';
-import ChatIcon from '@mui/icons-material/Chat';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import Typography from '@mui/material/Typography';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -32,6 +32,14 @@ function BotonWhatsApp({ numeroTelefono, mensajeInicial, onOpenCotizacion, sx = 
   };
 
   const handleCotizar = () => {
+    // Evento Meta Pixel para lead/cotización
+    if (window.fbq) {
+      window.fbq('track', 'Lead', {
+        content_name: 'Cotización',
+        content_category: 'Quote Form'
+      });
+    }
+    
     setOpenChatbot(false);
     if (onOpenCotizacion) {
       onOpenCotizacion();
@@ -39,6 +47,14 @@ function BotonWhatsApp({ numeroTelefono, mensajeInicial, onOpenCotizacion, sx = 
   };
 
   const handleWhatsApp = () => {
+    // Evento Meta Pixel para contacto por WhatsApp
+    if (window.fbq) {
+      window.fbq('track', 'Contact', {
+        content_name: 'WhatsApp',
+        content_category: 'Contact Button'
+      });
+    }
+    
     window.open(
       `https://wa.me/${numeroTelefono}?text=${encodeURIComponent(mensajeInicial)}`,
       '_blank',

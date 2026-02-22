@@ -1,8 +1,7 @@
-import React from "react";
-import { Box, Card, CardContent, Typography } from "@mui/material";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import BuildCircleIcon from "@mui/icons-material/BuildCircle";
 import DescriptionIcon from "@mui/icons-material/Description";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import { Box, Typography } from "@mui/material";
 
 const flipCardStyle = {
   perspective: "1000px",
@@ -109,7 +108,7 @@ const FlipCard = ({ icon, title, description, isSpecial = false }) => {
                     2.- Informe de Visual Mecánica
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 'bold', fontSize: '0.8rem' }}>
-                    3.- Documentos legales (Servicio full)
+                    3.- Checklist Vehiculo denunciado por robo o clonación 
                   </Typography>
                 </Box>
               </Box>

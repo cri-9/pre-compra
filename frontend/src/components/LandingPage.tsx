@@ -1,31 +1,31 @@
-import { FC, useState, useEffect } from "react";
-import '../Csspersonalizado/landingpage.css';
+import { Theme } from "@mui/material";
 import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import { SxProps } from '@mui/system';
-import { Theme } from "@mui/material";
-import { Link } from "react-router-dom";
 import { useWindowSize } from '@react-hook/window-size';
+import { FC, useEffect, useState } from "react";
 import Confetti from 'react-confetti';
+import { Link } from "react-router-dom";
+import '../Csspersonalizado/landingpage.css';
 
 // Components
-import PrecioServicio from "./PrecioServicio";
-import Cotizacion from "./Cotizacion";
-import ServiceCards from "./ServiceCards";
-import HerramientasSection from './HerramientasSection';
-import ValorServicio from './ValorServicio';
-import TestimoniosSection from "./TestimoniosSection";
-import Footer from "./Footer";
 import BotonWhatsApp from "./BotonWhatsApp";
+import Cotizacion from "./Cotizacion";
+import Footer from "./Footer";
+import HerramientasSection from './HerramientasSection';
+import PrecioServicio from "./PrecioServicio";
+import ServiceCards from "./ServiceCards";
+import TestimoniosSection from "./TestimoniosSection";
+import ValorServicio from './ValorServicio';
 
 // Assets
 import logo from "../assets/Logo_Superior/logo_visual1.2.png";
-import logo_sect from "../assets/img_secction2.jpg";
 import headerBg from "../assets/img_atras_header/header_atras.webp";
+import logo_sect from "../assets/img_secction2.jpg";
 
 // Estilo para el fondo del header con imagen
 const headerBackgroundStyle = {
@@ -51,9 +51,9 @@ const floatingAppBarStyle: SxProps<Theme> = {
   width: { xs: "95vw", sm: "80vw", md: "70vw" },
   borderRadius: "24px",
   boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.15)",
-  position: "absolute",
-  left: "50%",
-  transform: "translateX(-50%) translateY(40%)",
+  position: "relative",
+  mx: 'auto',
+  mt: { xs: 4, sm: 6 },
   zIndex: 2,
   overflow: "hidden"
 };
@@ -125,7 +125,7 @@ const LandingPage: FC = () => {
   const [openCotizacion, setOpenCotizacion] = useState<boolean>(false);
   const [width, height] = useWindowSize();
 
-  const numeroTelefono = "56997541042";
+  const numeroTelefono = "56949685530";
   const mensajeInicial = "Visual Mecánica le da la Bienvenida;  Te podemos ayudar.";
 
   useEffect(() => {

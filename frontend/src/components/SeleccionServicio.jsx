@@ -12,7 +12,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import valores1 from '../assets/Valores_Servicios/mecanica_valor1.webp';
 import valores2 from '../assets/Valores_Servicios/mecanica_valor2.webp';
-import valores3 from '../assets/Valores_Servicios/mecanica_valor3.webp';
 
 // Usar la misma información de servicios que en ValorServicio.jsx
 const servicios = [
@@ -20,7 +19,7 @@ const servicios = [
     id: 1,
     titulo: "Inspección Visual Básica",
     precio: 35000,
-    descripcion: "$35.000",
+    descripcion: "$35.000 c/iva",
     imagen: valores1,
     listado: [
       { texto: "Scaner" },
@@ -28,9 +27,9 @@ const servicios = [
   },
   {
     id: 2,
-    titulo: "Inspección Visual Semi Full",
-    precio: 49000,
-    descripcion: "$49.000",
+    titulo: "Inspección Full",
+    precio: 62500,
+    descripcion: "$62.500 c/iva",
     imagen: valores2,
     listado: [
       { texto: "+ de 100 puntos de revisión" },
@@ -38,21 +37,6 @@ const servicios = [
       { texto: "Prueba Ruta" },
       { texto: "Imagenes" },
       { texto: "Scaner " },
-    ],
-  },
-  {
-    id: 3,
-    titulo: "Inspección Visual Full",
-    precio: 69000,
-    descripcion: "$69.000",
-    imagen: valores3,
-    listado: [
-      { texto: "Informe Legal Digital" },
-      { texto: "+ de 100 puntos de revisión" },
-      { texto: "revisión estado pintura" },
-      { texto: "Revisión Mecánica" },
-      { texto: "Prueba ruta" },
-      { texto: "Imagenes" },
     ],
   },
 ];

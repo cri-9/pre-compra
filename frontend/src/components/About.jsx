@@ -1,17 +1,10 @@
 // src/components/About.jsx
-import React from 'react';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import { Build, CheckCircle, DirectionsCar, Search } from '@mui/icons-material';
 import Avatar from '@mui/material/Avatar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Fade from '@mui/material/Fade';
-import { Build, CheckCircle, DirectionsCar, DriveEta, Search } from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
 
 //Imagenes
@@ -54,9 +47,12 @@ const About = () => {
             fontSize: '1.1rem',
           }}
         >
-          En <strong>VisualMecánica</strong> se especializa en brindar un servicio de <strong>inspección automotriz pre-compra a domicilio</strong>, 
-          fundamental para proteger tu inversión. Nuestro equipo técnico evalúa meticulosamente cada componente del vehículo, 
-          proporcionándote una visión clara y objetiva para que tomes la mejor decisión de compra.
+          En <strong>VisualMecánica</strong> somos una empresa especializada en servicios técnicos automotrices a domicilio, orientados a la evaluación, 
+          diagnóstico y mantenimiento preventivo del vehículo. Contamos con personal calificado y equipamiento profesional para entregar información precisa y confiable.
+          Nuestros servicios incluyen <strong>diagnóstico computarizado mediante escáner automotriz</strong>, <strong>Inspección pre-compra Automotriz</strong>, 
+          <strong>Mantenimiento y calibración de sensores TPMS</strong> (sistema de monitoreo de presión de neumáticos) y <strong>regeneración de DPF</strong> 
+          (filtro de partículas diésel). Cada servicio se realiza bajo criterios técnicos objetivos, entregando reportes claros que permiten a nuestros clientes 
+          tomar decisiones informadas, seguras y respaldadas técnicamente.
         </Typography>
 
         {/* Íconos representativos */}
