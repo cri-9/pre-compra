@@ -29,9 +29,39 @@
 
 ---
 
-## 🚀 OPCIÓN 1: SUBIR DIST COMPILADO VÍA SFTP (Más rápido - 10 min)
+## ⚠️ RECOMENDACIÓN
 
-### Para usar si no necesitas hacer cambios adicionales:
+**✅ ELIGE OPCIÓN 2** (Upload componentes + build en VPS)  
+**Razón:** Actualiza TODOS los cambios (componentes, CSS, imágenes, DPF/TPMS)  
+**Tiempo:** 45-60 minutos  
+
+**Opción 1 solo si:** Necesitas deploy de emergencia sin cambios adicionales
+
+---
+
+## �️ HERRAMIENTAS NECESARIAS PARA OPCIÓN 2
+
+Antes de comenzar, descarga e instala:
+
+```
+1. PuTTY (Terminal SSH)
+   Descargar: https://www.putty.org/
+   Función: Ejecutar comandos mkdir, cp, npm run build, etc.
+   Usuario: root
+
+2. Bitvise SSH Client (Incluye gestor SFTP gráfico)
+   Descargar: https://www.bitvise.com/download
+   Función: Subir archivos con Drag & Drop
+   Usuario: visualmecanica
+```
+
+**Ambas se usan SIMULTÁNEAMENTE durante el deployment**
+
+---
+
+## �🚀 OPCIÓN 1: SUBIR DIST COMPILADO VÍA SFTP (Más rápido - 10 min)
+
+### Para usar SOLO en caso de emergencia (sin cambios adicionales):
 
 ```bash
 1. Conectar a VPS vía Bitvise SFTP
@@ -57,46 +87,77 @@
 
 ---
 
-## 🔧 OPCIÓN 2: SUBIR COMPONENTES Y HACER BUILD EN VPS (Recomendado - actualiza todo)
+## 🔧 OPCIÓN 2: SUBIR COMPONENTES Y HACER BUILD EN VPS (Recomendado - 60 min)
+
+**✅ ESTA ES LA OPCIÓN RECOMENDADA**
+
+Actualiza TODO: componentes, CSS, imágenes, DPF/TPMS compilados correctamente.
 
 ### Instrucciones detalladas:
 
+**IMPORTANTE:** Mantén ABIERTOS DOS PROGRAMAS SIMULTÁNEAMENTE:
+
+```
+Programa 1: 🔵 Bitvise SFTP (Gestor de archivos gráfico)
+            Usuario: visualmecanica
+            Función: Subir componentes, CSS, imágenes
+
+Programa 2: ⚫ PuTTY SSH (Terminal de comandos)
+            Usuario: root
+            Función: Hacer respaldos, mkdir, cp, build
+```
+
 #### PASO 1: Preparar upload de componentes
 
-**Paso 1A: Hacer backups en VPS (TERMINAL SSH - NO SFTP)**
+**Paso 1A: Hacer respaldos (⚫ TERMINAL SSH - PuTTY, NO BITVISE)**
+
+⚠️ **IMPORTANTE:** Este paso se hace en PuTTY (programa de terminal SSH), NO en Bitvise SFTP
 
 ```bash
-# Abre terminal/PuTTY y conecta como root:
-ssh root@[IP_VPS]
+# Abre PuTTY y conecta:
+# Host: [IP_VPS]
+# Puerto: 22
+# Usuario: root
+# Contraseña: [Tu contraseña]
 
-# Luego ejecuta estos comandos:
+# Una vez conectado, copia y pega estos comandos:
 cd /home/visualmecanica/frontend/src/components
 mkdir backup_21feb2026
 cp *.jsx backup_21feb2026/
 cp *.tsx backup_21feb2026/
 
-# Salir de la terminal (escribe exit o ciérrala)
+# Verifica que funcionó:
+ls -la backup_21feb2026/ | wc -l
+# Debe mostrar un número (cantidad de archivos respaldados)
+
+# Listo, cierra PuTTY
 exit
 ```
 
-**Paso 1B: Subir nuevos componentes (VÍA BITVISE SFTP)**
+**Paso 1B: Subir nuevos componentes (🔵 BITVISE SFTP - Programa gráfico)**
+
+Después de cerrar PuTTY, abre Bitvise SFTP:
 
 ```
-1. Abre Bitvise SFTP (cliente SFTP gráfico)
-   
-2. Conectar a VPS:
+1. Abre Bitvise SFTP
    Host: [IP_VPS]
-   Usuario: visualmecanica
+   Usuario: visualmecanica (NO root)
+   Contraseña: [Tu contraseña]
    
-3. Limpiar carpeta de componentes en VPS:
-   Navega a: /home/visualmecanica/frontend/src/components/
-   Elimina todos los *.jsx (click derecho → Delete)
-   Elimina todos los *.tsx (click derecho → Delete)
+2. Navega a: /home/visualmecanica/frontend/src/components/
+
+3. Elimina archivos viejos (uno por uno o varios):
+   - Selecciona *.jsx
+   - Click derecho → Delete
+   - Selecciona *.tsx
+   - Click derecho → Delete
    
-4. Subir nuevos componentes (38 archivos):
-   Fuente: c:\Users\Users\desarrollo_aplicaciones\pre-compra\frontend\src\components\
-   Destino: /home/visualmecanica/frontend/src/components/ (en Bitvise)
-   Método: Drag & drop todos los archivos
+4. Sube 38 componentes nuevos:
+   Fuente PC: c:\Users\Users\desarrollo_aplicaciones\pre-compra\frontend\src\components\
+   Método: Drag & drop o copy/paste en Bitvise
+   
+5. Espera confirmación (muestra progreso)
+```
    
    Archivos principales a subir:
    - DPFPage.jsx ⭐ NUEVO
@@ -112,28 +173,42 @@ exit
 
 #### PASO 2: Subir CSS actualizado
 
-**Paso 2A: Hacer backup de CSS (TERMINAL SSH)**
+**Paso 2A: Hacer backup de CSS (⚫ TERMINAL SSH - PuTTY)**
 
 ```bash
-# En terminal SSH del VPS (como root):
+# Abre PuTTY y conecta como root:
+# Host: [IP_VPS], Usuario: root
+
+# Ejecuta comandos:
 cd /home/visualmecanica/frontend/src/Csspersonalizado/
 mkdir backup_css_21feb2026
 cp *.css backup_css_21feb2026/
+
+# Verifica:
+ls backup_css_21feb2026/ | wc -l
+# Debe mostrar 8 (cantidad de archivos respaldados)
+
+# Cierra PuTTY
+exit
 ```
 
-**Paso 2B: Subir CSS (VÍA BITVISE SFTP)**
+**Paso 2B: Subir CSS (🔵 BITVISE SFTP - Programa gráfico)**
 
 ```
-1. En Bitvise SFTP, navegar a:
-   /home/visualmecanica/frontend/src/Csspersonalizado/
+1. Abre Bitvise SFTP (ya debe estar en otra ventana)
+   Usuario: visualmecanica
 
-2. Eliminar CSS antiguos:
-   Click derecho en cada *.css → Delete
+2. Navega a: /home/visualmecanica/frontend/src/Csspersonalizado/
 
-3. Subir 8 archivos CSS nuevos:
+3. Elimina *.css viejos:
+   Selecciona todos
+   Click derecho → Delete
+
+4. Sube 8 archivos CSS nuevos:
    Fuente: c:\Users\Users\desarrollo_aplicaciones\pre-compra\frontend\src\Csspersonalizado\
-   Destino: /home/visualmecanica/frontend/src/Csspersonalizado/ (en Bitvise)
    Método: Drag & drop
+   Espera confirmación
+```
 
 4. Archivos a subir:
    - Botones_RRSS.css
@@ -210,35 +285,55 @@ cp *.css backup_css_21feb2026/
    https://visualmecanica.cl/robots.txt
 ```
 
-#### PASO 5: Compilar en VPS (TERMINAL COMO ROOT)
+#### PASO 5: Compilar en VPS (⚫ TERMINAL SSH - PuTTY COMO ROOT)
+
+**IMPORTANTE:** Este paso se hace en PuTTY terminal SSH, NO en Bitvise SFTP
+
+Después de subir TODOS los archivos (componentes, CSS, imágenes):
 
 ```bash
-# 1. Conectar al VPS como root
+# 1. Abre PuTTY nuevamente como root
 ssh root@[IP_VPS]
+# Ingresa contraseña
 
 # 2. Ir a carpeta frontend
 cd /home/visualmecanica/frontend
 
-# 3. Instalar dependencias (si es primera vez)
+# 3. Instalar dependencias (si es primera vez o necesita actualizar)
 npm install
 
-# 4. Hacer build
+# 4. ⏳ HACER BUILD (espera 10-15 minutos)
 npm run build
 
-# Esperar ~10-15 minutos hasta que aparezca:
-# "✓ built in XX.XXs"
+# Verás progreso como:
+# "vite v5.4.19 building for production..."
+# "✓ 12394 modules transformed"
+# "✓ built in 53.31s"
 
-# 5. Verificar que dist se generó
-ls -la dist/ | head -20
+# Cuando aparezca "✓ built", significa que FUNCIONÓ ✅
 
-# 6. Cambiar propietario
+# 5. Cambiar propietario de dist
 sudo chown -R visualmecanica:visualmecanica dist/
 sudo chmod -R 755 dist/
 
-# 7. Reiniciar nginx (si es necesario)
+# 6. Reiniciar nginx
 sudo systemctl restart nginx
-# o
-sudo service nginx restart
+
+# Listo
+exit
+```
+
+**Verifica que funcionó:**
+```bash
+# En la misma terminal SSH:
+curl -I https://visualmecanica.cl/
+# Debe retornar: HTTP/2 200
+
+curl -I https://visualmecanica.cl/dpf
+# Debe retornar: HTTP/2 200
+
+curl -I https://visualmecanica.cl/tpms
+# Debe retornar: HTTP/2 200
 ```
 
 ---
