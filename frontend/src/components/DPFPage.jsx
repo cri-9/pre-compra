@@ -1,23 +1,16 @@
 import {
-  Timeline,
-  TimelineConnector,
-  TimelineContent,
-  TimelineDot,
-  TimelineItem,
-  TimelineSeparator,
-} from "@mui/lab";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  Container,
-  Grid,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
+    Avatar,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Chip,
+    Container,
+    Grid,
+    Stack,
+    Typography,
+    useMediaQuery,
+    useTheme,
 } from "@mui/material";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
@@ -650,52 +643,54 @@ function DPFPage() {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Timeline position="right">
-                <TimelineItem>
-                  <TimelineSeparator>
-                    <TimelineDot sx={{ backgroundColor: '#10B981' }} />
-                    <TimelineConnector />
-                  </TimelineSeparator>
-                  <TimelineContent>
+              <Stack spacing={3}>
+                {/* Item 1 */}
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Avatar sx={{ bgcolor: '#10B981', width: 32, height: 32 }}>&nbsp;</Avatar>
+                    <Box sx={{ width: 2, flexGrow: 1, bgcolor: '#10B981', my: 1 }} />
+                  </Box>
+                  <Box sx={{ pb: 3 }}>
                     <Typography variant="h6" sx={{ color: '#10B981', fontWeight: 'bold' }}>
                       Diagnóstico Completo
                     </Typography>
                     <Typography>
                       Evaluación exhaustiva del estado del filtro DPF con equipamiento especializado
                     </Typography>
-                  </TimelineContent>
-                </TimelineItem>
+                  </Box>
+                </Box>
 
-                <TimelineItem>
-                  <TimelineSeparator>
-                    <TimelineDot sx={{ backgroundColor: '#3B82F6' }} />
-                    <TimelineConnector />
-                  </TimelineSeparator>
-                  <TimelineContent>
+                {/* Item 2 */}
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Avatar sx={{ bgcolor: '#3B82F6', width: 32, height: 32 }}>&nbsp;</Avatar>
+                    <Box sx={{ width: 2, flexGrow: 1, bgcolor: '#3B82F6', my: 1 }} />
+                  </Box>
+                  <Box sx={{ pb: 3 }}>
                     <Typography variant="h6" sx={{ color: '#3B82F6', fontWeight: 'bold' }}>
                       Regeneración Forzada
                     </Typography>
                     <Typography>
                       Proceso controlado de regeneración activa para eliminar el hollín acumulado
                     </Typography>
-                  </TimelineContent>
-                </TimelineItem>
+                  </Box>
+                </Box>
 
-                <TimelineItem>
-                  <TimelineSeparator>
-                    <TimelineDot sx={{ backgroundColor: '#F59E0B' }} />
-                    <TimelineConnector />
-                  </TimelineSeparator>
-                  <TimelineContent>
+                {/* Item 3 */}
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Avatar sx={{ bgcolor: '#F59E0B', width: 32, height: 32 }}>&nbsp;</Avatar>
+                  </Box>
+                  <Box>
                     <Typography variant="h6" sx={{ color: '#F59E0B', fontWeight: 'bold' }}>
                       Reporte Detallado
                     </Typography>
                     <Typography>
                       Entregamos informe completo del servicio realizado y recomendaciones de mantenimiento
                     </Typography>
-                  </TimelineContent>
-                </TimelineItem>                
-              </Timeline>
+                  </Box>
+                </Box>
+              </Stack>
             </Grid>
           </Grid>
         </AnimatedSection>

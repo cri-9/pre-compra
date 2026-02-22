@@ -1,23 +1,16 @@
 import {
-  Timeline,
-  TimelineConnector,
-  TimelineContent,
-  TimelineDot,
-  TimelineItem,
-  TimelineSeparator,
-} from "@mui/lab";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  Container,
-  Grid,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
+    Avatar,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Chip,
+    Container,
+    Grid,
+    Stack,
+    Typography,
+    useMediaQuery,
+    useTheme,
 } from "@mui/material";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
@@ -597,90 +590,90 @@ function TPMSPage() {
           ¿Cómo funciona nuestro servicio TPMS?
         </Typography>
 
-        <Timeline position="alternate">
+        <Stack spacing={4}>
           {/* Paso 1 */}
-          <TimelineItem>
-            <TimelineSeparator>
-              <TimelineDot sx={{ backgroundColor: "#50455E" }} />
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent>
-              <Typography variant="h6" sx={{ color: "#50455E" }}>
-                1. Contacto inicial
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 40 }}>
+              <Avatar sx={{ bgcolor: "#50455E", width: 40, height: 40 }}>1</Avatar>
+              <Box sx={{ width: 2, height: 60, bgcolor: "#50455E", my: 1 }} />
+            </Box>
+            <Box flex={1}>
+              <Typography variant="h6" sx={{ color: "#50455E", mb: 1 }}>
+                Contacto inicial
               </Typography>
               <Typography>
                 El cliente se comunica con Visual Mecánica para solicitar revisión del sistema TPMS.
               </Typography>
-            </TimelineContent>
-          </TimelineItem>
+            </Box>
+          </Box>
 
           {/* Paso 2 */}
-          <TimelineItem>
-            <TimelineSeparator>
-              <TimelineDot sx={{ backgroundColor: "#7B1FA2" }} />
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent>
-              <Typography variant="h6" sx={{ color: "#7B1FA2" }}>
-                2. Diagnóstico con escáner
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 40 }}>
+              <Avatar sx={{ bgcolor: "#7B1FA2", width: 40, height: 40 }}>2</Avatar>
+              <Box sx={{ width: 2, height: 60, bgcolor: "#7B1FA2", my: 1 }} />
+            </Box>
+            <Box flex={1}>
+              <Typography variant="h6" sx={{ color: "#7B1FA2", mb: 1 }}>
+                Diagnóstico con escáner
               </Typography>
               <Typography>
                 El técnico realiza la lectura de códigos de error con el escáner Launch X431 Pro3
                 para determinar si uno o más sensores presentan fallas.
               </Typography>
-            </TimelineContent>
-          </TimelineItem>
+            </Box>
+          </Box>
 
           {/* Paso 3 */}
-          <TimelineItem>
-            <TimelineSeparator>
-              <TimelineDot sx={{ backgroundColor: "#50455E" }} />
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent>
-              <Typography variant="h6" sx={{ color: "#50455E" }}>
-                3. Evaluación y reparación
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 40 }}>
+              <Avatar sx={{ bgcolor: "#50455E", width: 40, height: 40 }}>3</Avatar>
+              <Box sx={{ width: 2, height: 60, bgcolor: "#50455E", my: 1 }} />
+            </Box>
+            <Box flex={1}>
+              <Typography variant="h6" sx={{ color: "#50455E", mb: 1 }}>
+                Evaluación y reparación
               </Typography>
               <Typography>
                 Si no es necesario reemplazar sensores, se reinician los códigos de error. Si es necesario cambiar,
                 el vehículo se traslada a vulcanización para desmontar la rueda y reemplazar el sensor.
               </Typography>
-            </TimelineContent>
-          </TimelineItem>
+            </Box>
+          </Box>
 
           {/* Paso 4 */}
-          <TimelineItem>
-            <TimelineSeparator>
-              <TimelineDot sx={{ backgroundColor: "#7B1FA2" }} />
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent>
-              <Typography variant="h6" sx={{ color: "#7B1FA2" }}>
-                4. Reprogramación y prueba de ruta
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 40 }}>
+              <Avatar sx={{ bgcolor: "#7B1FA2", width: 40, height: 40 }}>4</Avatar>
+              <Box sx={{ width: 2, height: 60, bgcolor: "#7B1FA2", my: 1 }} />
+            </Box>
+            <Box flex={1}>
+              <Typography variant="h6" sx={{ color: "#7B1FA2", mb: 1 }}>
+                Reprogramación y prueba de ruta
               </Typography>
               <Typography>
                 Se reprograman los nuevos sensores con el escáner y se realiza una prueba de ruta de 10 minutos
                 para verificar su correcto funcionamiento.
               </Typography>
-            </TimelineContent>
-          </TimelineItem>
+            </Box>
+          </Box>
 
           {/* Paso 5 */}
-          <TimelineItem>
-            <TimelineSeparator>
-              <TimelineDot sx={{ backgroundColor: "#50455E" }} />
-            </TimelineSeparator>
-            <TimelineContent>
-              <Typography variant="h6" sx={{ color: "#50455E" }}>
-                5. Entrega e informe final
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 40 }}>
+              <Avatar sx={{ bgcolor: "#50455E", width: 40, height: 40 }}>5</Avatar>
+            </Box>
+            <Box flex={1}>
+              <Typography variant="h6" sx={{ color: "#50455E", mb: 1 }}>
+                Entrega e informe final
               </Typography>
               <Typography>
                 Se entrega el informe del escáner Launch X431 Pro3 junto con el vehículo.
                 El cliente recibe el reporte final y se realiza el pago del servicio.
               </Typography>
-            </TimelineContent>
-          </TimelineItem>
-        </Timeline>
+            </Box>
+          </Box>
+        </Stack>
       </Box>
 
       {/* Sección: Tipos de TPMS */}
