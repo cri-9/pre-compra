@@ -109,54 +109,70 @@ Programa 2: ⚫ PuTTY SSH (Terminal de comandos)
 
 #### PASO 1: Preparar upload de componentes
 
-**Paso 1A: Hacer respaldos (⚫ TERMINAL SSH - PuTTY, NO BITVISE)**
+**Paso 1A: Hacer respaldos (⚫ TERMINAL EN BITVISE O PUTTY)**
 
-⚠️ **IMPORTANTE:** Este paso se hace en PuTTY (programa de terminal SSH), NO en Bitvise SFTP
-
+⭐ **OPCIÓN 1 (MÁS PRÁCTICA):** Usa la terminal integrada de Bitvise
 ```bash
-# Abre PuTTY y conecta:
-# Host: [IP_VPS]
-# Puerto: 22
-# Usuario: root
-# Contraseña: [Tu contraseña]
+# En Bitvise, ve a: TERMINAL tab (está arriba de SFTP)
+# Copia y pega estos comandos:
 
-# Una vez conectado, copia y pega estos comandos:
+# Cambiar a usuario root (si está como visualmecanica):
+su -
+# Ingresa contraseña root
+
+# Ahora ejecuta:
 cd /home/visualmecanica/frontend/src/components
 mkdir backup_21feb2026
 cp *.jsx backup_21feb2026/
 cp *.tsx backup_21feb2026/
 
-# Verifica que funcionó:
+# Verifica:
 ls -la backup_21feb2026/ | wc -l
 # Debe mostrar un número (cantidad de archivos respaldados)
 
-# Listo, cierra PuTTY
+# Listo
 exit
 ```
 
-**Paso 1B: Subir nuevos componentes (🔵 BITVISE SFTP - Programa gráfico)**
+**OPCIÓN 2 (Alternativa):** Usa PuTTY como programa separado
+```bash
+# Abre PuTTY y conecta como root:
+ssh root@[IP_VPS]
 
-Después de cerrar PuTTY, abre Bitvise SFTP:
+# Ejecuta lo mismo:
+cd /home/visualmecanica/frontend/src/components
+mkdir backup_21feb2026
+cp *.jsx backup_21feb2026/
+cp *.tsx backup_21feb2026/
+
+exit
+```
+
+**Paso 1B: Subir nuevos componentes (🔵 BITVISE SFTP - Tab gráfico)**
+
+Después de ejecutar los comandos anteriores, cambia al tab SFTP en Bitvise:
 
 ```
-1. Abre Bitvise SFTP
-   Host: [IP_VPS]
-   Usuario: visualmecanica (NO root)
-   Contraseña: [Tu contraseña]
+1. En Bitvise, abre el tab: SFTP (está al lado de TERMINAL)
    
-2. Navega a: /home/visualmecanica/frontend/src/components/
+2. Si no estás conectado al SFTP, conecta:
+   Abre el lado izquierdo (carpetas)
+   Host: [IP_VPS]
+   Usuario: visualmecanica
+   
+3. Navega a: /home/visualmecanica/frontend/src/components/
 
-3. Elimina archivos viejos (uno por uno o varios):
+4. Elimina archivos viejos:
    - Selecciona *.jsx
    - Click derecho → Delete
    - Selecciona *.tsx
    - Click derecho → Delete
    
-4. Sube 38 componentes nuevos:
+5. Sube 38 componentes nuevos:
    Fuente PC: c:\Users\Users\desarrollo_aplicaciones\pre-compra\frontend\src\components\
    Método: Drag & drop o copy/paste en Bitvise
    
-5. Espera confirmación (muestra progreso)
+6. Espera confirmación (muestra progreso)
 ```
    
    Archivos principales a subir:
