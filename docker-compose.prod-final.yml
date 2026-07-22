@@ -77,6 +77,7 @@ services:
       - ./security-headers.conf:/etc/nginx/security-headers.conf:ro
       - ./security.txt:/usr/share/nginx/html/security.txt:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - php
       - frontend
