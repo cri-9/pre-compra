@@ -60,3 +60,9 @@ Backend/tmp*.json
 # Otros/Misceláneos
 #########################
 *.qodo
+nginx/ssl/*.key
+nginx/ssl/*.crt
+nginx/ssl/live/
+nginx/ssl/accounts/
+nginx/ssl/archive/
+nginx/ssl/renewal/
