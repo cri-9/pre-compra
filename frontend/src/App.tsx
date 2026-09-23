@@ -3,12 +3,10 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 // IMPORTAR PÁGINA DE MANTENIMIENTO
 //import MantenimientoPage from './components/MantenimientoPage';
 // LandingPage comentado mientras está en mantenimiento
-import CalibracionECUPage from './components/CalibracionECUPage';
 import DPFPage from './components/DPFPage';
 import FormularioContacto from './components/FormularioContacto';
 import Gracias from './components/Gracias';
 import ImagePopup from './components/ImagePopup';
-import InmovilizadoresPage from './components/InmovilizadoresPage';
 import LandingPage from './components/LandingPage';
 import ResultadoPago from './components/resultado-pago';
 import ServiceCards from "./components/ServiceCards";
@@ -35,9 +33,6 @@ const App: FC = () => {
           <Route path="/gracias" element={<Gracias />} />
           <Route path="/tpms" element={<TPMSPage />} />
           <Route path="/dpf" element={<DPFPage />} />
-          <Route path="/inmovilizadores" element={<InmovilizadoresPage />} />
-          <Route path="/inmollaves" element={<InmovilizadoresPage />} />
-          <Route path="/calibracion-ecu" element={<CalibracionECUPage />} />
         </Routes>
       </Router>
     </div>
