@@ -24,7 +24,7 @@ export default defineConfig(function (_a) {
                 '@components': resolve(__dirname, './src/components'),
                 '@assets': resolve(__dirname, './src/assets'),
                 '@styles': resolve(__dirname, './src/Csspersonalizado'),
-                '@mui/system/Unstable_Grid': resolve(__dirname, 'node_modules/@mui/material/node_modules/@mui/system/Unstable_Grid'),
+                '@mui/system/Unstable_Grid': resolve(__dirname, 'node_modules/@mui/system/Unstable_Grid'),
             },
         },
         optimizeDeps: {
