@@ -2,8 +2,8 @@ import { Box, Typography } from '@mui/material';
 import Slider from 'react-slick';
 
 // Importa los estilos de slick-carousel
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 
 // Importa tus estilos personalizados
 import '../Csspersonalizado/PortadaTrabajos.css';
@@ -21,41 +21,42 @@ import subaruOutback from '../assets/Portadas_trabajos/subaru_outback.webp';
 const trabajosData = [
   {
     image: chevroletSilverado,
-    title: "Chevrolet Silverado",
-    link: null
+    title: 'Chevrolet Silverado',
+    link: null,
   },
   {
     image: fordExplorer,
-    title: "Ford Explorer",
-    link: null
+    title: 'Ford Explorer',
+    link: null,
   },
   {
     image: kiaSportage,
-    title: "Kia Sportage",
-    link: null
+    title: 'Kia Sportage',
+    link: null,
   },
   {
     image: landRover,
-    title: "Land Rover",
-    link: null
+    title: 'Land Rover',
+    link: null,
   },
   {
     image: mazdaMx5,
-    title: "Mazda MX-5",
-    link: null
+    title: 'Mazda MX-5',
+    link: null,
   },
   {
     image: ram1500,
-    title: "RAM 1500",
-    link: null
+    title: 'RAM 1500',
+    link: null,
   },
   {
     image: subaruOutback,
-    title: "Subaru Outback",
-    link: "https://web.facebook.com/reel/1736782864393152"
-  }
+    title: 'Subaru Outback',
+    link: 'https://web.facebook.com/reel/1736782864393152',
+  },
 ];
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const PortadaTrabajos = () => {
   // Configuración del carrusel
   const settings = {
@@ -72,30 +73,30 @@ const PortadaTrabajos = () => {
         breakpoint: 1200,
         settings: {
           slidesToShow: 3,
-        }
+        },
       },
       {
         breakpoint: 768,
         settings: {
           slidesToShow: 2,
-        }
+        },
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-        }
-      }
-    ]
+        },
+      },
+    ],
   };
 
   return (
     <Box sx={{
-      textAlign: "center",
+      textAlign: 'center',
       p: { xs: 2, sm: 3, md: 4, lg: 5 },
       mt: { xs: 2, sm: 3, md: 4 },
       backgroundColor: '#ffffff',
-      backgroundImage: 'none'
+      backgroundImage: 'none',
     }}>
       {/* Título principal */}
       <Typography
@@ -104,9 +105,9 @@ const PortadaTrabajos = () => {
         textAlign="center"
         gutterBottom
         sx={{
-          color: "#1848B9",
-          fontSize: { xs: "1.3rem", sm: "1.7rem", md: "2.1rem", lg: "2.5rem" },
-          mb: { xs: 2, sm: 3, md: 4 }
+          color: '#1848B9',
+          fontSize: { xs: '1.3rem', sm: '1.7rem', md: '2.1rem', lg: '2.5rem' },
+          mb: { xs: 2, sm: 3, md: 4 },
         }}
       >
         Muestra de trabajos realizados
@@ -117,11 +118,11 @@ const PortadaTrabajos = () => {
         width: { xs: '98%', sm: '97%', md: '96%', lg: '95%' },
         margin: '0 auto',
         '& .slick-slide': {
-          padding: { xs: '0 5px', sm: '0 8px', md: '0 10px' }
+          padding: { xs: '0 5px', sm: '0 8px', md: '0 10px' },
         },
         '& .slick-list': {
-          margin: { xs: '0 -5px', sm: '0 -8px', md: '0 -10px' }
-        }
+          margin: { xs: '0 -5px', sm: '0 -8px', md: '0 -10px' },
+        },
       }}>
         <Slider {...settings}>
           {trabajosData.map((trabajo, index) => (
@@ -130,7 +131,7 @@ const PortadaTrabajos = () => {
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                px: 1
+                px: 1,
               }}
             >
               <Box
@@ -151,7 +152,7 @@ const PortadaTrabajos = () => {
                   display: 'block',
                   '&:hover': {
                     boxShadow: 4,
-                    transform: 'translateY(-5px)'
+                    transform: 'translateY(-5px)',
                   },
                   '& img': {
                     width: '100%',
@@ -160,8 +161,8 @@ const PortadaTrabajos = () => {
                     transition: 'transform 0.3s ease-in-out',
                   },
                   '&:hover img': {
-                    transform: 'scale(1.05)'
-                  }
+                    transform: 'scale(1.05)',
+                  },
                 }}
               >
                 <img
@@ -181,7 +182,7 @@ const PortadaTrabajos = () => {
                     display: 'flex',
                     alignItems: 'flex-end',
                     height: '100%',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
                   }}
                 >
                   <Typography
@@ -189,7 +190,7 @@ const PortadaTrabajos = () => {
                       color: 'white',
                       fontWeight: 'bold',
                       fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem', lg: '1.1rem' },
-                      textShadow: '1px 1px 3px rgba(0,0,0,0.5)'
+                      textShadow: '1px 1px 3px rgba(0,0,0,0.5)',
                     }}
                   >
                     {trabajo.title}
@@ -206,14 +207,14 @@ const PortadaTrabajos = () => {
       <Typography
         variant="body1"
         sx={{
-          color: "#757575",
-          fontSize: { xs: "0.85rem", sm: "0.95rem", md: "1rem", lg: "1.1rem" },
+          color: '#757575',
+          fontSize: { xs: '0.85rem', sm: '0.95rem', md: '1rem', lg: '1.1rem' },
           mt: { xs: 2, sm: 3, md: 4 },
           maxWidth: '800px',
-          margin: { xs: '15px auto 0', sm: '20px auto 0', md: '30px auto 0' }
+          margin: { xs: '15px auto 0', sm: '20px auto 0', md: '30px auto 0' },
         }}
       >
-        Conhece algunos de los vehículos que hemos inspeccionado. Cada inspección realizada con profesionalismo y precisión.
+        Conoce algunos de los vehículos que hemos inspeccionado. Cada inspección realizada con profesionalismo y precisión.
       </Typography>
     </Box>
   );

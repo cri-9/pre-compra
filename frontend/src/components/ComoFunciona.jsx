@@ -38,7 +38,7 @@ const flipCardFace = {
 
 const frontStyle = {
   ...flipCardFace,
-  backgroundColor: "#50455E",
+  backgroundColor: "#4f455e",
   color: "#FFFFFF",
 };
 
@@ -129,12 +129,12 @@ const ComoFunciona = () => {
   return (
     <Box
          sx={{
-        py: 8,
-        bgcolor: "#DBD6E1",
+        pt: { xs: 14, sm: 12, md: 8 },
+        pb: 8,
+        bgcolor: "#F2F0F4",
         textAlign: "center",
-        position: "relative", // Necesario para que el pseudo-elemento funcione
-        // Crea una forma de onda en la parte inferior
-        clipPath: 'polygon(0 10%, 100% 0, 100% 100%, 0% 100%)', // Ajusta estos valores para crear una onda
+        position: "relative",
+        clipPath: 'polygon(0 10%, 100% 0, 100% 100%, 0% 100%)',
         
       }}
     >
@@ -145,8 +145,9 @@ const ComoFunciona = () => {
         gutterBottom 
         color={"#1848B9"}
         mb={4}
+        sx={{ fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' } }}
       >
-        ¿Cómo Funciona?
+        Nuestro Servicio de Inspección
       </Typography>
       <Box
         sx={{

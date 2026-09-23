@@ -5,28 +5,44 @@
     
     <!-- Favicons optimizados -->
     <link rel="icon" type="image/x-icon" href="/icon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
     
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Visual-Mecánica Servicio Inspección Automotriz en Temuco</title>
+    
+    <!-- Canonical URL para evitar contenido duplicado -->
+    <link rel="canonical" href="https://visualmecanica.cl/" />
+    
+    <title>Visual-Mecánica Servicio de Diagnóstico Automotriz en Temuco</title>
     <meta name="description" content="Inspección automotriz pre-compra en Temuco, Región de la Araucanía. Agenda tu revisión técnica, diagnóstico y otros servicios para autos usados. Servicio profesional y confiable." />
     <meta name="robots" content="index, follow" />
     <meta name="keywords" content="inspección automotriz, pre compra, Temuco, Región de la Araucanía, revisión técnica, autos usados, mecánica, diagnóstico, servicio automotriz" />
     <meta name="author" content="Visual Mecánica" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Visual-Mecánica Servicio Inspección Automotriz en Temuco" />
+    <meta property="og:title" content="Visual-Mecánica Servicio de Diagnóstico Automotriz en Temuco" />
     <meta property="og:description" content="Inspección automotriz pre-compra en Temuco, Región de la Araucanía. Agenda tu revisión técnica, diagnóstico y otros servicios para autos usados." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://visualmecanica.cl/" />
-    <meta property="og:image" content="https://visualmecanica.cl/icon.ico" />
+    <meta property="og:image" content="https://visualmecanica.cl/favicon-512x512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="Visual Mecánica - Inspección Automotriz" />
     <meta property="og:locale" content="es_CL" />
+    <meta property="og:site_name" content="Visual Mecánica" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Visual-Mecánica Servicio Inspección Automotriz en Temuco" />
+    <meta name="twitter:title" content="Visual-Mecánica Servicio de Diagnóstico Automotriz en Temuco" />
     <meta name="twitter:description" content="Inspección automotriz pre-compra en Temuco, Región de la Araucanía. Agenda tu revisión técnica, diagnóstico y otros servicios para autos usados." />
-    <meta name="twitter:image" content="https://visualmecanica.cl/icon.ico" />
+    <meta name="twitter:image" content="https://visualmecanica.cl/favicon-512x512.png" />
+    <meta name="twitter:image:alt" content="Visual Mecánica - Inspección Automotriz" />
 
     <!-- Datos de negocio local -->
     <script type="application/ld+json">
@@ -34,10 +50,10 @@
         "@context": "https://schema.org",
         "@type": "AutoRepair",
         "name": "Visual Mecánica",
-        "image": "https://visualmecanica.cl/icon.ico",
+        "image": "https://visualmecanica.cl/favicon-512x512.png",
         "@id": "https://visualmecanica.cl/",
         "url": "https://visualmecanica.cl/",
-        "telephone": "+56997541042",
+        "telephone": "+56949685530",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Dirección de tu taller",
@@ -55,6 +71,22 @@
         "priceRange": "$"
       }
     </script>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '25383611277964156');
+      fbq('track', 'PageView');
+    </script>
+    <!-- End Meta Pixel Code -->
+    
      <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CT6E84H79W"></script>
     <script>
@@ -79,6 +111,13 @@
                 event_category: 'Interacción',
                 event_label: href
               });
+              // Meta Pixel para WhatsApp
+              if (window.fbq) {
+                window.fbq('track', 'Contact', {
+                  content_name: 'WhatsApp Button',
+                  content_category: 'Contact'
+                });
+              }
             }
 
             // Evento para Contacto
@@ -88,12 +127,37 @@
                 event_label: text
               });
             }
+            
+            // Evento para Agendar
+            if (text.includes("agendar") || href.includes("/agendar")) {
+              gtag('event', 'click_agendar', {
+                event_category: 'Interacción',
+                event_label: 'Botón Agendar'
+              });
+              // Meta Pixel para intención de agendar
+              if (window.fbq) {
+                window.fbq('trackCustom', 'ClickAgendar', {
+                  content_name: 'Booking Button',
+                  content_category: 'Navigation'
+                });
+              }
+            }
           }
         });
       });
     </script>
   </head>
   <body>
+    <!-- Meta Pixel noscript -->
+    <noscript>
+      <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=25383611277964156&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Meta Pixel noscript -->
+    <!-- Meta Pixel Noscript -->
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=25383611277964156&ev=PageView&noscript=1"
+    /></noscript>
     <!-- Script para deshabilitar Vite HMR en producción -->
     <script>
       // Deshabilitar Vite HMR en producción

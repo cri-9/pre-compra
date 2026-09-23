@@ -1,8 +1,8 @@
+import { CheckCircleOutline } from "@mui/icons-material";
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import { CheckCircleOutline } from "@mui/icons-material";
+import Typography from '@mui/material/Typography';
 import { motion } from "framer-motion";
 
 const items = [
@@ -48,7 +48,7 @@ const ChecklistSection = () => {
           fontWeight="bold"
           textAlign="center"
           gutterBottom
-          color={"#1848B9"}
+          color={"#1A237E"}
           sx={{
             fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
             mt: { xs: 2, sm: 0 }, // Margen superior para pantallas pequeñas

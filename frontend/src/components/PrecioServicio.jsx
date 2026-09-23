@@ -74,11 +74,11 @@ function PrecioServicio() {
   const serviciosPrincipales = [
     {
       id: 1,
-      nombre: 'Escáner',
+      nombre: 'Revisión Electrónica OBD2',
       icono: '🔎',
       iconoLargo: '🚗',
       precioAnterior: 45000,
-      precioActual: 35000,
+      precioActual: 30000,
       descripcion: 'Escáner Automotriz Profesional',
       caracteristicas: ['Diagnóstico completo', 'Análisis de sistemas', 'Reporte detallado'],
       color: '#515DDB',
@@ -86,12 +86,12 @@ function PrecioServicio() {
     },
     {
       id: 4,
-      nombre: 'Inspección Full',
+      nombre: 'Inspección pre-compra',
       icono: '📋',
       iconoLargo: '🔍',
       precioAnterior: 79000,
       precioActual: 62500,
-      descripcion: 'Inspección Automotriz Completa',
+      descripcion: 'Revisión Automotriz Completa',
       caracteristicas: ['+ de 150 puntos de revisión', 'Revisión interior/exterior', 'Informe Electrónico OBD2', 'Informe técnico', 'Revisión de pintura (micras)', 'Prueba de ruta', 'Revisión Mecánica', 'Fotografias'],
       color: '#FFB64D',
       oferta: true,
@@ -149,7 +149,7 @@ function PrecioServicio() {
               mb: 4, // Más separación debajo del título
             }}
         >
-          Nuestros Servicios de Inspección Pre-Compra<br /> Escáner y Mantenimiento TPMS y DPF
+          Nuestros Servicios<br /> Inspección pre-compra, Escáner y Mantenimiento
         </Typography>
         <Typography
           variant="h6"

@@ -81,7 +81,7 @@ const Testimonios = () => {
           component="h2" 
           sx={{ 
             fontWeight: 'bold',
-            color: '#1A237E',
+            color: '#1A237E', // Azul oscuro para mejor contraste
             fontSize: { xs: '1.3rem', sm: '1.8rem', md: '2.5rem' }, // Ligeramente más pequeño en móviles
             mt: { xs: 2, md: 0 }, // Reducido margen superior en móviles para dar más espacio al contenido
             mb: { xs: 3, md: 1 }, // Margen inferior ajustado

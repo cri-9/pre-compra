@@ -28,10 +28,232 @@ const Cotizacion = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
 
   const servicios = [
-    { value: "basico", label: "Servicio Escaner - $35.000 c/iva" },
-    { value: "completo", label: "Inspección Completa - $62.500 c/iva" },
-    { value: "tpms", label: "Servicio TPMS - $75.000 c/iva" },
-    { value: "dpf", label: "Servicio DPF - $60.000 c/iva" },
+    { value: "segunda_llave",
+      text: "Segunda llave",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Segunda llave
+        </span>
+      </div>
+    ) 
+  },
+    { value: "duplicacion_llave",
+      text: "Duplicación de llave",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Duplicación de llave
+        </span>
+      </div>
+    ) 
+  },
+    { value: "clonacion_transponder",
+      text: "Clonación de transponder",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Clonación de transponder
+        </span>
+      </div>
+    ) 
+  },
+    { value: "smart_key",
+      text: "Smart Key",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Smart Key
+        </span>
+      </div>
+    ) 
+  },
+    { value: "control_remoto",
+      text: "Control remoto",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Control remoto
+        </span>
+      </div>
+    ) 
+  },
+    { value: "programacion_immo_obd",
+      text: "Programación IMMO / OBD",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Programación IMMO / OBD
+        </span>
+      </div>
+    ) 
+  },
+    { value: "inmovilizador",
+      text: "Inmovilizador",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Inmovilizador
+        </span>
+      </div>
+    ) 
+  },
+    { value: "diagnostico_electronico",
+      text: "Diagnóstico electrónico",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Diagnóstico electrónico
+        </span>
+      </div>
+    ) 
+  },
+    { value: "all_keys_lost",
+      text: "All Keys Lost",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          All Keys Lost
+        </span>
+      </div>
+    ) 
+  },
+    { value: "recuperacion_llave_usada",
+      text: "Recuperación de llave usada",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Recuperación de llave usada
+        </span>
+      </div>
+    ) 
+  },
+    { value: "otro",
+      text: "Otro",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#7D1EA2', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Otro
+        </span>
+      </div>
+    ) 
+  },
+    { value: "completo",
+      text: "Inspección pre-compra",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#4F46E5', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Inspección pre-compra
+        </span>
+      </div>
+    ) 
+  },
+    { value: "tpms",
+      text: "Activación TPMS",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#4F46E5', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Activación TPMS
+        </span>
+      </div>
+    ) 
+  },    
+    { value: "escaner",
+      text: "Escáner Profesional",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#4F46E5', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Escáner Profesional
+        </span>
+      </div>
+    ) 
+  },
+    { value: "regeneracion_dpf",
+      text: "Regeneración DPF",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#4F46E5', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Regeneración DPF
+        </span>
+      </div>
+    ) 
+  },
+    
+    
+    { value: "consulta_general",
+      text: "Consulta General",
+      label: (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ 
+          color: '#4F46E5', 
+          fontWeight: '600', 
+          fontSize: '16px' 
+        }}>
+          Consulta General
+        </span>
+      </div>
+    ) 
+  },
   ];
 
   const handleChange = (e) => {
@@ -84,7 +306,7 @@ const Cotizacion = ({ open, handleClose }) => {
       ...formData,
       telefono: "+56" + formData.telefono,
       servicio: servicioSeleccionado
-        ? servicioSeleccionado.label
+        ? servicioSeleccionado.text
         : "Servicio desconocido",
     };
 

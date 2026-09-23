@@ -173,10 +173,10 @@ function Pago({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
 
         // Validar que el monto corresponda al servicio seleccionado
         const precios_servicios = {
-          'Inspección Visual Básica': 35000,
+          'Diagnóstico Electrónico': 30000,
           'Inspección Full': 62500,
-          'Servicio TPMS': 75000,
-          'Servicio DPF': 60000
+          'Servicio TPMS': 68000,
+          'Servicio DPF': 55000
         };
 
         const servicioSeleccionado = datos.nombreServicio || nombreServicio;
@@ -371,10 +371,10 @@ function Pago({ datos, onChange, iniciarWebPay, loading, nombreServicio, datosCl
 
         // Validar que el monto corresponda al servicio seleccionado
         const precios_servicios = {
-          'Inspección Visual Básica': 35000,
+          'Diagnóstico Electrónico': 30000,
           'Inspección Full': 62500,
-          'Servicio TPMS': 75000,
-          'Servicio DPF': 60000
+          'Servicio TPMS': 68000,
+          'Servicio DPF': 55000
         };
 
         const servicioSeleccionado = datos.nombreServicio || nombreServicio;

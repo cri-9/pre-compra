@@ -37,22 +37,25 @@ const About = () => {
           </Typography>
         </motion.div>
 
-        {/* Descripción */}
+        {/* Descripción */} 
         <Typography
-          variant="body1"
-          sx={{
-            color: '#220F3E',
-            textAlign: 'center',
-            mb: 5,
-            fontSize: '1.1rem',
-          }}
+        variant="body1"
+        sx={{
+        color: '#220F3E',
+        textAlign: 'justify',      // Justifica el texto para que los bordes queden alineados
+        textAlignLast: 'center',  // Opcional: Centra la última línea para mantener el estilo
+        maxWidth: '1100px',        // Limita el ancho para que no se desarme en pantallas grandes
+        mx: 'auto',               // Centra todo el bloque de texto horizontalmente
+        mb: 5,
+        fontSize: '1.1rem',
+        lineHeight: 1.6,          // Mejora la legibilidad del bloque justificado
+        }}
         >
-          En <strong>VisualMecánica</strong> somos una empresa especializada en servicios técnicos automotrices a domicilio, orientados a la evaluación, 
-          diagnóstico y mantenimiento preventivo del vehículo. Contamos con personal calificado y equipamiento profesional para entregar información precisa y confiable.
-          Nuestros servicios incluyen <strong>diagnóstico computarizado mediante escáner automotriz</strong>, <strong>Inspección pre-compra Automotriz</strong>, 
-          <strong>Mantenimiento y calibración de sensores TPMS</strong> (sistema de monitoreo de presión de neumáticos) y <strong>regeneración de DPF</strong> 
-          (filtro de partículas diésel). Cada servicio se realiza bajo criterios técnicos objetivos, entregando reportes claros que permiten a nuestros clientes 
-          tomar decisiones informadas, seguras y respaldadas técnicamente.
+        En <strong>VisualMecánica</strong> somos una empresa especializada en servicios técnicos automotrices a domicilio, orientados a la evaluación, 
+        diagnóstico y mantenimiento preventivo del vehículo. Contamos con personal calificado y equipamiento profesional para entregar información precisa y confiable.
+        Nuestros servicios incluyen <strong>Diagnóstico computarizado mediante escáner automotriz</strong>, <strong>Inspección pre-compra Automotriz</strong>, <strong>Mantenimiento y calibración de sensores TPMS</strong> (sistema de monitoreo de presión de neumáticos) y <strong>regeneración de DPF</strong> 
+        (filtro de partículas diésel). Cada servicio se realiza bajo criterios técnicos objetivos, entregando reportes claros que permiten a nuestros clientes 
+        tomar decisiones informadas, seguras y respaldadas técnicamente.
         </Typography>
 
         {/* Íconos representativos */}
@@ -69,7 +72,7 @@ const About = () => {
                   bgcolor: '#7B1FA2',
                   color: 'white',
                   borderRadius: 3,
-                  height: '200px', // Altura fija para uniformidad
+                  height: '250px', // Altura fija para uniformidad
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between'
@@ -78,8 +81,8 @@ const About = () => {
                 <Avatar sx={{ bgcolor: 'white', mb: 1, mx: 'auto' }}>
                   <DirectionsCar sx={{ color: '#7B1FA2' }} />
                 </Avatar>
-                <Typography variant="h6">Inspección en terreno</Typography>
-                <Typography variant="body2">Realizamos la evaluación en la ubicación del vehículo para tu comodidad.</Typography>
+                <Typography variant="h6">Escáner Profesional</Typography>
+                <Typography variant="body2">Diagnóstico computarizado avanzado para detectar fallas electrónicas latentes, analizar módulos ECU y asegurar el correcto funcionamiento de los sistemas del vehículo.</Typography>
               </Paper>
             </motion.div>
           </Grid>
@@ -92,9 +95,9 @@ const About = () => {
                   p: 3,
                   textAlign: 'center',
                   bgcolor: '#FFB74D',
-                  color: '#220F3E',
+                  color: '#250F3E',
                   borderRadius: 3,
-                  height: '220px', // Altura fija para uniformidad
+                  height: '250px', // Altura fija para uniformidad
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between'
@@ -103,8 +106,8 @@ const About = () => {
                 <Avatar sx={{ bgcolor: 'white', mb: 1, mx: 'auto' }}>
                   <Build sx={{ color: '#FFB74D' }} />
                 </Avatar>
-                <Typography variant="h6">Análisis integral</Typography>
-                <Typography variant="body2">Un diagnóstico profundo que abarca desde el motor y el chasis hasta el interior y sistemas clave</Typography>
+                <Typography variant="h6">Inspección Pre-compra</Typography>
+                <Typography variant="body2">Evaluación técnica, estética y mecánica completa en terreno antes de comprar. Revisamos motor, chasis y componentes clave para que inviertas con total seguridad.</Typography>
               </Paper>
             </motion.div>
           </Grid>
@@ -119,7 +122,7 @@ const About = () => {
                   bgcolor: '#1565C0',
                   color: 'white',
                   borderRadius: 3,
-                  height: '200px', // Altura fija para uniformidad
+                  height: '250px', // Altura fija para uniformidad
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between'
@@ -128,8 +131,8 @@ const About = () => {
                 <Avatar sx={{ bgcolor: 'white', mb: 1, mx: 'auto' }}>
                   <CheckCircle sx={{ color: '#1565C0' }} />
                 </Avatar>
-                <Typography variant="h6">Reporte exhaustivo</Typography>
-                <Typography variant="body2">Recibe un informe profesional con hallazgos detallados, fotografías y recomendaciones</Typography>
+                <Typography variant="h6">Sensores TPMS</Typography>
+                <Typography variant="body2">Servicio especializado de mantenimiento, programación y calibración del sistema de monitoreo de presión de neumáticos. Evita alertas molestas y viaja seguro.</Typography>
               </Paper>
             </motion.div>
           </Grid>
@@ -144,7 +147,7 @@ const About = () => {
                   bgcolor: '#CAB0E5',
                   color: '#220F3E',
                   borderRadius: 3,
-                  height: '220px', // Altura fija para uniformidad
+                  height: '250px', // Altura fija para uniformidad
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between'
@@ -153,8 +156,8 @@ const About = () => {
                 <Avatar sx={{ bgcolor: 'white', mb: 1, mx: 'auto' }}>
                   <Search sx={{ color: '#CAB0E5' }} />
                 </Avatar>
-                <Typography variant="h6">Visual y Prueba de ruta</Typography>
-                <Typography variant="body2">Realizamos una inspección visual interna y externa, prueba de conducción para evaluar el desempeño de la dirección, caja de cambios y la amortiguación.</Typography>
+                <Typography variant="h6">Regeneración DPF</Typography>
+                <Typography variant="body2">Limpieza y regeneración forzada del filtro de partículas diésel mediante software profesional. Restaura la potencia del motor y reduce la emisión de contaminantes.</Typography>
               </Paper>
             </motion.div>
           </Grid>         

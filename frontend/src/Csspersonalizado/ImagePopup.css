@@ -1,0 +1,32 @@
+/* ImagePopup.css */
+.popup-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  overflow: hidden;
+
+  /* Proporción retrato 2:3 para imagen 800x1200 */
+  width: clamp(280px, 62vmin, 560px);
+  height: clamp(420px, 93vmin, 840px);
+}
+
+.popup-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.close-button {
+  position: absolute !important;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  color: #FFD600 !important;
+}

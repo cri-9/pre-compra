@@ -22,25 +22,19 @@ import valores3 from '../assets/Valores_Servicios/tmps_valor3.webp';
 //Nuevo estilo botones 
 import "../Csspersonalizado/Botones_RRSS.css";
 
-  const precios = {
-    'Inspección Visual Básica': 35000,
-    'Inspección Full': 62500,
-    'Servicio TPMS': 75000,
-    'Servicio DPF': 60000,
-  };
-
 const valores = [
   {
     id: 1,
     titulo: "Diagnóstico Electrónico",
-    precio: 35000,
-    descripcion: "$35.000 c/iva",
+    precio: 30000,
+    descripcion: "$30.000 c/iva",
     imagen: valores1,
     listado: [
       { texto: "Scanner" },
       { texto: "Informe escáner" },
+      { texto: "Revisión datos en vivo" },
       { texto: "Validación Kilometraje" },
-            
+      { texto: "Borrado de códigos de falla" },
     ],
   },
   {
@@ -64,22 +58,23 @@ const valores = [
   {
     id: 3,
     titulo: "Mantenimiento Sensores TPMS",
-    precio: 75000,
-    descripcion: "$75.000 c/iva",
+    precio: 68000,
+    descripcion: "$68.000 c/iva",
     imagen: valores3,
     listado: [
-      { texto: "Diagnóstico con escáner" },
-      { texto: "Instalación sensor" },
+      { texto: "Diagnóstico avanzado con escáner" },
+      { texto: "Instalación sensor nuevo" },
       { texto: "Activación sensor" },                   
-      { texto: "Programación sensor" },  
-      { texto: "Garantía un año" },
+      { texto: "Programación sensor" },
+      { texto: "Vulcanización gratis" },  
+      { texto: "Garantía 2 años" },
     ],
   },
   {
     id: 4,
     titulo: "Regeneración Electrónica DPF",
-    precio: 60000,
-    descripcion: "$60.000 c/iva",
+    precio: 55000,
+    descripcion: "$55.000 c/iva",
     imagen: valores4,
     listado: [
       { texto: "Diagnóstico con escáner" },
@@ -104,8 +99,8 @@ const ValorServicio = () => {
         fontWeight="bold" 
         textAlign="center" 
         gutterBottom 
-        color={"#1848B9"} 
-        >
+        color={"#1848B9"}
+      >
         Valores de todos Nuestros Servicios
       </Typography>
       <Typography variant="body1" textAlign="center" gutterBottom
@@ -177,7 +172,7 @@ const ValorServicio = () => {
                     <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '0.85rem', textTransform: 'uppercase' }}>
                       A Domicilio
                     </Typography>
-                    </Box>
+                  </Box>
                 </Box>
                 <Box sx={{ mt: 2, textAlign: 'center' }}>
                   <Typography variant="h3" sx={{ 
@@ -207,25 +202,25 @@ const ValorServicio = () => {
                       return (
                         <ListItem key={index}>
                           <ListItemIcon>
-                    <Box
-                      sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 24, // Ajusta el tamaño del círculo
-                      height: 24, // Debe ser el mismo que el ancho
-                      borderRadius: '50%', // Para que sea un círculo perfecto
-                      bgcolor: checkColor, // O el color que desees para el fondo
-                      }}
-                    >
-                  <CheckIcon
-                sx={{
-                color: 'white', // El color del ícono debe ser blanco o uno que contraste
-                fontSize: '1rem', // Un tamaño más pequeño dentro del círculo
-                }}
-                />
-              </Box>
-            </ListItemIcon>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: 24,
+                                height: 24,
+                                borderRadius: '50%',
+                                bgcolor: checkColor,
+                              }}
+                            >
+                              <CheckIcon
+                                sx={{
+                                  color: 'white',
+                                  fontSize: '1rem',
+                                }}
+                              />
+                            </Box>
+                          </ListItemIcon>
                           <ListItemText 
                             primary={
                               (valor.id === 1 && index === 0) || (valor.id === 2 && index === 0) || (valor.id === 3 && index === 0) || (valor.id === 4 && index === 0)
@@ -241,8 +236,7 @@ const ValorServicio = () => {
                 )}
               </CardContent>
               <Box sx={{ p: 1, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                
-                 {/* Botón de WhatsApp agregado arriba del botón Agendar */}
+                {/* Botón de WhatsApp agregado arriba del botón Agendar */}
                 <Button 
                   sx={{
                     width: '280px', // Ajusta el ancho del botón
@@ -285,7 +279,7 @@ const ValorServicio = () => {
                     width: '240px',
                     height: '50px',
                     borderRadius: '50px',
-                    background: ' #675978',                    
+                    background: 'linear-gradient(135deg, #3730a3 0%, #5b21b6 100%)',                 
                     border: 'none',
                     fontSize: '1.1rem',
                     fontWeight: 'bold',
@@ -299,12 +293,11 @@ const ValorServicio = () => {
                     whiteSpace: 'nowrap',
                     transition: 'all 0.3s ease-in-out',
                     '&:hover': {
-                      transform: 'translateY(3px)',
-                      boxShadow: 'none',
-                      background: '#50455E',
-                    },
-                    '&:active': {
-                      opacity: 0.5,
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 12px 32px rgba(67,56,202,0.4)',
+                      '& .text-content': { transform: 'translateX(60px)', opacity: 0 },
+                      '& .dot-indicator': { opacity: 0, transform: 'scale(0.5)' },
+                      '& .arrow-content': { transform: 'translateX(-20px)', opacity: 1 },
                     },
                   }}               
                   component={valor.id === 3 || valor.id === 4 ? 'a' : Link}
@@ -317,8 +310,8 @@ const ValorServicio = () => {
                 </Button>
               </Box>
               <Typography variant="body2" sx={{ mb: 1, p: 2 }}>
-                  ¿Tienes preguntas? Contáctanos
-                </Typography>
+                ¿Tienes preguntas? Contáctanos
+              </Typography>
             </Card>
           </Grid>
         ))}

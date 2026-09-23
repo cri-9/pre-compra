@@ -329,7 +329,7 @@ const handleEnviarFormulario = async () => {
 
       console.log('📤 DEBUG - datosEnvio completo:', JSON.stringify(datosEnvio, null, 2));
       
-      const response = await fetch('https://visualmecanica.cl/router.php?ruta=notificarTransferencia', {
+      const response = await fetch('/api/router.php?ruta=notificarTransferencia', {
   method: 'POST',
   headers: { 
     'Content-Type': 'application/json',

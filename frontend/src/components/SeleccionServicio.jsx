@@ -17,9 +17,9 @@ import valores2 from '../assets/Valores_Servicios/mecanica_valor2.webp';
 const servicios = [
   {
     id: 1,
-    titulo: "Inspección Visual Básica",
-    precio: 35000,
-    descripcion: "$35.000 c/iva",
+    titulo: "Diagnóstico Electrónico",
+    precio: 30000,
+    descripcion: "$30.000 c/iva",
     imagen: valores1,
     listado: [
       { texto: "Scaner" },

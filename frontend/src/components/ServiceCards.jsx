@@ -1,122 +1,147 @@
-import { Home, Person, Search } from "@mui/icons-material";
+import { School, Search, Settings, WifiTethering } from "@mui/icons-material";
 import {
   Box,
   Card,
   CardContent,
   Grid,
-  Typography
+  Typography,
 } from '@mui/material';
+import pieTpms from '../assets/pie_tpms/pie_.webp';
 
-// Neuvo estiloo css de las card
-
-
-const options = [
-  { 
-    number: "01", 
-    title: "Inspección Visual", 
-    icon: <Search fontSize="large" />, 
+const tpmsSteps = [
+  {
+    number: "01",
+    title: "Revisión Gratuita",
+    icon: <Search fontSize="large" />,
     color: "#1976D2",
-    description: "Realizamos una revisión externa y detallada del vehículo para identificar posibles daños en la carrocería, chasis, neumáticos, vidrios, focos y otros componentes visibles."
+    description: "Una vez contactado vamos al domicilio, revisamos cuántos sensores están con problema."
   },
-  { 
-    number: "02", 
-    title: "Revisión con escaner", 
-    icon: <Home fontSize="large" />, 
-    color: "#ffb64d",
-    description: " Este procedimiento nos permite acceder a la información de las diferentes unidades de control (ECU), detectar posibles fallas, códigos de error o anomalías ocultas y evaluar el estado real de los sistemas electrónicos."
-  },
-  { 
-    number: "03", 
-    title: "Mantenimiento TPMS", 
-    icon: <Person fontSize="large" />, 
+  {
+    number: "02",
+    title: "Activación TPMS",
+    icon: <WifiTethering fontSize="large" />,
     color: "#9C27B0",
-    description: "Realizamos un pre chequeo para saber el estado de cada uno, en el caso que no se tenga comunicación con no o más se procede al reemplazo del sensores TPMS para asegurar su correcto funcionamiento y la seguridad de tu vehículo, proceso 100% a domicilio."
+    description: "Con escáner activamos uno por uno los sensores."
   },
-  { 
-    number: "04", 
-    title: "Mantenimiento DPF", 
-    icon: <Person fontSize="large" />, 
-    color: "#b02727ff",
-    description: "Realizamos la regeneración electrónica del filtro de partículas diésel (DPF) utilizando equipos especializados que permiten eliminar las partículas acumuladas en el filtro sin necesidad de desmontarlo, restaurando su eficiencia y funcionalidad.  "
+  {
+    number: "03",
+    title: "Programación Precisa",
+    icon: <Settings fontSize="large" />,
+    color: "#1565C0",
+    description: "Realizamos el diagnóstico y la programación de cada uno de estos sensores."
+  },
+  {
+    number: "04",
+    title: "Aprendizaje",
+    icon: <School fontSize="large" />,
+    color: "#ff9a04",
+    description: "Una vez instalados, realizamos el aprendizaje en el vehículo y borramos los códigos de error."
   }
 ];
 
-const OptionCard = ({ number, title, icon, color, description }) => {
-  return (
+const StepCard = ({ number, title, icon, color, description }) => (
   <Card
-  sx={{
-    maxWidth: 300,
-    p: 2,
-    borderRadius: 10,
-    position: "relative",
-    overflow: "visible",
-    background: "#F2F2F2", // ✅ background como string
-    boxShadow: "15px 15px 30px #bebebe, -15px -15px 30px #ffffff" // ✅ múltiple sombra como string
-    
-  }}
->
+    sx={{
+      p: 2,
+      borderRadius: 4,
+      position: "relative",
+      overflow: "visible",
+      background: "#F2F2F2",
+      boxShadow: "8px 8px 20px #bebebe, -8px -8px 20px #ffffff",
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+    }}
+  >
+    <Box
+      sx={{
+        backgroundColor: color,
+        color: "white",
+        padding: "5px 16px",
+        borderRadius: "20px",
+        position: "absolute",
+        top: -16,
+        left: "50%",
+        transform: "translateX(-50%)",
+        fontSize: "0.8rem",
+        fontWeight: "bold",
+        whiteSpace: "nowrap",
+      }}
+    >
+      Paso {number}
+    </Box>
+    <CardContent sx={{ textAlign: "center", pt: 3.5, flexGrow: 1 }}>
       <Box
         sx={{
           backgroundColor: color,
           color: "white",
-          padding: "8px 15px",
-          borderRadius: "8px",
-          position: "absolute",
-          top: -20,
-          left: "50%",
-          transform: "translateX(-50%)",
-          fontSize: "0.9rem",
-          fontWeight: "bold",
-          textTransform: "uppercase",
+          width: 58,
+          height: 58,
+          borderRadius: "50%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mx: "auto",
+          mb: 1.5,
         }}
       >
-        
+        {icon}
       </Box>
-      <CardContent sx={{ textAlign: "center" }}>
-        <Typography variant="h3" fontWeight="bold">{number}</Typography>
-        <Typography variant="h6" fontWeight="bold" mt={1}>{title}</Typography>
-        <Typography variant="body2" mt={1}>
-          {description}  {/* Se muestra la descripción personalizada */}
-        </Typography>
-        <Box mt={2} sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-          <Box
-            sx={{ backgroundColor: color, padding: 1.5, borderRadius: "50%", display: "flex", justifyContent: "center" }}
-          >
-            {icon}
-          </Box>
-          <Typography mt={1} fontSize={14} fontWeight="bold">DATA INFO</Typography>
-        </Box>
-      </CardContent>
-    </Card>
-  );
-};
+      <Typography variant="h6" fontWeight="bold" mt={1}>
+        {title}
+      </Typography>
+      <Typography variant="body2" mt={1} color="text.secondary">
+        {description}
+      </Typography>
+    </CardContent>
+  </Card>
+);
 
-const ServiceCards = () => {
-  return (
-    <Box>
-      <Grid 
-        container 
-        spacing={3} 
-        justifyContent="center" 
-        sx={{ 
-          p: 3,
-          display: 'grid',
-          gridTemplateColumns: {
-            xs: '1fr',
-            sm: 'repeat(2, 1fr)',
-            md: 'repeat(4, 1fr)'
-          },
-          gap: 3
+const ServiceCards = () => (
+  <Box>
+    <Typography
+      variant="h5"
+      fontWeight="bold"
+      textAlign="center"
+      mb={5}
+      sx={{
+        color: "#1848B9",
+        fontSize: { xs: "1.6rem", sm: "2rem", md: "2.3rem" },
+      }}
+    >
+      Procedimiento Sensores TPMS
+    </Typography>
+
+    <Grid
+      container
+      spacing={4}
+      justifyContent="center"
+      sx={{ px: { xs: 1, md: 2 } }}
+    >
+      {tpmsSteps.map((step, index) => (
+        <Grid item xs={12} sm={6} md={4} key={index}>
+          <StepCard {...step} />
+        </Grid>
+      ))}
+    </Grid>
+
+    <Box sx={{ mt: 6, textAlign: "center" }}>
+      <Box
+        component="img"
+        src={pieTpms}
+        alt="Servicio TPMS a domicilio"
+        sx={{
+          width: '100%',
+          maxWidth: 800,
+          display: 'block',
+          mx: 'auto',
+          borderRadius: 2,
+          imageRendering: 'auto',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
         }}
-      >
-        {options.map((option, index) => (
-          <Box key={index}>
-            <OptionCard {...option} />
-          </Box>
-        ))}
-      </Grid>
+      />
     </Box>
-  );
-};
+  </Box>
+);
 
 export default ServiceCards;

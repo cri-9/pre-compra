@@ -1,40 +1,36 @@
-﻿import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import CheckIcon from '@mui/icons-material/Check';
+import CalendarMonth from '@mui/icons-material/CalendarMonth';
 import CloseIcon from '@mui/icons-material/Close';
+import Description from '@mui/icons-material/Description';
+import DesktopWindows from '@mui/icons-material/DesktopWindows';
+import DirectionsCar from '@mui/icons-material/DirectionsCar';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FilterAlt from '@mui/icons-material/FilterAlt';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link as MuiLink, useTheme } from "@mui/material";
+import PrecisionManufacturing from '@mui/icons-material/PrecisionManufacturing';
+import TireRepair from '@mui/icons-material/TireRepair';
+import VerifiedUser from '@mui/icons-material/VerifiedUser';
+import { Link as MuiLink, useTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import Drawer from '@mui/material/Drawer';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // Importar useLocation para obtener la ubicación actual
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css"; //carrusel slick
-import logo_sect from "../assets/Carrusel_Portada/img_secction1.webp";
-import img_sec_1 from "../assets/Carrusel_Portada/portada_01.webp"; // Imagen de la sección
-import img_sect_2 from "../assets/Carrusel_Portada/portada_02.webp"; // Imagen de la sección
-import img_sect_3 from "../assets/Carrusel_Portada/portada_03.webp"; // Imagen de la sección
-import img_sect_4 from "../assets/Carrusel_Portada/portada_04.webp"; // Imagen de la sección
-import iconDpf from "../assets/img_prin_dpf/ico_dpf_nabv.png";
-import logo from "../assets/Logo_Superior/logo_superior_menu2.webp";
-import iconTpms from "../assets/servicios/icon_tpms_menu.png";
-import '../Csspersonalizado/landingpage.css'; //Css personalizado para varios estilos
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import iconDpf from '../assets/img_prin_dpf/ico_dpf_nabv.png';
+import logo from '../assets/Logo_Superior/logo_superior_menu2.webp';
+import iconTpms from '../assets/servicios/icon_tpms_menu.png';
+import '../Csspersonalizado/landingpage.css';
 
-// DOCUMENTACIÓN: Hook personalizado para rastrear la posición del mouse
-// Necesario para el efecto de partículas interactivas
+// Hook personalizado para rastrear la posición del mouse (reservado para uso futuro)
 function useMousePosition() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -255,16 +251,9 @@ const Particles = React.forwardRef(({
   );
 });
 
-// Importar imágenes optimizadas para móvil (600x500, menor peso)
-import img_movil_1 from "../assets/Carrusel_Movil/img_movil_1.webp";
-import img_movil_2 from "../assets/Carrusel_Movil/img_movil_2.webp";
-import img_movil_3 from "../assets/Carrusel_Movil/img_movil_3.webp";
-import img_movil_4 from "../assets/Carrusel_Movil/img_movil_4.webp";
-import img_movil_5 from "../assets/Carrusel_Movil/img_movil_5.webp";
 //componentes
 import { useWindowSize } from '@react-hook/window-size'; // Importar el hook para obtener el tamaño de la ventana
 import Confetti from 'react-confetti'; // Importar el componente de confeti
-import Slider from "react-slick";
 import Cotizacion from "../components/Cotizacion"; // Importar el nuevo componente
 import About from './About';
 import BotonWhatsApp from "./BotonWhatsApp.jsx"; // Importar el botón de WhatsApp
@@ -273,7 +262,6 @@ import ComoFunciona from './ComoFunciona.jsx';
 import Footer from "./Footer";
 import HerramientasSection from "./HerramientasSection.jsx";
 import PortadaTrabajos from './PortadaTrabajos';
-import PrecioServicio from "./PrecioServicio";
 import PreguntasFrecuentes from './PreguntasFrecuentes.jsx';
 import ServiceCards from "./ServiceCards.jsx"; //nuevas card de prueba
 import TestimoniosSection from "./TestimoniosSection.jsx";
@@ -283,6 +271,45 @@ import ValorServicio from './ValorServicio';
 import headerBackground from "../assets/img_atras_header/header_.webp";
 //IMPORTAR IMAGEN DE FONDO MENU HAMBURGUEZA
 import fondoMenuHamburguesa from "../assets/fondo_menu_hambur/img_fondo_hambur.webp";
+
+const services = [
+  {
+    Icon: DirectionsCar,
+    title: 'Inspección pre-compra',
+    subtitle: 'automotriz',
+    text: 'Evaluación completa para que tomes la mejor decisión.',
+  },
+  {
+    Icon: TireRepair,
+    title: 'TPMS | Activación |',
+    subtitle: 'Programación | Diagnóstico',
+    text: 'Sistemas de monitoreo de presión de neumáticos.',
+  },
+  {
+    Icon: DesktopWindows,
+    title: 'Scanner profesional',
+    subtitle: 'con Informe Técnico',
+    text: 'Diagnóstico avanzado con reporte completo y detallado.',
+  },
+  {
+    Icon: FilterAlt,
+    title: 'Regeneración',
+    subtitle: 'Electrónica DPF',
+    text: 'Limpieza y regeneración del filtro de partículas diésel.',
+  },
+  {
+    Icon: PrecisionManufacturing,
+    title: 'Diagnóstico',
+    subtitle: 'Electrónico Completo',
+    text: 'Detección precisa de fallas en todos los sistemas del vehículo.',
+  },
+  {
+    Icon: VerifiedUser,
+    title: 'Asesoría Técnica',
+    subtitle: 'Especializada',
+    text: 'Acompañamiento profesional para cada necesidad de tu vehículo.',
+  },
+];
 
 // Componente principal de la página de destino
 function LandingPage() {
@@ -294,8 +321,7 @@ function LandingPage() {
   const serviciosLpRef = React.useRef(null); // Ref para cerrar al hacer clic fuera
   const location = useLocation(); // Obtener la ubicación actual
   const navigate = useNavigate(); // Hook para navegación programática
-  const theme = useTheme(); // Accede al tema de MUI para los breakpoints
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detecta si es pantalla móvil
+  const theme = useTheme();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search); // Obtener los parámetros de la URL
@@ -320,10 +346,25 @@ function LandingPage() {
     });
   }, []);
    //Boton de WhatsApp
-  const numeroTelefono = "56997541042"; // Número de teléfono de WhatsApp
-  const mensajeInicial = "Visual Mecánica le da la Bienvenida;  Te podemos ayudar."; // Mensaje inicial
-  
+  const numeroTelefono = "56949685530"; // Número de teléfono de WhatsApp
+  const mensajeInicial = `Hola! 
+Gracias por comunicarte con Visual Mecánica
 
+Selecciona el servicio que deseas agendar:
+
+1) Inspección Pre-Compra Automotriz
+   Revisión técnica completa + Informe profesional
+
+2) Mantención de Sensores TPMS
+   Diagnóstico, programación y activación
+
+3) Regeneración Electrónica DPF
+   Diagnóstico + regeneración + reset de error
+
+4) Servicio de Escáner Profesional
+   Diagnóstico avanzado con informe OBD2
+
+Nuestro equipo confirmará disponibilidad a la brevedad.`; // Mensaje inicial
   // Enlaces de navegación
   const navLinks = [
     { name: 'Inicio', href: '/' },
@@ -345,46 +386,60 @@ function LandingPage() {
   // Handlers anteriores removidos - dropdown local usa setOpenServiciosLP
 
   
-  // Componente Navigation con dropdown local para Servicios
+  // Componente Navigation con nuevo estilo (inspirado en diseño indigo)
   const Navigation = () => (
-    <Stack direction="row" spacing={1.5} sx={{ mr: 2, ml: 1, alignItems: 'center', flexWrap: 'nowrap' }}>
+    <Box
+      component="nav"
+      sx={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '10px 20px',
+        mr: 2,
+        ml: 1,
+      }}
+    >
       {navLinks.map((link) => {
         // Si el link es "Servicios", renderiza con dropdown local
         if (link.name === 'Servicios') {
           return (
             <Box key={link.name} ref={serviciosLpRef} sx={{ position: 'relative', zIndex: 1000 }}>
-              <Button
-                disableRipple
+              <Box
+                component="button"
                 onClick={() => setOpenServiciosLP(!openServiciosLP)}
-                endIcon={
-                  <ExpandMoreIcon
-                    sx={{
-                      fontSize: '1.1rem',
-                      transition: 'transform 0.3s ease',
-                      transform: openServiciosLP ? 'rotate(180deg)' : 'rotate(0deg)',
-                    }}
-                  />
-                }
                 sx={{
-                  color: '#7B1FA2',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#475569',
                   fontWeight: 500,
-                  textTransform: 'none',
-                  fontSize: '0.85rem',
+                  fontSize: { xs: '0.75rem', md: '0.875rem' },
                   fontFamily: 'Roboto, Arial, sans-serif',
-                  letterSpacing: 0.2,
-                  whiteSpace: 'nowrap',
-                  '&:hover': { color: '#D49CEC', background: 'transparent' },
+                  transition: 'color 0.2s ease',
+                  padding: 0,
+                  '&:hover': { color: '#4338ca' },
                 }}
               >
-                {link.name}
-              </Button>
+                Servicios
+                <ExpandMoreIcon
+                  sx={{
+                    fontSize: '0.9rem',
+                    transition: 'transform 0.3s ease',
+                    transform: openServiciosLP ? 'rotate(180deg)' : 'rotate(0deg)',
+                  }}
+                />
+              </Box>
 
-              {/* Dropdown local con posicionamiento absoluto y transparencia */}
+              {/* Dropdown */}
               <Box
                 role="menu"
                 sx={{
                   position: 'absolute',
-                  top: 'calc(100% + 6px)',
+                  top: 'calc(100% + 8px)',
                   left: '50%',
                   transform: openServiciosLP
                     ? 'translateX(-50%) translateY(0)'
@@ -392,15 +447,18 @@ function LandingPage() {
                   opacity: openServiciosLP ? 1 : 0,
                   pointerEvents: openServiciosLP ? 'auto' : 'none',
                   transition: 'opacity 180ms ease, transform 180ms ease',
-                  backgroundColor: 'rgba(249, 246, 252, 0.75)',
-                  boxShadow: '0 12px 30px rgba(0, 0, 0, 0.18)',
-                  border: '1px solid rgba(123, 31, 162, 0.12)',
+                  backgroundColor: '#f9f6fc',
+                  boxShadow: '0 12px 30px rgba(0,0,0,0.18)',
+                  border: '1px solid rgba(123,31,162,0.12)',
                   borderRadius: '12px',
                   overflow: 'visible',
                   display: 'flex',
                   flexDirection: 'row',
-                  backdropFilter: 'blur(10px)',
+                  alignItems: 'stretch',
                   zIndex: 9999,
+                  minWidth: '360px',
+                  py: 1,
+                  px: 1,
                 }}
               >
                 {servicios.map((servicio, idx, arr) => (
@@ -412,39 +470,34 @@ function LandingPage() {
                     }}
                     style={{
                       display: 'flex',
+                      flexDirection: 'column',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flex: 1,
-                      padding: '12px 16px',
-                      minWidth: 'auto',
+                      padding: '16px 24px',
+                      gap: '8px',
                       backgroundColor: 'transparent',
                       borderRadius: '8px',
                       borderRight:
                         idx === arr.length - 1
                           ? 'none'
-                          : '1px solid rgba(123, 31, 162, 0.12)',
+                          : '1px solid rgba(123,31,162,0.12)',
                       textDecoration: 'none',
                       color: 'inherit',
                       transition: 'background-color 0.2s ease',
                       cursor: 'pointer',
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#EDE7F6';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#EDE7F6'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                   >
-                    <span
-                      style={{
-                        color: '#7B1FA2',
-                        fontWeight: 500,
-                        fontSize: '0.9rem',
-                        textAlign: 'center',
-                        fontFamily: 'Roboto, Arial, sans-serif',
-                        letterSpacing: 0.2,
-                      }}
-                    >
+                    {servicio.icon && (
+                      <img
+                        src={servicio.icon}
+                        alt=""
+                        style={{ width: '32px', height: '32px', objectFit: 'contain' }}
+                      />
+                    )}
+                    <span style={{ color: '#7B1FA2', fontWeight: 500, fontSize: '0.9rem', fontFamily: 'Roboto, Arial, sans-serif', textAlign: 'center' }}>
                       {servicio.name}
                     </span>
                   </div>
@@ -454,124 +507,47 @@ function LandingPage() {
           );
         }
 
-        // Enlaces normales
+        // Enlace activo para Inicio
+        const isActive = link.name === 'Inicio';
         return (
           <MuiLink
             key={link.name}
             href={link.href}
             underline="none"
             sx={{
-              position: 'relative',
-              padding: '5px 0',
-              color: '#7B1FA2',
+              color: isActive ? '#4338ca' : '#475569',
               fontFamily: 'Roboto, Arial, sans-serif',
               fontWeight: 500,
-              fontSize: '0.85rem',
-              letterSpacing: 0.2,
-              textTransform: 'none',
-              transition: 'color 0.3s ease-out',
+              fontSize: { xs: '0.75rem', md: '0.875rem' },
+              transition: 'color 0.2s ease',
               whiteSpace: 'nowrap',
-              '&:hover': {
-                color: '#D49CEC',
-              },
-              '&::after': {
-                content: '""',
-                position: 'absolute',
-                width: '100%',
-                height: '2px',
-                backgroundColor: '#B34FDE',
-                bottom: 0,
-                left: 0,
-                transform: 'scaleX(0)',
-                transformOrigin: 'center',
-                transition: 'transform 0.3s ease-out',
-              },
-              '&:hover::after': {
-                transform: 'scaleX(1)',
-              },
+              '&:hover': { color: '#4338ca' },
             }}
           >
             {link.name}
           </MuiLink>
         );
       })}
-    </Stack>
+    </Box>
   );
   // Función para manejar el menú móvil
   const handleDrawerToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Configuración de imágenes del carrusel con versiones para escritorio y móvil
-  const carouselImages = [
-    {
-      desktop: logo_sect,
-      mobile: img_movil_1,
-      alt: "Imagen principal del servicio" // Descripción de la imagen
-    },
-    {
-      desktop: img_sec_1,
-      mobile: img_movil_2,
-      alt: "Servicio de inspección profesional"
-    },
-    {
-      desktop: img_sect_2,
-      mobile: img_movil_3,
-      alt: "Herramientas especializadas"
-    },
-    {
-      desktop: img_sect_3,
-      mobile: img_movil_4,
-      alt: "Atención personalizada"
-    },
-    {
-      desktop: img_sect_4,
-      mobile: img_movil_5,
-      alt: "Cobertura completa"
-    }
-  ];
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1, // Solo una imagen visible a la vez
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 4000,
-    arrows: true,
-    lazyLoad: 'progressive', // Cambiado para mejor rendimiento en móviles
-    adaptiveHeight: true, // Se adapta a la altura de la imagen
-    centerMode: false, // Desactivar modo centro para evitar solapamiento
-    variableWidth: false, // Ancho fijo para evitar problemas de alineación
-    swipeToSlide: true, // Permitir deslizar suavemente
-    touchThreshold: 5, // Mayor sensibilidad al tacto
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          arrows: false, // Sin flechas en móvil para mejor UX
-          dots: true,
-          adaptiveHeight: true,
-          centerMode: false, // Asegurar que no se active en móvil
-          variableWidth: false
-        }
-      }
-    ]
-  };
   return (
-    <div style={{ width: '100%', overflowX: 'hidden' }}>          {/* NUEVO CONTENEDOR CON LA IMAGEN DE FONDO */}
+    <div style={{ width: '100%', overflowX: 'hidden', marginTop: 0, paddingTop: 0, lineHeight: 0 }}>
       <Box 
         sx={{
           // ESTILOS DEL FONDO DE LA IMAGEN
-          backgroundImage: `linear-gradient(rgba(47, 47, 128, 0.5), rgba(31, 27, 27, 0.5)), url(${headerBackground})`,
+          backgroundColor: '#0a0a0a', // base oscura: evita franja blanca
+          backgroundImage: `linear-gradient(rgba(20, 15, 40, 0.6), rgba(10, 5, 20, 0.35)), url(${headerBackground})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundBlendMode: 'multiply',
+          backgroundPosition: '50% center',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-end',
-          minHeight: { xs: '150px', sm: '200px' }, // Altura del contenedor para que la imagen sobresalga
+          justifyContent: 'flex-end',            // imagen llena arriba, AppBar al fondo
+          minHeight: { xs: '110px', sm: '170px', md: '200px' }, // banner imagen grande
         }}
       > 
                 {/* Header original con menú hamburguesa - MODIFICADO PARA BARRA FLOTANTE */}            
@@ -581,11 +557,10 @@ function LandingPage() {
             backdropFilter: 'blur(10px)', // Efecto de desenfoque moderno
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.30)', // Sombra más suave
             borderRadius: '15px', // Bordes redondeados para efecto flotante
-            mx: 'auto', // DOCUMENTACIÓN: Centrado automático para mejor balance
-            my: -6, // Margen vertical para efecto flotante
-            maxWidth: { xs: '95%', sm: '95%', md: '85%', lg: '95%' }, // DOCUMENTACIÓN: Ancho controlado para centrado perfecto
-            // Los márgenes laterales (mx) hacen que la barra sea más corta que el ancho completo
-            // creando el efecto de barra flotante sobre la imagen de fondo
+            mx: 'auto',
+            maxWidth: '1250px', //Ancho menu
+            mb: '-44px', // 50% dentro imagen, 50% fuera
+            overflow: 'visible',
           }}
         >
           <Toolbar sx={{
@@ -598,7 +573,8 @@ function LandingPage() {
             justifyContent: 'space-between',
             py: { xs: 1, sm: 1.5 },
             minHeight: { xs: '56px', sm: '64px' },
-          }}>
+            overflow: 'visible',
+          }}>
             {/* Logo Container */}
             <Box
               sx={{
@@ -635,11 +611,11 @@ function LandingPage() {
                   height: "36px",
                   fontSize: "0.9rem",
                   fontWeight: "bold",
-                  backgroundColor: "#7B1FA2",
+                  backgroundColor: "#8a23a8",
                   color: "#ffffff",
                   ml: 1,
                   "&:hover": { 
-                    backgroundColor: "#6a6191"
+                    backgroundColor: "#8a23a8"
                   },
                   textTransform: 'none',
                   borderRadius: '8px',
@@ -651,7 +627,7 @@ function LandingPage() {
               {/* Botón WhatsApp en el menú */}
               <Button
                 component="a"
-                href="https://wa.me/56997541042"
+                href="https://wa.me/56949685530"
                 target="_blank"
                 rel="noopener"
                 sx={{
@@ -659,7 +635,7 @@ function LandingPage() {
                   height: "36px",
                   fontSize: "0.9rem",
                   fontWeight: "bold",
-                  backgroundColor: "#25D366",
+                  backgroundColor: "#ff9a04",
                   color: "#ffffff",
                   ml: 1,
                   "&:hover": {
@@ -850,439 +826,212 @@ function LandingPage() {
       </AppBar>
     </Box>
       
-      {/* Sección principal con efecto de partículas interactivas */}
-      <Container
+      {/* SECCIÓN HERO REDISEÑADA */}
+      <Box
+        component="section"
         sx={{
-          mt: { xs: 3, sm: 4 }, // Margen superior
-          mb: { xs: 6, sm: 8 }, // Margen inferior
-          px: { xs: 2, sm: 3, md: 4 }, // Padding horizontal responsivo
-          maxWidth: "100%", // Asegurar que no se desborde
-          overflow: "hidden", // Prevenir scroll horizontal
-          position: 'relative', // DOCUMENTACIÓN: Necesario para el posicionamiento absoluto de las partículas
-          minHeight: '600px', // DOCUMENTACIÓN: Altura mínima para que las partículas tengan espacio
-        }}
-      >
-        {/* DOCUMENTACIÓN: Componente de partículas animadas de fondo */}
-        {/* Efecto más visible con partículas púrpuras que responden al movimiento del mouse */}
-        <Particles
-          quantity={70}
-          staticity={35}
-          ease={25}
-          size={1.2}
-          color="#DF9FEA"
-        />
-        {/* Contenedor principal con layout flexbox responsivo */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' }, // Columna en móviles, fila en pantallas medianas y grandes
-            alignItems: 'center', // Centra verticalmente los elementos
-            justifyContent: 'space-between', // Distribuye el espacio entre los elementos
-            gap: { xs: 4, sm: 6, md: 12 }, // Espacio entre elementos, responsivo
-            position: 'relative', // DOCUMENTACIÓN: Para que el contenido aparezca sobre las partículas
-            zIndex: 2, // DOCUMENTACIÓN: Z-index superior a las partículas (z-index: 1)
+          width: '100%',
+          py: { xs: 3, md: 4 },
+          px: { xs: 1.5, md: 4 },
+          mt: '44px', // compensar overlap 50/50 AppBar
           }}
-        >
-          {/* Sección de contenido de texto */}
+      >
+        <Container maxWidth="xl" disableGutters>
           <Box
             sx={{
-              textAlign: { xs: 'center', md: 'left' }, // Alineación de texto responsiva
-              width: { md: '50%' }, // Ocupa la mitad del ancho en pantallas medianas y grandes
-              zIndex: 10, // DOCUMENTACIÓN: Z-index alto para estar sobre las partículas
-              position: 'relative', // DOCUMENTACIÓN: Necesario para el z-index
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: '18px',
+              px: { xs: 2, md: 7 },
+              py: { xs: 3, md: 4 },
+              background: 'linear-gradient(135deg, #ffffff 0%, #fbf6ff 45%, #f6ebff 100%)',
+              boxShadow: '0 14px 40px rgba(36, 20, 49, 0.08)',
             }}
           >
-            {/* Chip/Etiqueta para "Servicios de Autoseguro Profesionales" */}
-            <Chip
-              label="Servicio de Inspección Automotriz Profesional"
+            <Typography
+              component="h2"
               sx={{
-                display: 'inline-flex', // Para que se comporte como un bloque en línea
-                px: 4, // Padding horizontal (4 unidades de MUI, cada una 8px)
-                py: 1.5, // Padding vertical
-                          width: "100%", // Asegurar ancho completo
-                          mx: 0, // Sin márgenes horizontales
-                backgroundColor: '#EDE7F6', // Color de fondo similar a purple-100
-                color: '#6A1B9A', // Color del texto similar a purple-800
-                borderRadius: '9999px', // Bordes completamente redondeados
-                fontSize: '0.875rem', // Tamaño de fuente pequeño (text-sm)
-                fontWeight: 'medium', // Grosor de fuente medio
-                mb: 3, // Margen inferior (3 unidades de MUI)
+                textAlign: 'center',
+                fontWeight: 900,
+                fontSize: { xs: '1.8rem', sm: '2.3rem', md: '2.85rem' },
+                lineHeight: 1.05,
+                letterSpacing: '-1px',
+                color: '#202632',
+                textTransform: 'uppercase',
+              }}
+            >
+              Servicios{' '}
+              <Box component="span" sx={{ color: '#7B1FA2' }}>
+                Integrales
+              </Box>{' '}
+              de Diagnóstico
+            </Typography>
+
+            <Box
+              sx={{
+                width: '92px',
+                height: '5px',
+                borderRadius: '999px',
+                background: '#7B1FA2',
+                mx: 'auto',
+                mt: 1,
+                mb: 1.5,
               }}
             />
 
-            {/* Título principal de la sección */}
             <Typography
-              variant="h3" // Variante de tipografía, adaptable a tamaños de pantalla
-              component="h1" // Renderiza semánticamente como un h1
               sx={{
-                fontWeight: 'bold', // Texto en negrita
-                mb: 3, // Margen inferior
-                color: 'grey.800', // Color de texto gris oscuro (del tema MUI)
-                lineHeight: 'tight', // Altura de línea ajustada
-                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem', lg: '3.5rem' }, // Tamaños de fuente responsivos
+                textAlign: 'center',
+                color: '#4B5563',
+                fontSize: { xs: '0.9rem', md: '1.05rem' },
+                fontWeight: 500,
+                mb: { xs: 3, md: 4 },
               }}
-              className="efecto-titulo" //Efecto css nuevo
             >
-              Protege tu inversión con{' '}
-              {/* Parte del texto con un color diferente */}
-              <Box component="span" sx={{ color: '#7d1ea2' }}>
-                expertos
-              </Box>
+              Tecnología avanzada y expertos a tu servicio para el cuidado completo de tu vehículo.
             </Typography>
 
-            {/* Párrafo descriptivo */}
-            <Typography
-              variant="body1" // Variante de tipografía para texto de cuerpo
-              sx={{
-                fontSize: '1.125rem', // Tamaño de fuente grande (text-lg)
-                color: 'grey.600', // Color de texto gris (del tema MUI)
-                mb: 4, // Margen inferior
-                maxWidth: 'lg', // Ancho máximo en el contenedor
-                mx: { xs: 'auto', md: 0 }, // Margen horizontal automático para centrar en móviles, a la izquierda en escritorio
-              }}
-            >
-              Primeros en la Región de la Araucania, servicio 100% a domicilio
-              y una atención de primera calidad.
-            </Typography>
+            <Grid container spacing={{ xs: 3, md: 4 }}>
+              {services.map((item, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      gridTemplateColumns: '82px 1fr',
+                      alignItems: 'center',
+                      columnGap: 2,
+                      minHeight: '112px',
+                      position: 'relative',
+                      pr: { md: index % 3 !== 2 ? 3 : 0 },
+                      '&::after': {
+                        content: { xs: 'none', md: index % 3 !== 2 ? '""' : 'none' },
+                        position: 'absolute',
+                        right: 0,
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '1px',
+                        height: '70px',
+                        background: 'rgba(36, 20, 49, 0.16)',
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 78,
+                        height: 78,
+                        borderRadius: '50%',
+                        background: '#ffffff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#7B1FA2',
+                        boxShadow: '0 12px 25px rgba(36, 20, 49, 0.12), inset 0 0 0 1px rgba(123, 31, 162, 0.06)',
+                        '& svg': {
+                          fontSize: 42,
+                          strokeWidth: 1.4,
+                        },
+                      }}
+                    >
+                      <item.Icon />
+                    </Box>
 
-            {/* Contenedor de los puntos de beneficio */}
-            <Stack
-              direction="column" // Organiza los elementos en columna
-              spacing={2.5} // Espacio entre cada punto de beneficio
-              sx={{
-                mb: 4, // Margen inferior
-                textAlign: 'left', // Alineación de texto a la izquierda
-                maxWidth: 'lg', // Ancho máximo
-                mx: { xs: 'auto', md: 0 }, // Margen horizontal automático para centrar en móviles, a la izquierda en escritorio
-              }}
-            >
-              {/* Beneficio 1 */}
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                {/* Ícono de verificación */}
-                <Box
-                  sx={{
-                    flexShrink: 0, // Evita que el elemento se encoja
-                    width: 32, // Ancho (8 unidades de Tailwind = 32px)
-                    height: 32, // Alto
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '50%', // Completamente redondeado
-                    backgroundColor: '#ffb64d', // Color de fondo naranja
-                  }}
-                >
-                  <CheckIcon sx={{ width: 16, height: 16, color: '#ffffff' }} /> {/* Ícono blanco */}
-                </Box>
-                <Typography variant="body1" sx={{ ml: 3, color: 'grey.700' }}>
-                  Atención personalizada a domicilio
-                </Typography>
-              </Box>
+                    <Box>
+                      <Typography
+                        sx={{
+                          color: '#7B1FA2',
+                          fontWeight: 900,
+                          fontSize: { xs: '1.03rem', md: '1.12rem' },
+                          lineHeight: 1.05,
+                        }}
+                      >
+                        {item.title}
+                      </Typography>
 
-              {/* Beneficio 2 */}
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box
-                  sx={{
-                    flexShrink: 0,
-                    width: 32,
-                    height: 32,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '50%',
-                    backgroundColor: '#ffb64d', // Color de fondo naranja
-                  }}
-                >
-                  <CheckIcon sx={{ width: 16, height: 16, color: '#ffffff' }} />
-                </Box>
-                <Typography variant="body1" sx={{ ml: 3, color: 'grey.700' }}>
-                  Cobertura completa y confiable
-                </Typography>
-              </Box>
+                      <Typography
+                        sx={{
+                          color: '#202632',
+                          fontWeight: 900,
+                          fontSize: { xs: '1.03rem', md: '1.12rem' },
+                          lineHeight: 1.05,
+                          mb: 0.7,
+                        }}
+                      >
+                        {item.subtitle}
+                      </Typography>
 
-              {/* Beneficio 3 */}
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box
-                  sx={{
-                    flexShrink: 0,
-                    width: 32,
-                    height: 32,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '50%',
-                    backgroundColor: '#ffb64d', // Color de fondo naranja
-                  }}
-                >
-                  <CheckIcon sx={{ width: 16, height: 16, color: '#ffffff' }} />
-                </Box>
-                <Typography variant="body1" sx={{ ml: 3, color: 'grey.700' }}>
-                  Precios competitivos garantizados
-                </Typography>
-              </Box>
-            </Stack>
+                      <Typography
+                        sx={{
+                          color: '#4B5563',
+                          fontSize: { xs: '0.88rem', md: '0.96rem' },
+                          lineHeight: 1.35,
+                          maxWidth: '290px',
+                        }}
+                      >
+                        {item.text}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
 
-            {/* Contenedor de botones */}
             <Box
               sx={{
-                display: "flex", // Flex container
-                flexDirection: { xs: "column", sm: "row" }, // Columna en móviles, fila en pantallas más grandes
-                justifyContent: { xs: "center", md: "flex-start" }, // Centrado en móviles, izquierda en escritorio
-                gap: { xs: 2, sm: 2.5 }, // Espacio entre botones
-                maxWidth: "450px", // Ancho máximo del contenedor
-                mx: { xs: "auto", md: 0 }, // Margen automático para centrar en móviles
+                display: 'flex',
+                justifyContent: 'center',
+                gap: { xs: 1.5, md: 3 },
+                mt: { xs: 3, md: 3.5 },
+                flexWrap: 'wrap',
               }}
             >
-              {/* Botón Agendar con efecto hover personalizado */}
-              <Box
-                component="button"
-                onClick={() => window.location.href = '/agendar'}
-                className="btn" // Clase para el botón nuevo estilo CSS
+              <Button
+                href="/agendar"
+                variant="contained"
+                startIcon={<CalendarMonth />}
                 sx={{
-                  position: 'relative',
-                  cursor: 'pointer',
-                  overflow: 'hidden',
-                  borderRadius: '25px',
-                  border: '1px solid #7B1FA2',
-                  backgroundColor: '#7B1FA2',
-                  padding: '12px 36px', // Aumentado el padding para más espacio
-                  textAlign: 'center',
-                  fontWeight: 600,
-                  color: 'white',
-                  minWidth: { xs: '200px', sm: '220px' }, // Aumentado el ancho mínimo
-                  width: { xs: '100%', sm: 'auto' },
-                  transition: 'all 0.3s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 2, // Aumentado el gap para más separación
+                  width: { xs: '100%', sm: 280 },
+                  height: 46,
+                  borderRadius: '999px',
+                  textTransform: 'none',
+                  fontWeight: 800,
+                  fontSize: '1rem',
+                  color: '#ffffff',
+                  background: 'linear-gradient(90deg, #7B1FA2, #8E24AA)',
+                  boxShadow: '0 10px 22px rgba(123, 31, 162, 0.25)',
                   '&:hover': {
-                    backgroundColor: '#6a6191',
-                    '& .text-content': {
-                      transform: 'translateX(60px)', // Aumentado para más espacio
-                      opacity: 0,
-                    },
-                    '& .dot-indicator': {
-                      opacity: 0, // Hacer que el punto desaparezca
-                      transform: 'scale(0.5)',
-                    },
-                    '& .arrow-content': {
-                      transform: 'translateX(-20px)',
-                      opacity: 1,
-                    },
+                    background: 'linear-gradient(90deg, #6A1B9A, #7B1FA2)',
                   },
                 }}
               >
-                {/* Contenido principal con punto y texto */}
-                <Box
-                  className="dot-indicator"
-                  sx={{
-                    height: '8px',
-                    width: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: 'white',
-                    transition: 'all 0.3s ease',
-                    flexShrink: 0,
-                  }}
-                />
-                <Box
-                  className="text-content"
-                  sx={{
-                    transition: 'all 0.3s ease',
-                    whiteSpace: 'nowrap', // Evitar salto de línea
-                    fontSize: '1.1rem', // Tamaño de fuente específico
-                  }}
-                >
-                  Agendar Ahora
-                </Box>
-                
-                {/* Contenido con flecha que aparece en hover */}
-                <Box
-                  className="arrow-content"
-                  sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    zIndex: 10,
-                    display: 'flex',
-                    height: '100%',
-                    width: '100%',
-                    transform: 'translateX(60px)', // Ajustado para coincidir con el texto
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 1,
-                    color: 'white',
-                    opacity: 0,
-                    transition: 'all 0.3s ease',
-                    whiteSpace: 'nowrap', // Evitar salto de línea
-                  }}
-                >
-                  <span style={{ fontSize: '1.1rem' }}>Agendar Ahora</span>
-                  <ArrowForwardIcon sx={{ fontSize: '20px' }} />
-                </Box>
-              </Box>
+                Agendar Ahora
+              </Button>
 
-              {/* Botón Cotización con efecto hover personalizado */}
-              <Box
-                component="button"
+              <Button
                 onClick={() => setOpenCotizacion(true)}
-                className="btn"
+                variant="contained"
+                startIcon={<Description />}
                 sx={{
-                  position: 'relative',
-                  cursor: 'pointer',
-                  overflow: 'hidden',
-                  borderRadius: '25px',
-                  border: '1px solid #FFB64D',
-                  backgroundColor: '#FFB64D',
-                  padding: '12px 36px', // Mismo padding que el botón Agendar
-                  textAlign: 'center',
-                  fontWeight: 600,
-                  color: 'white',
-                  minWidth: { xs: '200px', sm: '220px' }, // Mismo ancho que el botón Agendar
-                  width: { xs: '100%', sm: 'auto' },
-                  transition: 'all 0.3s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 2, // Misma separación que el botón Agendar
+                  width: { xs: '100%', sm: 280 },
+                  height: 46,
+                  borderRadius: '999px',
+                  textTransform: 'none',
+                  fontWeight: 800,
+                  fontSize: '1rem',
+                  color: '#ffffff',
+                  background: 'linear-gradient(90deg, #FFA726, #FF9800)',
+                  boxShadow: '0 10px 22px rgba(255, 152, 0, 0.25)',
                   '&:hover': {
-                    backgroundColor: '#FFCE8A',
-                    '& .text-content': {
-                      transform: 'translateX(60px)', // Mismo desplazamiento
-                      opacity: 0,
-                    },
-                    '& .dot-indicator': {
-                      opacity: 0, // Hacer que el punto desaparezca
-                      transform: 'scale(0.5)',
-                    },
-                    '& .arrow-content': {
-                      transform: 'translateX(-20px)',
-                      opacity: 1,
-                    },
+                    background: 'linear-gradient(90deg, #FB8C00, #F57C00)',
                   },
                 }}
               >
-                {/* Contenido principal con punto y texto */}
-                <Box
-                  className="dot-indicator"
-                  sx={{
-                    height: '8px',
-                    width: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: 'white',
-                    transition: 'all 0.3s ease',
-                    flexShrink: 0,
-                  }}
-                />
-                <Box
-                  className="text-content"
-                  sx={{
-                    transition: 'all 0.3s ease',
-                    whiteSpace: 'nowrap', // Evitar salto de línea
-                    fontSize: '1.1rem', // Mismo tamaño que el botón Agendar
-                  }}
-                >
-                  Cotización
-                </Box>
-                
-                {/* Contenido con flecha que aparece en hover */}
-                <Box
-                  className="arrow-content"
-                  sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    zIndex: 10,
-                    display: 'flex',
-                    height: '100%',
-                    width: '100%',
-                    transform: 'translateX(60px)', // Ajustado para coincidir con el texto
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 1,
-                    color: 'white',
-                    opacity: 0,
-                    transition: 'all 0.3s ease',
-                    whiteSpace: 'nowrap', // Evitar salto de línea
-                  }}
-                >
-                  <span style={{ fontSize: '1.1rem' }}>Cotización</span>
-                  <ArrowForwardIcon sx={{ fontSize: '20px' }} />
-                </Box>
-              </Box>
+                Cotización
+              </Button>
             </Box>
           </Box>
-
-          {/* Carrusel de imágenes optimizado para móvil */}
-          <Box 
-            sx={{ 
-              display: "flex", 
-              textAlign: "center",
-              width: { md: '45%' }, // Ancho en pantallas medianas y grandes
-              justifyContent: "center",
-              // Prevenir overflow y solapamiento
-              overflow: 'hidden',
-              '& .slick-slider': {
-                width: '100%'
-              },
-              '& .slick-list': {
-                overflow: 'hidden',
-                width: '100%'
-              },
-              '& .slick-track': {
-                display: 'flex',
-                alignItems: 'center'
-              },
-              '& .slick-slide': {
-                padding: '0 5px', // Pequeño espacio entre slides
-                '& > div': {
-                  width: '100%',
-                  height: '100%'
-                }
-              }
-            }}
-          >
-            <Slider {...settings} style={{ width: "100%", maxWidth: "500px" }}>
-              {carouselImages.map((imageData, index) => (
-                <Box key={index} sx={{ 
-                  width: '100%',
-                  display: 'flex !important', // Force flex display
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  px: 0, // Sin padding extra que cause problemas
-                }}> 
-                  <Box
-                    component="img"
-                    src={isMobile ? imageData.mobile : imageData.desktop}
-                    alt={imageData.alt}
-                    sx={{
-                      width: "100%",
-                      height: "auto",
-                      borderRadius: "40px",
-                      objectFit: "cover",
-                      maxWidth: "100%",
-                      display: "block",
-                      margin: '0 auto', // Centrar imagen
-                      // Estilos específicos para móvil
-                      ...(isMobile && {
-                        maxHeight: "350px",
-                        objectFit: "contain"
-                      })
-                    }}
-                    onError={(e) => {
-                      // Fallback si la imagen no carga
-                      if (isMobile && e.target.src === imageData.mobile) {
-                        e.target.src = imageData.desktop; // Usar desktop como fallback
-                      }
-                    }}
-                  />
-                </Box>
-              ))}
-            </Slider>
-          </Box>
-        </Box>
-      </Container>
+        </Container>
+      </Box>
    
-
-      {/* Componente PrecioServicio */}
-      <PrecioServicio />
 
       {/* Componente About */}
       <div id="about">
@@ -1292,29 +1041,13 @@ function LandingPage() {
       {/* Componente Cómo Funciona */}
       <ComoFunciona />
 
-{/* Sección de Servicios */}
-<Container id="nuestro-servicio" sx={{ textAlign: "center", mt: 5 }}>
-  <Typography variant="h5" fontWeight="bold" mb={3}
-  sx={{ color: "#1848B9", 
-        fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" }, // Título principal - Reducido
-        mb: 3 //Menos separación debajo del titulo
-      }} 
-      >
-    Nuestros Servicios
-  </Typography>
-  <Typography variant="h6" fontWeight="bold" mb={2}
-  sx={{ color: "#757575", 
-        fontSize: { xs: "1.3rem", sm: "1.5rem", md: "1.7rem" }, // Título secundario - Reducido
-        mb: 4 // Separación debajo del título
-      }} 
-      >
-    Cada detalle cuenta: de una inspección minuciosa a una revisión documental completa.
-  </Typography>
-  <ServiceCards />  
-  </Container>
-
-  {/* Checklist Section - fuera del Container para fondo completo */}
+  {/* Checklist Section */}
   <ChecklistSection />
+
+{/* Sección de Servicios Procedimiento sensores TPMS */}
+<Container id="nuestro-servicio" sx={{ mt: 5, mb: 5 }}>
+  <ServiceCards />
+  </Container>
 
        {/* Se dejara sin efecta para probar otra Card --componente se guarda en block al final////// Componentes Card*/}
        {/* Sección de Herramientas */}

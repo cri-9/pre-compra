@@ -1,13 +1,19 @@
 /* Estilos globales para prevenir overflow horizontal */
 * {
   box-sizing: border-box;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE / Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome / Safari / Edge */
 }
 
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden; /* Prevenir scroll horizontal */
+  overflow-x: hidden;
 }
 
 #root {
@@ -26,6 +32,12 @@ html, body {
 /* Permitir que ciertos elementos se extiendan fuera de contenedores sin causar scroll */
 body {
   position: relative;
+}
+
+/* Garantizar que noscript no ocupe espacio visual */
+noscript {
+  display: none !important;
+  height: 0 !important;
 }
 
 /* Permite que los Popper y Menu de MUI funcionen con el comportamiento por defecto */

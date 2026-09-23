@@ -109,9 +109,10 @@ function Footer() {
                   Contacto
                 </Typography>
                 <Box sx={{ '& > *': { mb: 1 } }}>
-                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' }, flexWrap: 'wrap' }}><FaHome style={{ marginRight: '8px', flexShrink: 0 }} /> Ramon Freire, Temuco.</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' }, flexWrap: 'wrap' }}><FaHome style={{ marginRight: '8px', flexShrink: 0 }} /> Temuco.</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.7rem', sm: '0.8rem' }, flexWrap: 'wrap', wordBreak: 'break-all' }}><FaEnvelope style={{ marginRight: '8px', flexShrink: 0 }} /> contacto@visualmecanica.cl</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.7rem', sm: '0.8rem' }, flexWrap: 'wrap', wordBreak: 'break-all' }}><FaEnvelope style={{ marginRight: '8px', flexShrink: 0 }} /> cotizacion@visualmecanica.cl</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.7rem', sm: '0.8rem' }, flexWrap: 'wrap', wordBreak: 'break-all' }}><FaEnvelope style={{ marginRight: '8px', flexShrink: 0 }} /> calibracion-ecu@visualmecanica.cl</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><FaPhone style={{ marginRight: '8px', flexShrink: 0 }} /> + 56-949685530</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}><FaWhatsapp style={{ marginRight: '8px', flexShrink: 0 }} /> + 56-949685530</Typography>
                 </Box>
@@ -141,14 +142,14 @@ function Footer() {
                   Síguenos
                 </Typography>
                 <Box sx={{ display: 'flex', mt: 1, justifyContent: { xs: 'center', sm: 'flex-start' }, flexWrap: 'wrap', gap: 1 }}>
-                  <Link href="https://www.facebook.com/profile.php?id=61579055617312" 
+                  <Link href="https://www.facebook.com/precompravisualmecanica" 
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{ color: '#1976D2', fontSize: { xs: '1.2rem', sm: '1rem' } }}>
                     <FaFacebookF />
                   </Link>
                   <Link 
-                  href="https://www.instagram.com/precompravisualmecanica/"
+                  href="https://www.instagram.com/visualmecanica/"
                   target="_blank"
                   rel="noopener noreferrer" 
                   sx={{ color: '#AC3083', fontSize: { xs: '1.2rem', sm: '1rem' } }}>
@@ -220,7 +221,7 @@ function Footer() {
         {/* Copyright */}
         <Grid item xs={12} sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', pb: { xs: 3, sm: 2 } }}>
           <Typography variant="body2" fontWeight="bold" gutterBottom color="#424242" sx={{ fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }, textAlign: 'center' }}>
-            © 2025 Copyright: <Link href="https://visualmecanica.cl/" color="inherit" underline="hover">Visual Mecánica</Link>
+            © 2026 Copyright: <Link href="https://visualmecanica.cl/" color="inherit" underline="hover">Visual Mecánica</Link>
           </Typography>
         </Grid>
       </Grid>

@@ -2,22 +2,20 @@ import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
-  AppBar,
-  Box,
-  Button,
-  Collapse,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Link as MuiLink,
-  Stack,
-  Toolbar,
-  useTheme
+    AppBar,
+    Box,
+    Button,
+    Collapse,
+    Drawer,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Link as MuiLink,
+    Stack,
+    Toolbar,
+    useTheme
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -27,7 +25,7 @@ import logo from "../assets/Logo_Superior/logo_superior_menu2.webp";
 import iconTpms from "../assets/servicios/icon_tpms_menu.png";
 import Cotizacion from "./Cotizacion";
 
-function Navbar() {
+function Navbar({ embedded = false }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [anchorElServicios, setAnchorElServicios] = useState(null);
   const [openServicios, setOpenServicios] = useState(false);
@@ -76,22 +74,22 @@ function Navbar() {
   const linkStyles = {
     position: 'relative',
     padding: '5px 0',
-    color: '#7B1FA2',
+    color: '#475569',
     fontFamily: 'Roboto, Arial, sans-serif',
     fontWeight: 500,
-    fontSize: '0.9rem',
+    fontSize: '0.875rem',
     letterSpacing: 0.2,
     textTransform: 'none',
     transition: 'color 0.3s ease-out',
     '&:hover': {
-      color: '#D49CEC'
+      color: '#4338ca'
     },
     '&::after': {
       content: '""',
       position: 'absolute',
       width: '100%',
       height: '2px',
-      backgroundColor: '#B34FDE',
+      backgroundColor: '#4338ca',
       bottom: 0,
       left: 0,
       transform: 'scaleX(0)',
@@ -174,7 +172,7 @@ function Navbar() {
               boxShadow: '0 12px 30px rgba(0, 0, 0, 0.18)',
               borderRadius: '12px',
               border: '1px solid rgba(123, 31, 162, 0.12)',
-              minWidth: 360,
+              minWidth: 500,
               zIndex: (theme) => theme.zIndex.appBar + 200,
               py: 1,
               px: 1,
@@ -206,7 +204,7 @@ function Navbar() {
                   }
                 }}
               >
-                {servicio.icon && (
+                {servicio.icon ? (
                   <img
                     src={servicio.icon}
                     alt={servicio.name}
@@ -216,7 +214,9 @@ function Navbar() {
                       objectFit: 'contain'
                     }}
                   />
-                )}
+                ) : servicio.muiIcon ? (
+                  servicio.muiIcon
+                ) : null}
                 <span
                   style={{
                     color: '#7B1FA2',
@@ -260,16 +260,17 @@ function Navbar() {
 
   return (
     <>
-    <AppBar position="sticky"
+    <AppBar position={embedded ? 'static' : 'sticky'}
       sx={{
         backgroundColor: "#f9f6fc",
         backdropFilter: 'blur(10px)',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.30)',
         borderRadius: '15px',
         mx: 'auto',
-        my: -6,
+        my: 0,
+        mb: embedded ? '-44px' : 0,
         top: 0,
-        maxWidth: { xs: '95%', sm: '95%', md: '85%', lg: '95%' },
+        maxWidth: embedded ? '1250px' : { xs: '95%', sm: '95%', md: '85%', lg: '95%' },
         zIndex: (theme) => theme.zIndex.appBar + 50,
       }}
     >
@@ -313,20 +314,25 @@ function Navbar() {
         <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center' }}>
           <Navigation />
           <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => setOpenCotizacion(true)}
+            component={Link}
+            to="/agendar"
             sx={{
+              width: "120px",
+              height: "36px",
               fontSize: "0.9rem",
-              px: 3,
-              py: 1,
+              fontWeight: "bold",
+              backgroundColor: "#8a23a8",
+              color: "#ffffff",
               ml: 1,
+              "&:hover": {
+                backgroundColor: "#6d1a86"
+              },
               textTransform: 'none',
               borderRadius: '8px',
               whiteSpace: 'nowrap',
             }}
           >
-            Cotización
+            Agendar
           </Button>
           <Button
             component="a"
@@ -338,11 +344,11 @@ function Navbar() {
               height: "36px",
               fontSize: "0.9rem",
               fontWeight: "bold",
-              backgroundColor: "#25D366",
+              backgroundColor: "#ff9a04",
               color: "#ffffff",
               ml: 1,
               "&:hover": {
-                backgroundColor: "#1ebc59"
+                backgroundColor: "#e08800"
               },
               textTransform: 'none',
               borderRadius: '8px',
@@ -351,6 +357,27 @@ function Navbar() {
           >
             WhatsApp
           </Button>
+          {!embedded && (
+            <Button
+              component="a"
+              href="https://visualmecanica.cl"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                height: "36px",
+                fontSize: "0.78rem",
+                fontWeight: "bold",
+                color: "#7B1FA2",
+                ml: 1,
+                border: "1px solid rgba(123, 31, 162, 0.35)",
+                textTransform: 'none',
+                borderRadius: '8px',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Volver a VisualMecanica.cl
+            </Button>
+          )}
         </Box>
 
         {/* Botón de menú móvil */}
@@ -489,7 +516,7 @@ function Navbar() {
                             py: 1,
                           }}
                         >
-                          {servicio.icon && (
+                          {servicio.icon ? (
                             <img
                               src={servicio.icon}
                               alt={servicio.name}
@@ -500,7 +527,11 @@ function Navbar() {
                                 objectFit: 'contain'
                               }}
                             />
-                          )}
+                          ) : servicio.muiIcon ? (
+                            <Box sx={{ mb: '4px', display: 'flex', '& svg': { fontSize: '40px', color: '#D49CEC' } }}>
+                              {servicio.muiIcon}
+                            </Box>
+                          ) : null}
                           <ListItemText
                             primary={servicio.name}
                             sx={{
@@ -566,6 +597,27 @@ function Navbar() {
                         fontWeight: 'bold',
                       }
                     }}
+                  />
+                </ListItemButton>
+              </ListItem>
+
+              <ListItem disablePadding sx={{ mt: 1, px: 0 }}>
+                <ListItemButton
+                  component="a"
+                  href="https://visualmecanica.cl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    justifyContent: 'center',
+                    border: '1px solid rgba(123, 31, 162, 0.45)',
+                    borderRadius: '8px',
+                    py: 1.2,
+                    color: '#7B1FA2',
+                  }}
+                >
+                  <ListItemText
+                    primary="Volver a VisualMecanica.cl"
+                    sx={{ '& .MuiTypography-root': { fontSize: '0.82rem', fontWeight: 'bold', textAlign: 'center' } }}
                   />
                 </ListItemButton>
               </ListItem>

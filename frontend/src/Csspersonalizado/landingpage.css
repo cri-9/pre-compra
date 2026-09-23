@@ -3,6 +3,14 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Ocultar scrollbar vertical manteniendo el scroll funcional */
+html {
+  scrollbar-width: none; /* Firefox */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome / Safari / Edge */
+}
+
 .onda-fondo-svg {
   background-image: url('../assets/ondas/ondas2.webp'); /* Inserta tu SVG aquí */
   background-size: cover;

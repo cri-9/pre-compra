@@ -9,7 +9,7 @@ interface SEOProps {
 }
 
 const SEO = ({ 
-  title = "Visual-Mecánica Servicio Inspección Automotriz en Temuco",
+  title = "Visual-Mecánica Servicio de Diagnóstico Automotriz en Temuco",
   description = "Inspección automotriz pre-compra en Temuco, Región de la Araucanía. Agenda tu revisión técnica, diagnóstico y otros servicios para autos usados. Servicio profesional y confiable.",
   canonical = "https://visualmecanica.cl/",
   ogImage = "https://visualmecanica.cl/favicon-512x512.png",
